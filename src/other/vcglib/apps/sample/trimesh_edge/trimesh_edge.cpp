@@ -2,7 +2,7 @@
 * VCGLib                                                            o o     *
 * Visual and Computer Graphics Library                            o     o   *
 *                                                                _   O  _   *
-* Copyright(C) 2004-2009                                           \/)\/    *
+* Copyright(C) 2004-2012                                           \/)\/    *
 * Visual Computing Lab                                            /\/|      *
 * ISTI - Italian National Research Council                           |      *
 *                                                                    \      *
@@ -20,17 +20,19 @@
 * for more details.                                                         *
 *                                                                           *
 ****************************************************************************/
-#include <QtOpenGL/qgl.h>
 
-#include<vcg/simplex/vertex/base.h>
-#include<vcg/simplex/vertex/component.h>
+// This sample require gl.
+#ifndef GLU_VERSIONS
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#ifdef _WIN32
+  #include <windows.h>
+#endif
+#include <GL/gl.h>
+#endif
+#endif
 
-#include <vcg/complex/used_types.h>
-
-#include<vcg/simplex/face/base.h>
-#include<vcg/simplex/face/component.h>
-
-#include<vcg/simplex/face/topology.h>
 #include<vcg/complex/complex.h>
 #include<vcg/complex/append.h>
 
@@ -41,12 +43,11 @@
 // topology computation
 #include<vcg/complex/algorithms/update/topology.h>
 #include<vcg/complex/algorithms/update/bounding.h>
+#include<vcg/complex/algorithms/update/normal.h>
 #include <vcg/complex/algorithms/update/position.h>
 #include <vcg/complex/algorithms/update/quality.h>
 #include <vcg/complex/algorithms/stat.h>
 
-// normals
-#include<vcg/complex/algorithms/update/normal.h>
 #include <vcg/complex/algorithms/intersection.h>
 #include <vcg/complex/algorithms/refine.h>
 #include <wrap/gl/glu_tessellator_cap.h>
@@ -138,11 +139,11 @@ bool SplitMesh(MyMesh &m,             /// The mesh that has to be splitted. It i
 {
   tri::Append<MyMesh,MyMesh>::Mesh(A,m);
   tri::UpdateQuality<MyMesh>::VertexFromPlane(A, plane);
-  QualityMidPointFunctor<MyMesh> slicingfunc(0.0f);
-  QualityEdgePredicate<MyMesh> slicingpred(0.0f);
+  tri::QualityMidPointFunctor<MyMesh> slicingfunc(0.0f);
+  tri::QualityEdgePredicate<MyMesh> slicingpred(0.0f);
   tri::UpdateTopology<MyMesh>::FaceFace(A);
   // The Actual Slicing
-  RefineE<MyMesh, QualityMidPointFunctor<MyMesh>, QualityEdgePredicate<MyMesh> > (A, slicingfunc, slicingpred, false);
+  tri::RefineE<MyMesh, tri::QualityMidPointFunctor<MyMesh>, tri::QualityEdgePredicate<MyMesh> > (A, slicingfunc, slicingpred, false);
 
   tri::Append<MyMesh,MyMesh>::Mesh(B,A);
 
@@ -200,7 +201,7 @@ int main( int argc, char **argv )
     exit(0);
   }
   tri::UpdateBounding<MyMesh>::Box(m);
-  printf("Input mesh  vn:%i fn:%i\n",m.vn,m.fn);
+  printf("Input mesh  vn:%i fn:%i\n",m.VN(),m.FN());
   srand(time(0));
 
   Plane3f slicingPlane;
@@ -209,15 +210,15 @@ int main( int argc, char **argv )
   vcg::IntersectionPlaneMesh<MyMesh, MyMesh, float>(m, slicingPlane, em );
   tri::Clean<MyMesh>::RemoveDuplicateVertex(em);
   vcg::tri::CapEdgeMesh(em,slice);
-  printf("Slice  mesh has %i vert and %i faces\n", slice.vn, slice.fn );
+  printf("Slice  mesh has %i vert and %i faces\n", slice.VN(), slice.FN() );
 
   MyMesh A,B;
-  bool ret=SplitMesh(m,A,B,slicingPlane);
+  SplitMesh(m,A,B,slicingPlane);
   tri::UpdatePosition<MyMesh>::Translate(A, slicingPlane.Direction()*m.bbox.Diag()/80.0);
   tri::UpdatePosition<MyMesh>::Translate(B,-slicingPlane.Direction()*m.bbox.Diag()/80.0);
   tri::Append<MyMesh,MyMesh>::Mesh(sliced,A);
   tri::Append<MyMesh,MyMesh>::Mesh(sliced,B);
-  printf("Sliced mesh has %i vert and %i faces\n", sliced.vn, sliced.fn );
+  printf("Sliced mesh has %i vert and %i faces\n", sliced.VN(), sliced.FN() );
 
   tri::io::ExporterPLY<MyMesh>::Save(slice,"slice.ply",false);
   tri::io::ExporterPLY<MyMesh>::Save(sliced,"sliced.ply",false);

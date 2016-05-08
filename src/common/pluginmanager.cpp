@@ -32,7 +32,7 @@ static QString DLLFileNamePreamble() {
 }
 
 PluginManager::PluginManager()
-:currentDocInterface(NULL),scriptplugcode()
+:/*currentDocInterface(NULL),*/scriptplugcode()
 {
   //pluginsDir=QDir(getPluginDirPath());
   // without adding the correct library path in the mac the loading of jpg (done via qt plugins) fails
@@ -62,9 +62,9 @@ PluginManager::~PluginManager()
 
 void PluginManager::loadPlugins(RichParameterSet& defaultGlobal)
 {
-  pluginsDir=QDir(getPluginDirPath());
+  pluginsDir=QDir(getDefaultPluginDirPath());
   // without adding the correct library path in the mac the loading of jpg (done via qt plugins) fails
-  qApp->addLibraryPath(getPluginDirPath());
+  qApp->addLibraryPath(getDefaultPluginDirPath());
   qApp->addLibraryPath(getBaseDirPath());
   QStringList pluginfilters;
 
@@ -81,10 +81,20 @@ void PluginManager::loadPlugins(RichParameterSet& defaultGlobal)
   scriptplugcode += pluginNameSpace() + " = { };\n";
   foreach (QString fileName, pluginsDir.entryList(QDir::Files))
   {
+//      qDebug() << fileName;
     QString absfilepath = pluginsDir.absoluteFilePath(fileName);
     QFileInfo fin(absfilepath);
     if (fin.suffix() == "xml")
-      loadXMLPlugin(fileName);
+    {
+        try
+        {
+            loadXMLPlugin(fileName);
+        }
+        catch (MeshLabXMLParsingException& e)
+        {
+            qDebug() << e.what();
+        }
+    }
     else
     {
       QPluginLoader loader(absfilepath);
@@ -98,12 +108,12 @@ void PluginManager::loadPlugins(RichParameterSet& defaultGlobal)
           meshFilterPlug.push_back(iFilter);
           foreach(QAction *filterAction, iFilter->actions())
           {
+            filterAction->setData(QVariant(fileName));
             actionFilterMap.insert(filterAction->text(),filterAction);
             stringFilterMap.insert(filterAction->text(),iFilter);
             iFilter->initGlobalParameterSet(filterAction,defaultGlobal);
           }
         }
-
         MeshIOInterface *iIO = qobject_cast<MeshIOInterface *>(plugin);
         if (iIO)
           meshIOPlug.push_back(iIO);
@@ -114,7 +124,7 @@ void PluginManager::loadPlugins(RichParameterSet& defaultGlobal)
           meshDecoratePlug.push_back(iDecorator);
           foreach(QAction *decoratorAction, iDecorator->actions())
           {
-            editActionList.push_back(decoratorAction);
+            decoratorActionList.push_back(decoratorAction);
             iDecorator->initGlobalParameterSet(decoratorAction,defaultGlobal);
           }
         }
@@ -131,57 +141,12 @@ void PluginManager::loadPlugins(RichParameterSet& defaultGlobal)
             editActionList.push_back(editAction);
         }
       }
+      else
+          qDebug() << loader.errorString();
     }
   }
   knownIOFormats();
-  //QStringList liblist = ScriptAdapterGenerator::javaScriptLibraryFiles();
-  //int ii = 0;
-  //while(ii < liblist.size())
-  //{
-  //	QFile lib(liblist[ii]);
-  //	if (!lib.open(QFile::ReadOnly))
-  //		qDebug("Warning: Library %s has not been loaded.",qPrintable(liblist[ii]));
-  //	QByteArray libcode = lib.readAll();
-  //	QScriptValue res = env.evaluate(QString(libcode));
-  //	if (res.isError())
-  //		qDebug("Warning: Library %s generated JavaScript Error: %s",qPrintable(liblist[ii]),qPrintable(res.toString()));
-  //	++ii;
-  //}
-  ////loadPluginsCode();
-  //QScriptValue applyFun = env.newFunction(PluginInterfaceApplyXML, this);
-  //env.globalObject().setProperty("_applyFilter", applyFun);
-  //QScriptValue res = env.evaluate(scriptplugcode);
-  ////qDebug("Code:\n %s",qPrintable(code));
-  //if (env.hasUncaughtException())
-  //	qDebug() << "JavaScript Interpreter Error: " << res.toString() << "\n";
 }
-
-
-//void PluginManager::loadPluginsCode()
-//{
-//	scriptplugcode = "";
-//	ScriptAdapterGenerator gen;
-//	scriptplugcode += gen.mergeOptParamsCodeGenerator() + "\n";
-//	scriptplugcode += pluginNameSpace() + " = { };\n";
-//	//QMap<QString,RichParameterSet> FPM = generateFilterParameterMap();
-//	for(int ii = 0;ii < xmlpluginfo.size();++ii)
-//	{
-//		MLXMLPluginInfo* mi = xmlpluginfo[ii];
-//		QString pname = mi->pluginScriptName();
-//		if (pname != "")
-//		{
-//			scriptplugcode += pluginNameSpace() + "." + pname + " = { };\n";
-//			QStringList filters = mi->filterNames();
-//			foreach(QString filter,filters)
-//			{
-//				QString filterFunction = mi->filterScriptCode(filter);
-//				if (filterFunction == "")
-//					filterFunction = gen.funCodeGenerator(filter,*mi);
-//				scriptplugcode += pluginNameSpace() + "." + pname + "." + mi->filterAttribute(filter,MLXMLElNames::filterScriptFunctName) + " = " + filterFunction + "\n";
-//			}
-//		}
-//	}
-//}
 
 /*
 This function create a map from filtername to dummy RichParameterSet.
@@ -206,6 +171,11 @@ QMap<QString, RichParameterSet> PluginManager::generateFilterParameterMap()
   return FPM;
 }
 
+QString PluginManager::osDependentFileBaseName(const QString &plname)
+{
+    return (DLLFileNamePreamble() + plname + "."+DLLExtension());
+}
+
 QString PluginManager::getBaseDirPath()
 {
   QDir baseDir(qApp->applicationDirPath());
@@ -228,7 +198,7 @@ QString PluginManager::getBaseDirPath()
   return baseDir.absolutePath();
 }
 
-QString PluginManager::getPluginDirPath()
+QString PluginManager::getDefaultPluginDirPath()
 {
   QDir pluginsDir(getBaseDirPath());
   if(!pluginsDir.exists("plugins"))
@@ -316,7 +286,7 @@ void PluginManager::loadXMLPlugin( const QString& fileName )
   if (fin.suffix() == "xml")
   {
 
-    QString dllfile = DLLFileNamePreamble() + fin.completeBaseName() + "."+DLLExtension();
+    QString dllfile = osDependentFileBaseName(fin.completeBaseName());
 
     MeshLabXMLFilterContainer fc;
     //fc.filterInterface = NULL;
@@ -326,7 +296,7 @@ void PluginManager::loadXMLPlugin( const QString& fileName )
     {
       xmlpluginfo << pluginfo;
       fc.xmlInfo = xmlpluginfo[xmlpluginfo.size() - 1];
-      QStringList fn = fc.xmlInfo->filterNames();
+//      QStringList fn = fc.xmlInfo->filterNames();
       QObject* par = NULL;
       if (pluginsDir.exists(dllfile))
       {
@@ -360,12 +330,13 @@ void PluginManager::loadXMLPlugin( const QString& fileName )
       {
         QString plugnamespace = pluginNameSpace() + "." + pname;
         //pluginnamespaces << plugnamespace;
-        scriptplugcode += pluginNameSpace() + "." + pname + " = { };\n";
+        scriptplugcode += plugnamespace + " = { };\n";
         QStringList filters = pluginfo->filterNames();
         foreach(QString filter,filters)
         {
           QString completename = plugnamespace;
           fc.act = new QAction(filter,par);
+          fc.act->setData(QVariant(dllfile));
           stringXMLFilterMap.insert(filter,fc);
           QString filterFunction = pluginfo->filterScriptCode(filter);
           if (filterFunction == "")
@@ -443,3 +414,16 @@ QString PluginManager::pluginNameSpace()
 {
   return "Plugins";
 }
+
+QString PluginManager::osIndependentPluginName( const QString& plname )
+{
+    QFileInfo fi(plname);
+    QString res = fi.baseName();
+    QString pref = DLLFileNamePreamble();
+    return res.remove(0,pref.size());
+}
+
+//QString PluginManager::getLocalPluginDirPath()
+//{
+//    return QString();
+//}

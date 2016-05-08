@@ -3,12 +3,9 @@
 using namespace std;
 
 // VCG headers for triangular mesh processing
-#include<vcg/simplex/edge/base.h>
-#include<vcg/simplex/vertex/base.h>
-#include<vcg/simplex/face/base.h>
 #include <vcg/complex/complex.h>
 #include <vcg/complex/algorithms/update/topology.h>
-#include <vcg/complex/algorithms/update/edges.h>
+#include <vcg/complex/algorithms/update/component_ep.h>
 #include <vcg/complex/algorithms/update/bounding.h>
 #include <vcg/complex/algorithms/update/quality.h>
 #include <vcg/complex/algorithms/update/color.h>
@@ -89,9 +86,9 @@ int main(int argc,char ** argv)
 
   // updating
   tri::UpdateBounding<MyMesh>::Box(m);
-  tri::UpdateNormals<MyMesh>::PerFaceNormalized(m);
-  tri::UpdateNormals<MyMesh>::PerVertexAngleWeighted(m);
-  tri::UpdateNormals<MyMesh>::NormalizeVertex(m);
+  tri::UpdateNormal<MyMesh>::PerFaceNormalized(m);
+  tri::UpdateNormal<MyMesh>::PerVertexAngleWeighted(m);
+  tri::UpdateNormal<MyMesh>::NormalizePerVertex(m);
 	// Create a static grid (for fast indexing) and fill it
 	TriMeshGrid static_grid;
 	static_grid.Set(m.face.begin(), m.face.end());
@@ -143,12 +140,12 @@ int main(int argc,char ** argv)
     }
   }
   int t2 = clock();
-  tri::UpdateColor<MyMesh>::VertexQualityRamp(m);
+  tri::UpdateColor<MyMesh>::PerVertexQualityRamp(m);
   tri::io::ExporterPLY<MyMesh>::Save(m,"SDF.ply",tri::io::Mask::IOM_VERTCOLOR+tri::io::Mask::IOM_VERTQUALITY);
 
   printf("Initializated in %i msec\n",t1-t0);
   printf("Completed in %i msec\n",t2-t1);
-  printf("Shoot %i rays and found %i intersections\n",m.vn*samplePerVert,totRay);
+  printf("Shoot %i rays and found %i intersections\n",m.VN()*samplePerVert,totRay);
 
 return 0;
 }

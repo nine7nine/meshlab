@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src/QR
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src/QR
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2011-10-05T15:04:40.740408Z
-4180
+2013-02-27T21:07:14.867394Z
+4823
 cignoni
 
 
@@ -26,16 +26,16 @@ cignoni
 
 e8973e21-934d-0410-ac44-de4585f5606d
 
-FullPivHouseholderQR.h
+ColPivHouseholderQR.h
 file
 
 
 
 
-2011-10-10T11:28:11.376018Z
-e21531d214db3566aced15ec0129454d
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:26.407675Z
+7e1d4cb995fe330dc84dac4e7a1237de
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -58,7 +58,109 @@ has-props
 
 
 
-21478
+20149
+
+ColPivHouseholderQR_MKL.h
+file
+
+
+
+
+2013-05-22T15:25:26.407675Z
+5b56a84272f4e3ac10a2424aecf84c82
+2013-02-27T21:07:14.867394Z
+4823
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4478
+
+HouseholderQR.h
+file
+
+
+
+
+2013-05-22T15:25:26.407675Z
+8c706205c70ac501032003cbed5dc35d
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+11678
+
+FullPivHouseholderQR.h
+file
+
+
+
+
+2013-05-22T15:25:26.407675Z
+6fc6da2e09bbfef7e5a6eb0dbcc544af
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+22664
 
 CMakeLists.txt
 file
@@ -66,7 +168,7 @@ file
 
 
 
-2011-10-10T11:28:11.376018Z
+2013-05-22T15:25:26.407675Z
 728eaf2cda49b033d11fded23649187c
 2011-10-05T15:04:40.740408Z
 4180
@@ -94,16 +196,16 @@ has-props
 
 135
 
-ColPivHouseholderQR.h
+HouseholderQR_MKL.h
 file
 
 
 
 
-2011-10-10T11:28:11.376018Z
-9dab4b3b1e6a185c9de698171addbac7
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:26.407675Z
+f7742a734cb1beee55423d87879742c7
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -126,39 +228,5 @@ has-props
 
 
 
-20868
-
-HouseholderQR.h
-file
-
-
-
-
-2011-10-10T11:28:11.376018Z
-1bf51a3bb238a3eacd762563a75720d1
-2011-10-05T15:04:40.740408Z
-4180
-cignoni
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-12397
+2944
 

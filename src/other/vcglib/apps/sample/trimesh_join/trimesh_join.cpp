@@ -1,16 +1,30 @@
-#include <vector>
-
-#include<vcg/simplex/vertex/base.h>
-#include<vcg/simplex/face/base.h>
-#include<vcg/simplex/face/topology.h>
-
+/****************************************************************************
+* VCGLib                                                            o o     *
+* Visual and Computer Graphics Library                            o     o   *
+*                                                                _   O  _   *
+* Copyright(C) 2004-2012                                           \/)\/    *
+* Visual Computing Lab                                            /\/|      *
+* ISTI - Italian National Research Council                           |      *
+*                                                                    \      *
+* All rights reserved.                                                      *
+*                                                                           *
+* This program is free software; you can redistribute it and/or modify      *
+* it under the terms of the GNU General Public License as published by      *
+* the Free Software Foundation; either version 2 of the License, or         *
+* (at your option) any later version.                                       *
+*                                                                           *
+* This program is distributed in the hope that it will be useful,           *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+* GNU General Public License (http://www.gnu.org/licenses/gpl.txt)          *
+* for more details.                                                         *
+*                                                                           *
+****************************************************************************/
 #include<vcg/complex/complex.h>
-#include<vcg/complex/allocate.h>
 #include<vcg/complex/append.h>
 #include<vcg/complex/algorithms/clean.h>
 #include<vcg/complex/algorithms/clip.h>
 #include<vcg/complex/algorithms/update/bounding.h>
-
 
 // input output
 #include <wrap/io_trimesh/import_ply.h>
@@ -83,12 +97,12 @@ int main(int argc,char **argv )
         printf("Error reading file  %s\n",argv[1]);
 			  exit(0);
 		  }
-      printf("Input mesh %3i           vn:%9i fn:%9i\n",i, mr.vn, mr.fn);
+      printf("Input mesh %3i           vn:%9i fn:%9i\n",i, mr.VN(), mr.FN());
       if(ClipFlag) 
       { 
         tri::GenericVertexInterpolator<MyMesh> interp(mr);
         tri::TriMeshClipper<MyMesh>::Box(ClipBB,interp,mr);
-        printf("              clipped to vn:%9i fn:%9i\n", mr.vn, mr.fn);
+        printf("              clipped to vn:%9i fn:%9i\n", mr.VN(), mr.FN());
       }
       tri::UpdateBounding<MyMesh>::Box(mr);
       TotBB.Add(mr.bbox);
@@ -97,7 +111,7 @@ int main(int argc,char **argv )
   		++i;
 		}
   
-  printf("Output mesh vn:%i fn:%i\n",ml.vn,ml.fn);
+  printf("Output mesh vn:%i fn:%i\n",ml.VN(),ml.FN());
 	
   tri::io::ExporterPLY<MyMesh>::Save(ml,"joined.ply");
   int dv=tri::Clean<MyMesh>::RemoveDuplicateVertex(ml); 

@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src/Core/util
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src/Core/util
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2012-06-14T13:31:05.191445Z
-4432
+2013-02-27T21:07:14.867394Z
+4823
 cignoni
 
 
@@ -26,16 +26,16 @@ cignoni
 
 e8973e21-934d-0410-ac44-de4585f5606d
 
-Memory.h
+CMakeLists.txt
 file
 
 
 
 
-2012-06-27T10:07:33.672228Z
-f5af0219035df7d0c3f8e1520f4fc4d4
-2012-06-14T13:31:05.191445Z
-4432
+2013-05-22T15:25:27.107675Z
+9cc3f7fa207b677c45f30be2628adb4a
+2011-10-05T15:04:40.740408Z
+4180
 cignoni
 has-props
 
@@ -58,7 +58,41 @@ has-props
 
 
 
-36080
+157
+
+Memory.h
+file
+
+
+
+
+2013-05-22T15:25:27.107675Z
+ed6341d5e65761a6dfacd9ecc24b19a1
+2013-02-27T21:07:14.867394Z
+4823
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+36469
 
 StaticAssert.h
 file
@@ -66,10 +100,10 @@ file
 
 
 
-2011-10-10T11:33:43.006017Z
-613a656e08afd8d82133515057c6da13
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.099675Z
+437be1565a772d4585e17cdab102dca9
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -92,7 +126,7 @@ has-props
 
 
 
-8902
+9190
 
 XprHelper.h
 file
@@ -100,10 +134,10 @@ file
 
 
 
-2012-06-27T10:07:33.672228Z
-0a1b0295318a32085f8dceca4aff8e55
-2012-06-14T13:31:05.191445Z
-4432
+2013-05-22T15:25:27.099675Z
+f9291d1f0ae551bbe27bb79bfaccd8ef
+2013-02-27T21:07:14.867394Z
+4823
 cignoni
 has-props
 
@@ -126,7 +160,7 @@ has-props
 
 
 
-16984
+16554
 
 Constants.h
 file
@@ -134,10 +168,10 @@ file
 
 
 
-2011-10-10T11:33:43.006017Z
-09fa92e4d8d286979af471c7d8f623d4
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.103675Z
+2f4366a1704d786dfec33e4eeadc9df2
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -160,7 +194,7 @@ has-props
 
 
 
-17220
+16782
 
 ForwardDeclarations.h
 file
@@ -168,10 +202,10 @@ file
 
 
 
-2011-10-10T11:33:43.006017Z
-e52ee1d8813f4a54d9bc2f8887cd9ec4
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.103675Z
+7b34de7f1fcf13200c2a991dd2d834ff
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -194,7 +228,7 @@ has-props
 
 
 
-14178
+13636
 
 BlasUtil.h
 file
@@ -202,10 +236,10 @@ file
 
 
 
-2011-10-10T11:33:43.006017Z
-f063b7465df821444bde780026cc3a9d
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.103675Z
+67643926f9a4ff6b1897f62deb6a5b92
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -228,7 +262,41 @@ has-props
 
 
 
-10798
+10157
+
+MKL_support.h
+file
+
+
+
+
+2013-05-22T15:25:27.103675Z
+7e11f8d538ce6cd16a6a7a6c745fc2eb
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3733
 
 ReenableStupidWarnings.h
 file
@@ -236,7 +304,7 @@ file
 
 
 
-2011-10-10T11:33:43.006017Z
+2013-05-22T15:25:27.103675Z
 e0abd50c752bd47acdcebe62b325fcab
 2011-10-05T15:04:40.740408Z
 4180
@@ -270,10 +338,10 @@ file
 
 
 
-2012-06-27T10:07:33.672228Z
-4bf0df1855eb610718e7d6223ef47cc5
-2012-06-14T13:31:05.191445Z
-4432
+2013-05-22T15:25:27.103675Z
+ced0ddb886a820afc0ba7884e6b6a90c
+2013-02-27T21:07:14.867394Z
+4823
 cignoni
 has-props
 
@@ -296,7 +364,7 @@ has-props
 
 
 
-17578
+16969
 
 DisableStupidWarnings.h
 file
@@ -304,10 +372,10 @@ file
 
 
 
-2011-10-10T11:33:43.006017Z
-963379330c1953d16f5a7f0af9948163
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.103675Z
+6e693a3812ad0e47d1c38666ecc8094b
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -330,7 +398,41 @@ has-props
 
 
 
-2285
+2089
+
+NonMPL2.h
+file
+
+
+
+
+2013-05-22T15:25:27.103675Z
+c4ca2e16c302c71df98732240109e7e0
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+85
 
 Meta.h
 file
@@ -338,10 +440,10 @@ file
 
 
 
-2011-10-10T11:33:43.006017Z
-d86234042f95184046498d61faee7a67
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.107675Z
+83daf5b96c24b8162581accd796d2166
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -364,39 +466,5 @@ has-props
 
 
 
-10337
-
-CMakeLists.txt
-file
-
-
-
-
-2011-10-10T11:33:43.006017Z
-9cc3f7fa207b677c45f30be2628adb4a
-2011-10-05T15:04:40.740408Z
-4180
-cignoni
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-157
+9718
 

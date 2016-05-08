@@ -26,14 +26,9 @@
 
 //None of this should happen if we are compiling c, not c++
 #ifdef __cplusplus
-#include <GL/glew.h>
-#include <QtScript>
 
-#include <QDir>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QStringList>
-#include <QColorDialog>
+#include <GL/glew.h>
+
 #include "../common/pluginmanager.h"
 #include "../common/scriptinterface.h"
 #include "glarea.h"
@@ -41,6 +36,15 @@
 #include "stdpardialog.h"
 #include "xmlstdpardialog.h"
 #include "xmlgeneratorgui.h"
+
+
+#include <QtScript>
+#include <QDir>
+#include <QMainWindow>
+#include <QMdiArea>
+#include <QStringList>
+#include <QColorDialog>
+#include <QMdiSubWindow>
 
 #define MAXRECENTFILES 4
 
@@ -50,8 +54,20 @@ class QMenu;
 class QScrollArea;
 class QSignalMapper;
 class QProgressDialog;
-class QHttp;
+class QNetworkAccessManager;
+class QNetworkReply;
+class QToolBar;
 
+class MainWindowSetting
+{
+public:
+
+	static void initGlobalParameterSet(RichParameterSet* gblset);
+	void updateGlobalParameterSet( RichParameterSet& rps );
+
+	bool permeshtoolbar;
+	static QString perMeshRenderingToolBar() {return "MeshLab::GUI::perMeshToolBar";}
+};
 
 class MainWindow : public QMainWindow, MainWindowInterface
 {
@@ -63,20 +79,22 @@ public:
 	void executeFilter(MeshLabXMLFilterContainer* mfc, EnvWrap& env, bool  isPreview);
 
   MainWindow();
-	static bool QCallBack(const int pos, const char * str);
-	const QString appName() const {return tr("MeshLab v")+appVer(); }
-  const QString appVer() const {return tr("1.3.2_64bit"); }
-
+  void init();
+    static bool QCallBack(const int pos, const char * str);
+    //const QString appName() const {return tr("MeshLab v")+appVer(); }
+  //const QString appVer() const {return tr("1.3.2"); }
+	MainWindowSetting mwsettings;
 signals:
 	void dispatchCustomSettings(RichParameterSet& rps);
 	void filterExecuted();
+	void updateLayerTable();
 
 private slots:
   GLArea* newProject(const QString& projName = QString());
   void saveProject();
 
 public slots:
-  bool importMesh(QString fileName=QString());
+  bool importMeshWithLayerManagement(QString fileName=QString());  
   bool importRaster(const QString& fileImg = QString());
   bool openProject(QString fileName=QString());
   bool appendProject(QString fileName=QString());
@@ -85,7 +103,9 @@ public slots:
 
   void delCurrentMesh();
   void delCurrentRaster();
+  void updateRenderMode();
 private slots:
+  bool importMesh(QString fileName=QString());  
   void endEdit();
   void updateDocumentScriptBindings();
   void loadAndInsertXMLPlugin(const QString& xmlpath,const QString& scriptname);
@@ -99,59 +119,70 @@ public:
   bool loadMeshWithStandardParams(QString& fullPath,MeshModel* mm);
 
 private slots:
-	//////////// Slot Menu File //////////////////////
+    //////////// Slot Menu File //////////////////////
   void reload();
   void reloadAllMesh();
   void openRecentMesh();
-	void openRecentProj();
-	bool saveAs(QString fileName = QString(),const bool saveAllPossibleAttributes = false);
-	bool save(const bool saveAllPossibleAttributes = false);
-	bool saveSnapshot();
-	///////////Slot Menu Edit ////////////////////////
-	void applyEditMode();
-	void suspendEditMode();
-	///////////Slot Menu Filter ////////////////////////
-	void startFilter();
-	void applyLastFilter();
-	void runFilterScript();
-	void showFilterScript();
-	void showXMLPluginEditorGui();
+    void openRecentProj();
+    bool saveAs(QString fileName = QString(),const bool saveAllPossibleAttributes = false);
+    bool save(const bool saveAllPossibleAttributes = false);
+    bool saveSnapshot();
+	void changeFileExtension(const QString&);
+    ///////////Slot Menu Edit ////////////////////////
+    void applyEditMode();
+    void suspendEditMode();
+    ///////////Slot Menu Filter ////////////////////////
+    void startFilter();
+    void applyLastFilter();
+    void runFilterScript();
+    void showFilterScript();
+    void showXMLPluginEditorGui();
   void showTooltip(QAction*);
   /////////// Slot Menu Render /////////////////////
-	void renderBbox();
-	void renderPoint();
-	void renderWire();
-	void renderFlat();
-	void renderFlatLine();
-	void renderHiddenLines();
-	void renderSmooth();
-	void renderTexture();
-	void setLight();
-	void setDoubleLighting();
-	void setFancyLighting();
-    void setColorMode(QAction *qa);
+   //void renderBbox();
+    //void renderPoint();
+/*    void renderWire();
+    void renderFlat();
+    void renderFlatLine();
+    void renderHiddenLines();
+    void renderSmooth();
+    void renderTexture();
+    void setLight();
+    void setDoubleLighting();
+    void setFancyLighting();*/
+
+    //void setColorMode(QAction *qa);
+ //   void setColorNoneMode();
+	//void setPerMeshColorMode();
+	//void setPerVertexColorMode();
+	//void setPerFaceColorMode();
+	
 	void applyRenderMode();
-	//void applyColorMode();
-	void toggleBackFaceCulling();
-  void toggleSelectFaceRendering();
-  void toggleSelectVertRendering();
-  void applyDecorateMode();
-	///////////Slot Menu View ////////////////////////
-	void fullScreen();
-	void showToolbarFile();
-	void showToolbarRender();
-	void showInfoPane();
-	void showTrackBall();
-	void resetTrackBall();
-	void showLayerDlg();
-	void showRaster();
-	///////////Slot Menu Windows /////////////////////
-	void updateWindowMenu();
+    //void applyColorMode();
+	/* void toggleBackFaceCulling();
+	void toggleSelectFaceRendering();
+	void toggleSelectVertRendering();*/
+	void applyDecorateMode();
+
+  void switchOffDecorator(QAction* );
+    ///////////Slot Menu View ////////////////////////
+    void fullScreen();
+    void showToolbarFile();
+    void showToolbarRender();
+    void showInfoPane();
+    void showTrackBall();
+    void resetTrackBall();
+    void showLayerDlg(bool visible);
+    void showRaster();
+    ///////////Slot Menu Windows /////////////////////
+    void updateWindowMenu();
     void updateMenus();
-	void updateSubFiltersMenu(const bool createmenuenabled,const bool validmeshdoc);
+    void updateSubFiltersMenu(const bool createmenuenabled,const bool validmeshdoc);
     void updateMenuItems(QMenu* menu,const bool enabled);
-	void updateStdDialog();
-	void updateXMLStdDialog();
+    void updateStdDialog();
+    void updateXMLStdDialog();
+
+	//void updatePerViewApplicationStatus();
 	void setSplit(QAction *qa);
 	void setUnsplit();
 	void linkViewers();
@@ -160,8 +191,7 @@ private slots:
   void viewFromCurrentMeshShot();
   void viewFromCurrentRasterShot();
   void copyViewToClipBoard();
-	void pasteViewFromClipboard();
-
+    void pasteViewFromClipboard();
 	///////////Slot PopUp Menu Handles /////////////////////
 	void splitFromHandle(QAction * qa);
 	void unsplitFromHandle(QAction * qa);
@@ -180,17 +210,21 @@ private slots:
 
 	void dropEvent ( QDropEvent * event );
 	void dragEnterEvent(QDragEnterEvent *);
-	void connectionDone(bool status);
+	void connectionDone(QNetworkReply *reply);
 	void sendHistory();
 
 	///////////Solt Wrapper for QMdiArea //////////////////
 	void wrapSetActiveSubWindow(QWidget* window);
 	void scriptCodeExecuted(const QScriptValue& val,const int time,const QString& output);
 private:
-    void createStdPluginWnd(); // this one is
+
+	int longestActionWidthInMenu(QMenu* m,const int longestwidth);
+	int longestActionWidthInMenu( QMenu* m);
+	int longestActionWidthInAllMenus();
+	void createStdPluginWnd(); // this one is
 	void createXMLStdPluginWnd();
 	void initGlobalParameters();
-    void createActions();
+	void createActions();
 	void createMenus();
 	void initSearchEngine();
 	void initItemForSearching(QAction* act);
@@ -202,17 +236,17 @@ private:
 	void createToolBars();
 	void loadMeshLabSettings();
   // void loadPlugins();
-	void keyPressEvent(QKeyEvent *);
-	void updateRecentFileActions();
-	void updateRecentProjActions();
+    void keyPressEvent(QKeyEvent *);
+    void updateRecentFileActions();
+    void updateRecentProjActions();
   void saveRecentFileList(const QString &fileName);
-	void saveRecentProjectList(const QString &projName);
-	void addToMenu(QList<QAction *>, QMenu *menu, const char *slot);
+    void saveRecentProjectList(const QString &projName);
+    void addToMenu(QList<QAction *>, QMenu *menu, const char *slot);
 
 	void initDocumentMeshRenderState(MeshLabXMLFilterContainer* mfc,EnvWrap &env );
 	void initDocumentRasterRenderState(MeshLabXMLFilterContainer* mfc, EnvWrap &env );
 
-	QHttp *httpReq;
+	QNetworkAccessManager *httpReq;
 	QBuffer myLocalBuf;
 	int idHost;
 	int idGet;
@@ -227,25 +261,28 @@ private:
 	PluginGeneratorGUI* plugingui;
 	QSignalMapper *windowMapper;
 
+	PluginManager PM;
 
-    PluginManager PM;
-
-		/* 
+		/*
 		Note this part should be detached from MainWindow just like the loading plugin part.
-		
-		For each running instance of meshlab, for the global params we have default (hardwired) values and current(saved,modified) values. 
-		At the start up the initGlobalParameterSet function (of decorations and of glarea and of ... ) is called with the empty RichParameterSet defaultGlobalParams (to collect the default values) 
+
+		For each running instance of meshlab, for the global params we have default (hardwired) values and current(saved,modified) values.
+		At the start up the initGlobalParameterSet function (of decorations and of glarea and of ... ) is called with the empty RichParameterSet defaultGlobalParams (to collect the default values)
 		At the start up the currentGlobalParams is filled with the values saved in the registry.
 	*/
-	
+
 	RichParameterSet currentGlobalParams;
 	RichParameterSet defaultGlobalParams;
-	
+
 	QByteArray toolbarState;								//stato delle toolbar e dockwidgets
 
 	QDir lastUsedDirectory;  //This will hold the last directory that was used to load/save a file/project in
 
+
+	vcg::GLW::TextureMode getBestTextureRenderModePerMesh(const int meshid);
+	void setBestTextureModePerMesh(RenderModeAction* textact,const int meshid, RenderMode& rm);
 public:
+
 
   MeshDocument *meshDoc() {
     assert(currentViewContainer());
@@ -256,21 +293,21 @@ public:
   RichParameterSet& currentGlobalPars() { return currentGlobalParams; }
   const RichParameterSet& defaultGlobalPars() const { return defaultGlobalParams; }
 
-	GLArea *GLA() const {
+    GLArea *GLA() const {
 //	  if(mdiarea->currentSubWindow()==0) return 0;
     MultiViewer_Container *mvc = currentViewContainer();
     if(!mvc) return 0;
     GLArea *glw =  qobject_cast<GLArea*>(mvc->currentView());
-	  return glw;
-	}
+      return glw;
+    }
 
   MultiViewer_Container* currentViewContainer() const {
     MultiViewer_Container *mvc = qobject_cast<MultiViewer_Container *>(mdiarea->currentSubWindow());
     if(mvc) return mvc;
     if(mvc==0 && mdiarea->currentSubWindow()!=0 ){
-			mvc = qobject_cast<MultiViewer_Container *>(mdiarea->currentSubWindow()->widget());
+            mvc = qobject_cast<MultiViewer_Container *>(mdiarea->currentSubWindow()->widget());
       if(mvc) return mvc;
-		}
+        }
     QList<QMdiSubWindow *> subwinList=mdiarea->subWindowList();
     foreach(QMdiSubWindow *subwinPtr,subwinList)
     {
@@ -282,7 +319,7 @@ public:
         }
     }
 
-    return 0;
+	return 0;
 	}
 
 
@@ -296,10 +333,13 @@ public:
     return _qsb;
   }
     QMenu* meshLayerMenu() { return filterMenuMeshLayer; }
-	QMenu* rasterLayerMenu() { return filterMenuRasterLayer; }
-	
+    QMenu* rasterLayerMenu() { return filterMenuRasterLayer; }
+	void connectRenderModeActionList(QList<RenderModeAction*>& actlist);
 
 private:
+	//the xml filters run in a different thread. The xmlfiltertimer starts on executeFilter and stops on postFilterExecution
+	//function linked to the thread finished signal.
+	QTime xmlfiltertimer;
 	WordActionsMapAccessor wama;
 	//////// ToolBars ///////////////
 	QToolBar *mainToolBar;
@@ -321,24 +361,24 @@ private:
   QMenu *filterMenuPolygonal;
   QMenu *filterMenuColorize;
   QMenu *filterMenuSmoothing;
-  QMenu *filterMenuQuality; 
+  QMenu *filterMenuQuality;
   QMenu *filterMenuMeshLayer;
   QMenu *filterMenuRasterLayer;
   QMenu *filterMenuNormal;
   QMenu *filterMenuRangeMap;
   QMenu *filterMenuPointSet;
   QMenu *filterMenuSampling;
-  QMenu *filterMenuTexture; 
+  QMenu *filterMenuTexture;
   QMenu *filterMenuCamera;
 
-	QMenu *editMenu;
+    QMenu *editMenu;
 
   //Render Menu and SubMenu ////
-	QMenu *shadersMenu;
-	QMenu *renderMenu;
-	QMenu *renderModeMenu;
-	QMenu *lightingModeMenu;
-	QMenu *colorModeMenu;
+    QMenu *shadersMenu;
+    QMenu *renderMenu;
+    QMenu *renderModeMenu;
+    QMenu *lightingModeMenu;
+    QMenu *colorModeMenu;
 
 	//View Menu and SubMenu //////
 	QMenu *viewMenu;
@@ -358,6 +398,7 @@ private:
 	////////// Search Shortcut ////////////////
 	QShortcut* searchShortCut;
 	MyToolButton* searchButton;
+	SearchMenu* searchMenu;
 	//////////// Actions Menu File ///////////////////////
   QAction *newProjectAct;
   QAction *openProjectAct, *appendProjectAct, *saveProjectAct, *saveProjectAsAct;
@@ -369,8 +410,8 @@ private:
   QAction *saveSnapshotAct;
   QAction *recentFileActs[MAXRECENTFILES];
   QAction *recentProjActs[MAXRECENTFILES];
-	QAction *separatorAct;
-	QAction *exitAct;
+    QAction *separatorAct;
+    QAction *exitAct;
   //////
   QAction *lastFilterAct;
   QAction *runFilterScriptAct;
@@ -378,28 +419,29 @@ private:
   QAction* showFilterEditAct;
   /////////// Actions Menu Edit  /////////////////////
   QAction *suspendEditModeAct;
-	/////////// Actions Menu Render /////////////////////
-	QActionGroup *renderModeGroupAct;
-	QAction *renderBboxAct;
-	QAction *renderModePointsAct;
-	QAction *renderModeWireAct;
-	QAction *renderModeHiddenLinesAct;
-	QAction *renderModeFlatLinesAct;
-	QAction *renderModeFlatAct;
-	QAction *renderModeSmoothAct;
-	QAction *renderModeTextureAct;
-	QAction *setDoubleLightingAct;
-	QAction *setFancyLightingAct;
-  QAction *setLightAct;
-	QAction *backFaceCullAct;
-  QAction *setSelectFaceRenderingAct;
-  QAction *setSelectVertRenderingAct;
+    /////////// Actions Menu Render /////////////////////
+    QActionGroup *renderModeGroupAct;
+    RenderModeAction *renderBboxAct;
+    RenderModeAction *renderModePointsAct;
+    RenderModeAction *renderModeWireAct;
+    //RenderModeAction *renderModeHiddenLinesAct;
+    RenderModeAction *renderModeFlatLinesAct;
+    RenderModeAction *renderModeFlatAct;
+    RenderModeAction *renderModeSmoothAct;
+    RenderModeAction *renderModeTextureWedgeAct;
+	//RenderModeAction *renderModeTextureWedgeAct;
+    RenderModeAction *setDoubleLightingAct;
+    RenderModeAction *setFancyLightingAct;
+	RenderModeAction *setLightAct;
+	RenderModeAction *backFaceCullAct;
+	RenderModeAction *setSelectFaceRenderingAct;
+	RenderModeAction *setSelectVertRenderingAct;
 
 	QActionGroup *colorModeGroupAct;
-	QAction *colorModeNoneAct;
-        QAction *colorModePerMeshAct;
-	QAction *colorModePerVertexAct;
-	QAction *colorModePerFaceAct;
+	RenderModeAction *colorModeNoneAct;
+	RenderModeAction *colorModePerMeshAct;
+	RenderModeAction *colorModePerVertexAct;
+	RenderModeAction *colorModePerFaceAct;
 	///////////Actions Menu View ////////////////////////
 	QAction *fullScreenAct;
 	QAction *showToolbarStandardAct;
@@ -416,11 +458,11 @@ private:
 	QAction *closeAllAct;
 	QAction *setSplitHAct;
 	QAction *setSplitVAct;
-    QActionGroup *setSplitGroupAct;
+	QActionGroup *setSplitGroupAct;
 	QAction *setUnsplitAct;
 	///////////Actions Menu Windows -> Split/UnSplit from Handle ////////////////////////
 	QActionGroup *splitGroupAct;
-	QActionGroup *unsplitGroupAct;	
+	QActionGroup *unsplitGroupAct;
 
 	QAction *splitUpAct;
 	QAction *splitDownAct;
@@ -444,11 +486,11 @@ private:
 	QAction *viewBackAct;
   QAction *viewFromMeshAct;
   QAction *viewFromRasterAct;
-	QAction *viewFromFileAct;
+    QAction *viewFromFileAct;
 
-	///////////Actions Menu Windows -> Link/Copy/Paste View ////////////////////////
+    ///////////Actions Menu Windows -> Link/Copy/Paste View ////////////////////////
 public:
-	QAction *linkViewersAct;
+    QAction *linkViewersAct;
 private:
 	QAction *copyShotToClipboardAct;
 	QAction *pasteShotFromClipboardAct;
@@ -463,6 +505,9 @@ private:
 	QAction *onscreenHelpAct;
 	QAction *checkUpdatesAct;
 	////////////////////////////////////////////////////
+	static QString getDecoratedFileName(const QString& name);
+	
+	void updateRenderToolBar( RenderModeAction* act );
 };
 
 
@@ -488,7 +533,8 @@ protected:
     if (event->type() == QEvent::FileOpen) {
       noEvent=false;
       QFileOpenEvent *fileEvent = static_cast<QFileOpenEvent*>(event);
-      mainWindow->importMesh(fileEvent->file());
+      mainWindow->importMeshWithLayerManagement(fileEvent->file());
+      qDebug("event fileopen %s",qPrintable(fileEvent->file()));
       return true;
     } else {
       // standard event processing

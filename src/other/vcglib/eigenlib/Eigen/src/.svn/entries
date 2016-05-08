@@ -1,15 +1,15 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2012-06-14T13:31:05.191445Z
-4432
-cignoni
+2013-12-16T12:06:34.649605Z
+5041
+pietroni
 
 
 
@@ -26,13 +26,7 @@ cignoni
 
 e8973e21-934d-0410-ac44-de4585f5606d
 
-Core
-dir
-
-misc
-dir
-
-Geometry
+SuperLUSupport
 dir
 
 SVD
@@ -41,10 +35,28 @@ dir
 Sparse
 dir
 
+OrderingMethods
+dir
+
+PardisoSupport
+dir
+
 StlSupport
 dir
 
+SparseCholesky
+dir
+
+PaStiXSupport
+dir
+
+IterativeLinearSolvers
+dir
+
 Eigen2Support
+dir
+
+SparseCore
 dir
 
 Eigenvalues
@@ -56,7 +68,7 @@ file
 
 
 
-2011-10-10T11:35:44.516017Z
+2013-05-22T15:25:27.939675Z
 2ebef3f13165f24e7bc3f09b782f73b2
 2011-10-05T15:04:40.740408Z
 4180
@@ -90,15 +102,30 @@ dir
 plugins
 dir
 
+Cholesky
+dir
+
 Householder
 dir
 
-Cholesky
+CholmodSupport
 dir
 
 QR
 dir
 
+UmfPackSupport
+dir
+
 Jacobi
+dir
+
+Core
+dir
+
+misc
+dir
+
+Geometry
 dir
 

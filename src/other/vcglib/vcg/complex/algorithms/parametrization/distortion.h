@@ -27,9 +27,10 @@
 
 namespace vcg {
 	namespace tri{
-		template <class MeshType, bool PerWedgeFlag=false>
+		template <class MeshType, bool PerWedgeFlag>
 		class Distortion
 		{
+		public:
 			typedef typename MeshType::FaceType FaceType;
 			typedef typename MeshType::VertexType VertexType;
 			typedef typename MeshType::CoordType CoordType;
@@ -48,34 +49,34 @@ namespace vcg {
 				  uv1=f->cWT(1).P();
 				  uv2=f->cWT(2).P();
 				} else {
-				  uv0=f->V(0)->T().P();
-				  uv1=f->V(1)->T().P();
-				  uv2=f->V(2)->T().P();
+				  uv0=f->cV(0)->T().P();
+				  uv1=f->cV(1)->T().P();
+				  uv2=f->cV(2)->T().P();
 				}
 				ScalarType AreaUV=((uv1-uv0)^(uv2-uv0))/2.0;
 				return AreaUV;
 			}
 
-			static ScalarType EdgeLenght3D(FaceType *f,int e)
+            static ScalarType EdgeLenght3D(const FaceType *f,int e)
 			{
 				assert((e>=0)&&(e<3));
-				ScalarType lenght=(f->P0(e)-f->P1(e)).Norm();
-				return (lenght);
+				ScalarType length=(f->cP0(e)-f->cP1(e)).Norm();
+				return (length);
 			}
 
-			static ScalarType EdgeLenghtUV(FaceType *f,int e)
+            static ScalarType EdgeLenghtUV(const FaceType *f,int e)
 			{
 				assert((e>=0)&&(e<3));
 				Point2<ScalarType> uv0,uv1;
 				if(PerWedgeFlag) {
-				  uv0=f->WT(e+0).P();
-				  uv1=f->WT((e+1)%3).P();
+                  uv0=f->cWT(e+0).P();
+                  uv1=f->cWT((e+1)%3).P();
 				} else {
-				  uv0=f->V0(e)->T().P();
-				  uv1=f->V1(e)->T().P();
+                  uv0=f->cV0(e)->T().P();
+                  uv1=f->cV1(e)->T().P();
 				}
-				ScalarType UVlenght=Distance(uv0,uv1);
-				return UVlenght;
+				ScalarType UVlength=Distance(uv0,uv1);
+				return UVlength;
 			}
 
 			static ScalarType AngleCos3D(const FaceType *f,int e)
@@ -116,9 +117,9 @@ namespace vcg {
 			static ScalarType AngleRad3D(const FaceType *f,int e)
 			{
 				assert((e>=0)&&(e<3));
-				CoordType p0=f->P((e+2)%3);
-				CoordType p1=f->P(e);
-				CoordType p2=f->P((e+1)%3);
+				CoordType p0=f->cP((e+2)%3);
+				CoordType p1=f->cP(e);
+				CoordType p2=f->cP((e+1)%3);
 				typedef typename CoordType::ScalarType ScalarType;
 				CoordType dir0=p2-p1;
 				CoordType dir1=p0-p1;
@@ -133,9 +134,9 @@ namespace vcg {
 				uv1=f->cWT((e+0)%3).P();
 				uv2=f->cWT((e+1)%3).P();
 			  } else {
-				uv0=f->V2(e)->T().P();
-				uv1=f->V0(e)->T().P();
-				uv2=f->V1(e)->T().P();
+				uv0=f->cV2(e)->T().P();
+				uv1=f->cV0(e)->T().P();
+				uv2=f->cV1(e)->T().P();
 			  }
 				vcg::Point2<ScalarType> dir0=uv2-uv1;
 				vcg::Point2<ScalarType> dir1=uv0-uv1;
@@ -149,6 +150,7 @@ namespace vcg {
 
 
 		public:
+			enum DistType{AreaDist,EdgeDist,AngleDist};
 
 			///return the absolute difference between angle in 3D space and texture space
 			///Actually the difference in cos space
@@ -179,9 +181,9 @@ namespace vcg {
 			}
 
 			///return the global scaling factors  from 3D to UV
-			static ScalarType MeshScalingFactor(MeshType &m,
-				ScalarType &AreaScale,
-				ScalarType &EdgeScale)
+            static void MeshScalingFactor(const MeshType &m,
+                                          ScalarType &AreaScale,
+                                          ScalarType &EdgeScale)
 			{
 				ScalarType SumArea3D=0;
 				ScalarType SumArea2D=0;
@@ -201,10 +203,10 @@ namespace vcg {
 				EdgeScale=SumEdge3D/SumEdge2D;
 			}
 
-			///return the variance of edge lenght, normalized in absolute value,
+			///return the variance of edge length, normalized in absolute value,
 			// the needed scaling factor EdgeScaleVal may be calculated
 			///by using the ScalingFactor function
-			static ScalarType EdgeDistortion(FaceType *f,int e,
+            static ScalarType EdgeDistortion(const FaceType *f,int e,
 				ScalarType EdgeScaleVal)
 			{
 				ScalarType edgeUV=EdgeLenghtUV(f,e)*EdgeScaleVal;
@@ -218,7 +220,7 @@ namespace vcg {
 			///return the variance of area, normalized
 			///in absolute value, the scalar AreaScaleVal may be calculated
 			///by using the ScalingFactor function
-			static ScalarType AreaDistortion(FaceType *f,
+            static ScalarType AreaDistortion(const FaceType *f,
 											 ScalarType AreaScaleVal)
 			{
 			  ScalarType areaUV=AreaUV(f)*AreaScaleVal;
@@ -266,6 +268,26 @@ namespace vcg {
 				}
 				return UDdist;
 			}
+
+            static void SetQasDistorsion(MeshType &m,
+                                         DistType DType=AreaDist)
+            {
+                ScalarType edge_scale,area_scale;
+                MeshScalingFactor(m,area_scale,edge_scale);
+                for (int i=0;i<m.face.size();i++)
+                {
+                    if (m.face[i].IsD())continue;
+                    if (DType==AreaDist)
+                        m.face[i].Q()=1-AreaDistortion(&m.face[i],area_scale);
+                    else
+                    if (DType==AngleDist)
+                        m.face[i].Q()=1-AngleDistortion(&m.face[i]);
+                    else
+                        m.face[i].Q()=3-EdgeDistortion(&m.face[i],0,edge_scale)-
+                                        EdgeDistortion(&m.face[i],1,edge_scale)-
+                                        EdgeDistortion(&m.face[i],2,edge_scale);
+                }
+            }
 		};
 	}
 }

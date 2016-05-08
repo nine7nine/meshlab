@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src/StlSupport
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src/StlSupport
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2011-10-05T15:04:40.740408Z
-4180
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -32,10 +32,10 @@ file
 
 
 
-2011-10-10T11:27:07.606018Z
-4bbbc75465fa9a225c138bfaa0eb312d
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.435675Z
+a5821f10b69792c35620d717877f6dea
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -58,7 +58,7 @@ has-props
 
 
 
-3527
+2763
 
 StdList.h
 file
@@ -66,10 +66,10 @@ file
 
 
 
-2011-10-10T11:27:07.606018Z
-4ea050734b819527c739d15949c32409
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.435675Z
+9b8c12ce887b49449c57200b7acbae5b
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -92,7 +92,7 @@ has-props
 
 
 
-5289
+4525
 
 CMakeLists.txt
 file
@@ -100,7 +100,7 @@ file
 
 
 
-2011-10-10T11:27:07.606018Z
+2013-05-22T15:25:27.435675Z
 375f155764c6a99fe51c01209981d1e3
 2011-10-05T15:04:40.740408Z
 4180
@@ -134,10 +134,10 @@ file
 
 
 
-2011-10-10T11:27:07.606018Z
-f7fe5a5b90441832fe174968c3cafa69
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.435675Z
+665774a6e7160a0106bf457cacdfb7b6
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -160,7 +160,7 @@ has-props
 
 
 
-5974
+5210
 
 StdDeque.h
 file
@@ -168,10 +168,10 @@ file
 
 
 
-2011-10-10T11:27:07.606018Z
-2f33ee67569ec2f1d9a5bc1952898318
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.435675Z
+299f709ed67a7ddd11814eb4be2ee095
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -194,5 +194,5 @@ has-props
 
 
 
-6259
+5495
 

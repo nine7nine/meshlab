@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src/Core/arch/AltiVec
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src/Core/arch/AltiVec
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2011-10-05T15:04:40.740408Z
-4180
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -26,47 +26,13 @@ cignoni
 
 e8973e21-934d-0410-ac44-de4585f5606d
 
-PacketMath.h
-file
-
-
-
-
-2011-10-10T11:31:08.276017Z
-287e8114a45786ae9138ce134cc112ff
-2011-10-05T15:04:40.740408Z
-4180
-cignoni
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-19356
-
 CMakeLists.txt
 file
 
 
 
 
-2011-10-10T11:31:08.276017Z
+2013-05-22T15:25:26.667675Z
 38de4f3e9a39d503651a406a23d584f5
 2011-10-05T15:04:40.740408Z
 4180
@@ -100,10 +66,10 @@ file
 
 
 
-2011-10-10T11:31:08.276017Z
-58044a35c7f4941fa8d3dafe457f8e4c
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:26.667675Z
+8d3c929e57dfd2f6c0125b911ea31ab2
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -126,5 +92,39 @@ has-props
 
 
 
-9095
+8376
+
+PacketMath.h
+file
+
+
+
+
+2013-05-22T15:25:26.667675Z
+e4419c083d40fae4f0081326a2a63091
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+18637
 

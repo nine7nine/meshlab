@@ -30,6 +30,7 @@
 #include "meshmodel.h"
 #include "vcg/space/point3.h"
 
+
 class ScriptAdapterGenerator
 {
 private:
@@ -48,8 +49,8 @@ public:
 };
 
 
-QScriptValue PluginInterfaceInit(QScriptContext *context, QScriptEngine *engine, void * param);
-QScriptValue PluginInterfaceApply(QScriptContext *context, QScriptEngine *engine, void * param);
+//QScriptValue PluginInterfaceInit(QScriptContext *context, QScriptEngine *engine, void * param);
+//QScriptValue PluginInterfaceApply(QScriptContext *context, QScriptEngine *engine, void * param);
 QScriptValue PluginInterfaceApplyXML(QScriptContext *context, QScriptEngine *engine, void * param);
 
 QScriptValue IRichParameterSet_prototype_setBool(QScriptContext* c,QScriptEngine* e);
@@ -115,6 +116,8 @@ public:
 
 	CMeshO::VertexType& vv;
 };
+
+class MeshModelSI;
 
 class MeshDocumentSI : public QObject
 {

@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/unsupported/Eigen/src/NumericalDiff
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/unsupported/Eigen/src/NumericalDiff
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2011-10-05T15:04:40.740408Z
-4180
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -32,7 +32,7 @@ file
 
 
 
-2011-10-10T11:39:06.196017Z
+2013-05-22T15:25:28.555675Z
 effd859cc8217527d385c9811c47b4e9
 2011-10-05T15:04:40.740408Z
 4180
@@ -66,10 +66,10 @@ file
 
 
 
-2011-10-10T11:39:06.196017Z
-3d6f158a66882fc54955707a8716e634
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:28.555675Z
+6b0e853bfdddd8da4dcb3d87c07b7561
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -92,5 +92,5 @@ has-props
 
 
 
-4697
+3979
 

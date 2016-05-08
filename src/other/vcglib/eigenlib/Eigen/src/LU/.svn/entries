@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src/LU
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src/LU
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2012-06-14T13:31:05.191445Z
-4432
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -26,16 +26,16 @@ cignoni
 
 e8973e21-934d-0410-ac44-de4585f5606d
 
-PartialPivLU.h
+Determinant.h
 file
 
 
 
 
-2011-10-10T11:27:23.886018Z
-2385fc5544d0820a74ab14a7dd0a8e06
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:26.239675Z
+f4d248b7f950fe4304b5638ca18513d7
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -58,7 +58,109 @@ has-props
 
 
 
-18627
+3046
+
+Inverse.h
+file
+
+
+
+
+2013-05-22T15:25:26.239675Z
+555366d062b1115a8a77c1cbb3b34b6f
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+14366
+
+PartialPivLU.h
+file
+
+
+
+
+2013-05-22T15:25:26.239675Z
+bd1a6903e73bd63d375946b67cb05f2e
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+17909
+
+PartialPivLU_MKL.h
+file
+
+
+
+
+2013-05-22T15:25:26.243675Z
+118169bc6c115432bd8bc83cc0a4f2e4
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3479
 
 FullPivLU.h
 file
@@ -66,10 +168,10 @@ file
 
 
 
-2012-06-27T10:07:33.200228Z
-e52fd19949d1b4a5db858c08293c5270
-2012-06-14T13:31:05.191445Z
-4432
+2013-05-22T15:25:26.243675Z
+d5f6b9a618e19aea6590f4c315236946
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -92,7 +194,7 @@ has-props
 
 
 
-28615
+27914
 
 arch
 dir
@@ -103,7 +205,7 @@ file
 
 
 
-2011-10-10T11:27:23.886018Z
+2013-05-22T15:25:26.243675Z
 112fd354b8da1eab31ec9e683761a7f4
 2011-10-05T15:04:40.740408Z
 4180
@@ -130,72 +232,4 @@ has-props
 
 
 160
-
-Determinant.h
-file
-
-
-
-
-2011-10-10T11:27:23.886018Z
-4df0a295e276bad7cf84b5b549127174
-2011-10-05T15:04:40.740408Z
-4180
-cignoni
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-3764
-
-Inverse.h
-file
-
-
-
-
-2011-10-10T11:27:23.886018Z
-8c65c7f4032bb04deab69d1127784858
-2011-10-05T15:04:40.740408Z
-4180
-cignoni
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-15090
 

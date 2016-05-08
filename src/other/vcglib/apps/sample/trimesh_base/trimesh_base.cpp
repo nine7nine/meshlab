@@ -2,7 +2,7 @@
 * VCGLib                                                            o o     *
 * Visual and Computer Graphics Library                            o     o   *
 *                                                                _   O  _   *
-* Copyright(C) 2004-2009                                           \/)\/    *
+* Copyright(C) 2004-2012                                           \/)\/    *
 * Visual Computing Lab                                            /\/|      *
 * ISTI - Italian National Research Council                           |      *
 *                                                                    \      *
@@ -20,64 +20,58 @@
 * for more details.                                                         *
 *                                                                           *
 ****************************************************************************/
+/*! \file trimesh_base.cpp
+\ingroup code_sample
 
-#include<vcg/simplex/vertex/base.h>
-#include<vcg/simplex/vertex/component.h>
+\brief the minimal example of using the lib
 
-#include <vcg/complex/used_types.h>
+This file contain a minimal example of the library, showing how to load a mesh and how to compute per vertex normals on it.
 
-#include<vcg/simplex/face/base.h>
-#include<vcg/simplex/face/component.h>
+*/
 
-#include<vcg/simplex/face/topology.h>
 #include<vcg/complex/complex.h>
-
-// input output
-#include<wrap/io_trimesh/import.h>
-#include<wrap/io_trimesh/export.h>
-
-// topology computation
+#include<wrap/io_trimesh/import_off.h>
 #include<vcg/complex/algorithms/update/topology.h>
-
-// normals
 #include<vcg/complex/algorithms/update/normal.h>
 
-using namespace vcg;
-using namespace std;
+class MyVertex; class MyEdge; class MyFace;
+struct MyUsedTypes : public vcg::UsedTypes<vcg::Use<MyVertex>   ::AsVertexType,
+                                           vcg::Use<MyEdge>     ::AsEdgeType,
+                                           vcg::Use<MyFace>     ::AsFaceType>{};
 
-class MyEdge;
-class MyFace;
-class MyVertex;
-struct MyUsedTypes : public UsedTypes<	Use<MyVertex>   ::AsVertexType,
-                                        Use<MyEdge>     ::AsEdgeType,
-                                        Use<MyFace>     ::AsFaceType>{};
+class MyVertex  : public vcg::Vertex< MyUsedTypes, vcg::vertex::Coord3f, vcg::vertex::Normal3f, vcg::vertex::BitFlags  >{};
+class MyFace    : public vcg::Face<   MyUsedTypes, vcg::face::FFAdj,  vcg::face::VertexRef, vcg::face::BitFlags > {};
+class MyEdge    : public vcg::Edge<   MyUsedTypes> {};
 
-class MyVertex  : public Vertex<MyUsedTypes, vertex::Coord3f, vertex::Normal3f, vertex::BitFlags  >{};
-class MyFace    : public Face< MyUsedTypes, face::FFAdj,  face::VertexRef, face::BitFlags > {};
-class MyEdge    : public Edge<MyUsedTypes>{};
-class MyMesh    : public tri::TriMesh< vector<MyVertex>, vector<MyFace> , vector<MyEdge>  > {};
+class MyMesh    : public vcg::tri::TriMesh< std::vector<MyVertex>, std::vector<MyFace> , std::vector<MyEdge>  > {};
+
+class MyVertex0  : public vcg::Vertex< MyUsedTypes, vcg::vertex::Coord3f, vcg::vertex::BitFlags  >{};
+class MyVertex1  : public vcg::Vertex< MyUsedTypes, vcg::vertex::Coord3f, vcg::vertex::Normal3f, vcg::vertex::BitFlags  >{};
+class MyVertex2  : public vcg::Vertex< MyUsedTypes, vcg::vertex::Coord3f, vcg::vertex::Color4b, vcg::vertex::CurvatureDirf,
+                                                    vcg::vertex::Qualityf, vcg::vertex::Normal3f, vcg::vertex::BitFlags  >{};
+
 
 int main( int argc, char **argv )
 {
   if(argc<2)
   {
-    printf("Usage trimesh_base <meshfilename.ply>\n");
+    printf("Usage trimesh_base <meshfilename.obj>\n");
     return -1;
   }
-
+  /*!
+    */
   MyMesh m;
 
-  if(tri::io::ImporterPLY<MyMesh>::Open(m,argv[1])!=0)
+  if(vcg::tri::io::ImporterOFF<MyMesh>::Open(m,argv[1])!=vcg::tri::io::ImporterOFF<MyMesh>::NoError)
   {
     printf("Error reading file  %s\n",argv[1]);
     exit(0);
   }
 
-  tri::UpdateTopology<MyMesh>::FaceFace(m);
-  tri::UpdateFlags<MyMesh>::FaceBorderFromFF(m);
-  tri::UpdateNormals<MyMesh>::PerVertexNormalized(m);
-  printf("Input mesh  vn:%i fn:%i\n",m.vn,m.fn);
-  printf( "Mesh has %i vert and %i faces\n", m.vn, m.fn );
+  vcg::tri::RequirePerVertexNormal(m);
+  vcg::tri::UpdateNormal<MyMesh>::PerVertexNormalized(m);
+  printf("Input mesh  vn:%i fn:%i\n",m.VN(),m.FN());
+  printf( "Mesh has %i vert and %i faces\n", m.VN(), m.FN() );
 
   return 0;
 }

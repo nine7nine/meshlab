@@ -1,24 +1,35 @@
-// standard headers
+/****************************************************************************
+* VCGLib                                                            o o     *
+* Visual and Computer Graphics Library                            o     o   *
+*                                                                _   O  _   *
+* Copyright(C) 2004-2012                                           \/)\/    *
+* Visual Computing Lab                                            /\/|      *
+* ISTI - Italian National Research Council                           |      *
+*                                                                    \      *
+* All rights reserved.                                                      *
+*                                                                           *
+* This program is free software; you can redistribute it and/or modify      *
+* it under the terms of the GNU General Public License as published by      *
+* the Free Software Foundation; either version 2 of the License, or         *
+* (at your option) any later version.                                       *
+*                                                                           *
+* This program is distributed in the hope that it will be useful,           *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+* GNU General Public License (http://www.gnu.org/licenses/gpl.txt)          *
+* for more details.                                                         *
+*                                                                           *
+****************************************************************************/
 #include <stdio.h>
 
-// stl headers
-#include <vector>
-
-// vcg headers
-//#include<vcg/simplex/vertex/vertex.h>
-//#include<vcg/simplex/face/with/rtfmfn.h>
-#include<vcg/simplex/vertex/base.h>
-#include<vcg/simplex/face/base.h>
-#include<vcg/simplex/face/component_rt.h>
-
-#include<vcg/simplex/face/distance.h>
 #include<vcg/complex/complex.h>
+#include<vcg/simplex/face/distance.h>
+#include<vcg/simplex/face/component_ep.h>
 #include <vcg/complex/algorithms/create/platonic.h>
 #include <vcg/complex/algorithms/update/normal.h>
-#include <vcg/complex/algorithms/update/edges.h>
+#include <vcg/complex/algorithms/update/component_ep.h>
 #include <vcg/complex/algorithms/update/flag.h>
 #include <vcg/space/intersection3.h>
-
 #include <vcg/space/index/aabb_binary_tree/aabb_binary_tree.h>
 
 typedef float AScalarType;
@@ -33,10 +44,6 @@ struct MyUsedTypes : public vcg::UsedTypes<	vcg::Use<AVertex>		::AsVertexType,
 
 class AVertex     : public Vertex< MyUsedTypes, vertex::Normal3f, vertex::Coord3f,vertex::BitFlags >{};
 class AFace       : public Face<   MyUsedTypes, face::VertexRef, face::Normal3f, face::EdgePlane, face::BitFlags> {};
-
-//class AVertex   : public vcg::Vertex< AScalarType, AEdge, AFace > { };
-//class AFace     : public vcg::FaceRTFMFN< AVertex, AEdge, AFace > { };
-
 class AMesh     : public vcg::tri::TriMesh< std::vector<AVertex>, std::vector<AFace> > { };
 
 typedef vcg::AABBBinaryTreeIndex<AFace, AScalarType, vcg::EmptyClass> AIndex;
@@ -48,8 +55,8 @@ static void CreateMesh(void) {
 	vcg::tri::Dodecahedron<AMesh>(gMesh);
 
 	vcg::tri::UpdateFlags<AMesh>::Clear(gMesh);
-	vcg::tri::UpdateNormals<AMesh>::PerVertexNormalized(gMesh);
-	vcg::tri::UpdateEdges<AMesh>::Set(gMesh);
+	vcg::tri::UpdateNormal<AMesh>::PerVertexNormalized(gMesh);
+	vcg::tri::UpdateComponentEP<AMesh>::Set(gMesh);
 }
 
 static void SetIndex(void) {
@@ -57,7 +64,7 @@ static void SetIndex(void) {
 }
 
 static void TestClosest(void) {
-	vcg::face::PointDistanceFunctor<AIndex::ScalarType> getPtDist;
+	vcg::face::PointDistanceEPFunctor<AIndex::ScalarType> getPtDist;
 	const AIndex::CoordType queryPoint((AIndex::ScalarType)0, (AIndex::ScalarType)0, (AIndex::ScalarType)0);
 	const AIndex::ScalarType maxDist = std::numeric_limits<AIndex::ScalarType>::max();
 
@@ -81,7 +88,7 @@ static void TestClosest(void) {
 }
 
 static void TestKClosest(void) {
-	vcg::face::PointDistanceFunctor<AIndex::ScalarType> getPtDist;
+	vcg::face::PointDistanceEPFunctor<AIndex::ScalarType> getPtDist;
 	const unsigned int k = 10;
 	const AIndex::CoordType queryPoint((AIndex::ScalarType)0, (AIndex::ScalarType)0, (AIndex::ScalarType)0);
 	const AIndex::ScalarType maxDist = std::numeric_limits<AIndex::ScalarType>::max();

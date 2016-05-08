@@ -44,8 +44,9 @@ public:
 	virtual void collectWidgetValue() = 0;
 	virtual void setWidgetValue(const Value& nv) = 0;
 	virtual ~MeshLabWidget();
-
-    // called when the user press the 'default' button to reset the parameter values to its default.
+    
+	virtual void addWidgetToGridLayout(QGridLayout* lay,const int r) = 0;
+	// called when the user press the 'default' button to reset the parameter values to its default.
     // It just set the parameter value and then it calls the specialized resetWidgetValue() to update also the widget.
     void resetValue();
     // update the parameter with the current widget values and return it.
@@ -56,22 +57,25 @@ public:
 signals:
 	void parameterChanged();
 protected:
-	void setEqualSpaceForEachColumn();
+	//void setEqualSpaceForEachColumn();
 
-	int row;
-	QGridLayout* gridLay;
+	//int row;
+	//QGridLayout* gridLay;
 	void InitRichParameter(RichParameter* rpar);
 };
 
 
 class BoolWidget : public MeshLabWidget 
 {
+    public:
 	//QLabel* lab;
 	QCheckBox* cb;
 	//QRadioButton* cb;
-public:
+
 	BoolWidget(QWidget* p,RichBool* rb);
 	~BoolWidget();
+
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 	void collectWidgetValue();
 	void resetWidgetValue();
 	void setWidgetValue(const Value& nv);
@@ -94,6 +98,7 @@ protected:
 public:
 	LineEditWidget(QWidget* p,RichParameter* rpar);
 	~LineEditWidget();
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 	virtual void collectWidgetValue() = 0;
 	virtual void resetWidgetValue() = 0;
 	virtual void setWidgetValue(const Value& nv) = 0;
@@ -181,7 +186,8 @@ class ColorWidget : public MeshLabWidget
 	public:
 	ColorWidget(QWidget *p, RichColor* newColor);
 	~ColorWidget();
-
+	
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 		void collectWidgetValue();
 		void resetWidgetValue();
 		void setWidgetValue(const Value& nv);
@@ -194,6 +200,8 @@ private:
 		void dialogParamChanged();
 	private slots:
 		void pickColor(); 
+protected:
+	QHBoxLayout* vlay;
 };
 
 
@@ -212,6 +220,7 @@ public:
   AbsPercWidget(QWidget *p,RichAbsPerc* rabs);
   ~AbsPercWidget();
 	
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 	void collectWidgetValue();
 	void resetWidgetValue();
 	void setWidgetValue(const Value& nv);
@@ -232,6 +241,7 @@ protected:
 	QLabel* fieldDesc;
   float m_min;
   float m_max;
+  QGridLayout* vlay;
 };
 
 
@@ -251,6 +261,7 @@ public:
 	QString paramName;
 	vcg::Point3f getValue();
 
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 	void collectWidgetValue();
 	void resetWidgetValue();
 	void setWidgetValue(const Value& nv);
@@ -270,6 +281,7 @@ protected:
 	QComboBox *getPoint3Combo;
 	QPushButton *getPoint3Button;
 	QLabel* descLab;
+	QHBoxLayout* vlay;
 };
 
 class Matrix44fWidget : public MeshLabWidget
@@ -282,6 +294,7 @@ public:
 	QString paramName;
 	vcg::Matrix44f getValue();
 
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 	void collectWidgetValue();
 	void resetWidgetValue();
 	void setWidgetValue(const Value& nv);
@@ -298,6 +311,8 @@ protected:
 	QLineEdit * coordSB[16];
 	QPushButton *getPoint3Button;
 	QLabel* descLab;
+	QGridLayout* lay44;
+	QVBoxLayout* vlay;
 };
 
 /// Widget to enter a Shot,
@@ -314,6 +329,7 @@ public:
   QString paramName;
   vcg::Shotf getValue();
 
+  void addWidgetToGridLayout(QGridLayout* lay,const int r);
   void collectWidgetValue();
   void resetWidgetValue();
   void setWidgetValue(const Value& nv);
@@ -332,6 +348,7 @@ protected:
   QPushButton *getShotButton;
   QComboBox *getShotCombo;
   QLabel* descLab;
+  QHBoxLayout* hlay;
 };
 
 
@@ -347,6 +364,7 @@ public:
   float getValue();
 	void  setValue(float val, float minV, float maxV);
 
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 	void collectWidgetValue();
 	void resetWidgetValue();
 	void setWidgetValue(const Value& nv);
@@ -366,6 +384,7 @@ protected:
 	QLabel* fieldDesc; 
   float minVal;
   float maxVal;
+	QHBoxLayout* hlay; 
 private :
 	float intToFloat(int val);  
 	int floatToInt(float val);
@@ -383,6 +402,7 @@ public:
 	ComboWidget(QWidget *p, RichParameter* rpar);
 	~ComboWidget();
 	void Init(QWidget *p,int newEnum, QStringList values);
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 	virtual void collectWidgetValue() = 0;
 	virtual void resetWidgetValue() = 0;
 	virtual void setWidgetValue(const Value& nv) = 0;
@@ -423,6 +443,7 @@ private:
 public:
 	MeshWidget(QWidget *p, RichMesh* defaultMesh);
 	~MeshWidget(){};
+	
 	void collectWidgetValue();
 	void resetWidgetValue();
 	void setWidgetValue(const Value& nv);
@@ -442,6 +463,7 @@ protected:
 	void  updateFileName(const FileValue& file);
 
 public:
+	void addWidgetToGridLayout(QGridLayout* lay,const int r);
 	void collectWidgetValue();
 	void resetWidgetValue();
 	void setWidgetValue(const Value& nv);
@@ -458,6 +480,7 @@ protected:
 	QPushButton* browse;
 	QString fl;
 	QLabel* descLab;
+	QHBoxLayout* hlay;
 };
 
 class SaveFileWidget : public IOFileWidget
@@ -664,7 +687,6 @@ public:
 	StdParFrame(QWidget *p, QWidget *gla=0);
 
 	void loadFrameContent(RichParameterSet &curParSet,MeshDocument *mdPt = 0);
-	void loadFrameContent(RichParameter* par,MeshDocument *mdPt = 0);
 
     // The curParSet that is passed must be 'compatible' with the RichParameterSet that have been used to create the frame.
     // This function updates the RichParameterSet used to create the frame AND fill also the passed <curParSet>
@@ -752,7 +774,7 @@ public:
 
 	void closeEvent ( QCloseEvent * event ); 
 
-	int curmask;
+	uint curmask;
 	MeshModel *curModel;
 	MeshDocument * curMeshDoc;
 	MeshFilterInterface *curmfi;

@@ -3,6 +3,8 @@ include (../general.pri)
 DESTDIR = ../distrib
 EXIF_DIR = ../external/jhead-2.95
 
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x000000
+
 INCLUDEPATH *= . \
 	.. \
 	../.. \
@@ -28,6 +30,8 @@ HEADERS = ../common/interfaces.h \
 	xmlstdpardialog.h \
 	additionalgui.h \
 	xmlgeneratorgui.h \
+	snapshotsetting.h \
+	rendermodeactions.h \
     $$VCGDIR/wrap/gui/trackball.h \
     $$VCGDIR/wrap/gui/trackmode.h \
     $$VCGDIR/wrap/gl/trimesh.h \
@@ -48,6 +52,7 @@ SOURCES = main.cpp \
     xmlstdpardialog.cpp \
 	additionalgui.cpp \
 	xmlgeneratorgui.cpp \
+	rendermodeactions.cpp \
 	$$VCGDIR/wrap/gui/trackball.cpp \
     $$VCGDIR/wrap/gui/trackmode.cpp \
     glarea_setting.cpp \
@@ -68,7 +73,8 @@ FORMS = ui/layerDialog.ui \
 	
 	win32-msvc2005: RCC_DIR = $(ConfigurationName)
 	win32-msvc2008: RCC_DIR = $(ConfigurationName)
-	win32-msvc2010: RCC_DIR = $(ConfigurationName)
+	#win32-msvc2010: RCC_DIR = $(ConfigurationName)
+	#win32-msvc2012: RCC_DIR = $(ConfigurationName)
 
 
 RESOURCES = meshlab.qrc
@@ -76,7 +82,7 @@ RESOURCES = meshlab.qrc
 
 
 # to add windows icon
-RC_FILE = meshlab.rc
+win32:RC_FILE = meshlab.rc
 
 # ## the xml info list
 # ## the next time the app open a new extension
@@ -104,6 +110,7 @@ win32:DEFINES += NOMINMAX
 win32-msvc2005:DEFINES += _CRT_SECURE_NO_DEPRECATE
 win32-msvc2008:DEFINES += _CRT_SECURE_NO_DEPRECATE
 win32-msvc2010:DEFINES += _CRT_SECURE_NO_DEPRECATE
+win32-msvc2012:DEFINES += _CRT_SECURE_NO_DEPRECATE
 
 # Uncomment these if you want to experiment with newer gcc compilers
 # (here using the one provided with macports)
@@ -121,7 +128,8 @@ macx:QMAKE_POST_LINK ="cp -P ../common/libcommon.1.dylib ../distrib/meshlab.app/
 win32-msvc2005:LIBS		+= -L../external/lib/win32-msvc2005 -ljhead -L../distrib -lcommon 
 win32-msvc2008:LIBS		+= -L../external/lib/win32-msvc2008 -ljhead -L../distrib -lcommon 
 win32-msvc2010:LIBS		+= -L../external/lib/win32-msvc2010 -ljhead -L../distrib -lcommon
-win32-g++:LIBS        	+= -L../external/lib/win32-gcc -L../distrib -lcommon
+win32-msvc2012:LIBS		+= -L../external/lib/win32-msvc2012 -ljhead -L../distrib -lcommon
+win32-g++:LIBS        	+= -L../external/lib/win32-gcc -ljhead -L../distrib -lcommon
 
 #CONFIG(release,debug | release) {
 #	win32-msvc2005:release:LIBS     += -L../common/release -lcommon
@@ -131,9 +139,9 @@ win32-g++:LIBS        	+= -L../external/lib/win32-gcc -L../distrib -lcommon
 
 linux-g++:LIBS += -L../external/lib/linux-g++ -ljhead -L../distrib -lcommon -lGLU
 linux-g++:QMAKE_RPATHDIR += ../distrib
-linux-g++-32:LIBS += -L../external/lib/linux-g++-32 -L../distrib -lcommon -lGLU
+linux-g++-32:LIBS += -L../external/lib/linux-g++-32 -ljhead -L../distrib -lcommon -lGLU
 linux-g++-32:QMAKE_RPATHDIR += ../distrib
-linux-g++-64:LIBS += -L../external/lib/linux-g++-64 -L../distrib -lcommon -lGLU
+linux-g++-64:LIBS += -L../external/lib/linux-g++-64 -ljhead -L../distrib -lcommon -lGLU
 linux-g++-64:QMAKE_RPATHDIR += ../distrib
 
 # uncomment in your local copy only in emergency cases.

@@ -20,17 +20,10 @@
 * for more details.                                                         *
 *                                                                           *
 ****************************************************************************/
+#include <vcg/complex/complex.h>
 
 #ifndef __VCG_HEDGE_ 
 #define __VCG_HEDGE_ 
-
-//#include <vcg/space/point3.h>
-//#include <vcg/space/texcoord2.h>
-//#include <vcg/space/color4.h>
-#include <vcg/complex/all_types.h>
-//#include <vcg/complex/used_types.h>
-#include <vcg/connectors/hedge_component.h>
-#include <vcg/container/derivation_chain.h>
 
 namespace vcg {
 
@@ -107,9 +100,6 @@ public:
 		USER0      = 0x0200			// First user bit
 			};
 
-	inline int & UberFlags () { return this->Flags();	}
-        inline int UberFlags() const 	{		return this->Flags();	}
- 	
 	bool IsD() const {return (this->Flags() & DELETED) != 0;} ///  checks if the vertex is deleted
 	bool IsR() const {return (this->Flags() & NOTREAD) == 0;} ///  checks if the vertex is readable
 	bool IsW() const {return (this->Flags() & NOTWRITE)== 0;}///  checks if the vertex is modifiable

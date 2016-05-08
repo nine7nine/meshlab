@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/unsupported/Eigen/src/Polynomials
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/unsupported/Eigen/src/Polynomials
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2011-10-05T15:04:40.740408Z
-4180
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -26,16 +26,16 @@ cignoni
 
 e8973e21-934d-0410-ac44-de4585f5606d
 
-Companion.h
+PolynomialSolver.h
 file
 
 
 
 
-2011-10-10T11:39:01.806017Z
-106143848c51ae3fee50006e7852f11d
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:28.535675Z
+16bdef71edd85047dda8347f8bccbb67
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -58,7 +58,41 @@ has-props
 
 
 
-8445
+13981
+
+Companion.h
+file
+
+
+
+
+2013-05-22T15:25:28.539675Z
+0d407d66e9509bd7efd6a631b5638c25
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7727
 
 PolynomialUtils.h
 file
@@ -66,10 +100,10 @@ file
 
 
 
-2011-10-10T11:39:01.806017Z
-651925ea0bd905ea1d624dca8deb4927
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:28.539675Z
+83d4d71ab371cc9f1f8b880f5436a48f
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -92,7 +126,7 @@ has-props
 
 
 
-5558
+4839
 
 CMakeLists.txt
 file
@@ -100,7 +134,7 @@ file
 
 
 
-2011-10-10T11:39:01.806017Z
+2013-05-22T15:25:28.539675Z
 cf878432fdd5b066387dafc7522357d3
 2011-10-05T15:04:40.740408Z
 4180
@@ -127,38 +161,4 @@ has-props
 
 
 174
-
-PolynomialSolver.h
-file
-
-
-
-
-2011-10-10T11:39:01.806017Z
-eab828e4ac277c84d7871dcc06f7e129
-2011-10-05T15:04:40.740408Z
-4180
-cignoni
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-14699
 

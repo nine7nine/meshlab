@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src/LU/arch
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src/LU/arch
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2012-06-14T13:31:05.191445Z
-4432
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -26,13 +26,47 @@ cignoni
 
 e8973e21-934d-0410-ac44-de4585f5606d
 
+Inverse_SSE.h
+file
+
+
+
+
+2013-05-22T15:25:26.239675Z
+87defab2b55e823cef1bb87e5ee67cad
+2012-10-05T07:27:34.803522Z
+4539
+cignoni
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+13092
+
 CMakeLists.txt
 file
 
 
 
 
-2011-10-10T11:27:23.846018Z
+2013-05-22T15:25:26.239675Z
 aff91855579059066b4c03cc8b79b22e
 2011-10-05T15:04:40.740408Z
 4180
@@ -59,38 +93,4 @@ has-props
 
 
 150
-
-Inverse_SSE.h
-file
-
-
-
-
-2012-06-27T10:07:33.176228Z
-8f2688dc48115fb3932e7f959c5d19f4
-2012-06-14T13:31:05.191445Z
-4432
-cignoni
-has-props
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-13784
 

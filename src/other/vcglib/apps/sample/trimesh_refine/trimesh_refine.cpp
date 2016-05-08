@@ -1,8 +1,3 @@
-#include<vcg/simplex/vertex/base.h>
-#include<vcg/simplex/face/base.h>
-#include<vcg/simplex/face/component_ocf.h>
-#include<vcg/simplex/face/topology.h>
-
 #include<vcg/complex/complex.h>
 
 #include <vcg/complex/algorithms/update/topology.h>
@@ -16,9 +11,6 @@
 // input output
 #include <wrap/io_trimesh/import_ply.h>
 #include <wrap/io_trimesh/export.h>
-
-// std
-#include <vector>
 
 using namespace vcg;
 using namespace std;
@@ -95,8 +87,8 @@ int  main(int argc, char **argv)
   m.face.EnableFFAdjacency();
   tri::UpdateTopology<MyMesh>::FaceFace(m);
   tri::UpdateFlags<MyMesh>::FaceBorderFromFF(m);
-  tri::UpdateNormals<MyMesh>::PerVertexNormalized(m);
-  printf("Input mesh  vn:%i fn:%i\n",m.vn,m.fn);
+  tri::UpdateNormal<MyMesh>::PerVertexNormalized(m);
+  printf("Input mesh  vn:%i fn:%i\n",m.VN(),m.FN());
 	
   n_steps=atoi(argv[3]);
 	
@@ -105,26 +97,26 @@ int  main(int argc, char **argv)
     switch(RefMode)
     {
     case FLAT:
-      Refine<MyMesh, MidPoint<MyMesh> >(m,MidPoint<MyMesh>(&m),length);
+      tri::Refine<MyMesh, tri::MidPoint<MyMesh> >(m,tri::MidPoint<MyMesh>(&m),length);
       break;
     case LOOP:
-      tri::RefineOddEven<MyMesh, tri::OddPointLoop<MyMesh>, tri::EvenPointLoop<MyMesh> >(m, tri::OddPointLoop<MyMesh>(), tri::EvenPointLoop<MyMesh>(), length);
+      tri::RefineOddEven<MyMesh, tri::OddPointLoop<MyMesh>, tri::EvenPointLoop<MyMesh> >(m, tri::OddPointLoop<MyMesh>(m), tri::EvenPointLoop<MyMesh>(), length);
       break;
     case CATMULL:
       tri::BitQuadCreation<MyMesh>::MakePureByCatmullClark(m);
-      tri::UpdateNormals<MyMesh>::PerBitQuadFaceNormalized(m);
+      tri::UpdateNormal<MyMesh>::PerBitQuadFaceNormalized(m);
       break;      
     case   ONE_QUAD_X_EDGE:
       tri::BitQuadCreation<MyMesh>::MakePureByRefine(m);
-      tri::UpdateNormals<MyMesh>::PerBitQuadFaceNormalized(m);
+      tri::UpdateNormal<MyMesh>::PerBitQuadFaceNormalized(m);
       break;
     case BUTTERFLY:
-      Refine<MyMesh, MidPointButterfly<MyMesh> >(m,MidPointButterfly<MyMesh>(),length);
+      tri::Refine<MyMesh, tri::MidPointButterfly<MyMesh> >(m,tri::MidPointButterfly<MyMesh>(m),length);
       break;
     }					
   }
   
-  printf("Output mesh vn:%i fn:%i\n",m.vn,m.fn);
+  printf("Output mesh vn:%i fn:%i\n",m.VN(),m.FN());
 
   vcg::tri::io::PlyInfo pi;
   pi.mask|=vcg::tri::io::Mask::IOM_BITPOLYGONAL;

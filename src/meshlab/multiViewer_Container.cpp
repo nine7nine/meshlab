@@ -27,9 +27,7 @@
 
 using namespace vcg; 
 
-
 Splitter::Splitter ( QWidget * parent):QSplitter(parent){}
-
 Splitter::Splitter(Qt::Orientation orientation, QWidget *parent):QSplitter(orientation,parent){}
 
 QSplitterHandle *Splitter::createHandle()
@@ -65,14 +63,10 @@ void SplitterHandle::mousePressEvent ( QMouseEvent * e )
 MultiViewer_Container::MultiViewer_Container(QWidget *parent)
 : Splitter(parent)
 {
-	setChildrenCollapsible(false);
+    setChildrenCollapsible(false);
 
-	currentId=-1;
+    currentId=-1;
 
-}
-
-MultiViewer_Container::~MultiViewer_Container()
-{
 }
 
 int MultiViewer_Container::getNextViewerId(){
@@ -99,7 +93,6 @@ void MultiViewer_Container::addView(GLArea* viewer,Qt::Orientation orient){
 	View3
 	In the GUI, when a viewer is splitted, the new one appears on its right (the space is split in two equal portions).
 	*/
-
   //CASE 0: only when the first viewer is opened, just add it and return;
   if (viewerCounter()==0)
   {
@@ -300,6 +293,18 @@ void MultiViewer_Container::updateTrackballInViewers()
 
 void MultiViewer_Container::closeEvent( QCloseEvent *event )
 {
+	if (meshDoc.hasBeenModified())
+	{
+		QMessageBox::StandardButton ret=QMessageBox::question(
+			this,  tr("MeshLab"), tr("Project '%1' modified.\n\nClose without saving?").arg(meshDoc.docLabel()),
+			QMessageBox::Yes|QMessageBox::No,
+			QMessageBox::No);
+		if(ret==QMessageBox::No)	// don't close please!
+		{	
+			event->ignore();
+			return;
+		}
+	}
 	bool close = true;
 	int ii = 0;
 	while(close && (ii < viewerList.size()))
@@ -307,6 +312,7 @@ void MultiViewer_Container::closeEvent( QCloseEvent *event )
 		close = viewerList.at(ii)->readyToClose();
 		++ii;
 	}
+
 	if (close)
 		event->accept();
 	else

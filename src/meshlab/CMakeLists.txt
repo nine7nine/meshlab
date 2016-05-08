@@ -7,6 +7,8 @@ include_directories(
   ${JHEAD_INCLUDE_DIR}
   )
 
+add_definitions(-fPIC)
+
 set(meshlab_basic_SRCS
   additionalgui.cpp
   changetexturename.cpp

@@ -24,13 +24,13 @@
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
-#include<QMap>
-#include<QObject>
-
 #include "interfaces.h"
 #include "xmlfilterinfo.h"
 #include "scriptinterface.h"
 #include "scriptsyntax.h"
+
+#include<QMap>
+#include<QObject>
 
 class QScriptEngine;
 /**
@@ -39,7 +39,7 @@ class QScriptEngine;
 class PluginManager
 {
 private:
-	MeshDocumentSI* currentDocInterface;
+	//MeshDocumentSI* currentDocInterface;
 public:
 	PluginManager();
 	~PluginManager();
@@ -47,7 +47,7 @@ public:
 	void loadPlugins(RichParameterSet& defaultGlobal);
 	QString pluginsCode() const;
 	void loadXMLPlugin(const QString& filename);
-	MLXMLPluginInfo* getXMLPluginInfo( const QString& plugname );
+	//MLXMLPluginInfo* getXMLPluginInfo( const QString& plugname );
 	void deleteXMLPlugin(const QString& plugscriptname);
 
 	inline QVector<MeshIOInterface*>& meshIOPlugins()  {return meshIOPlug;}
@@ -57,7 +57,8 @@ public:
 	inline QVector<MeshEditInterfaceFactory*>& meshEditFactoryPlugins()  {return meshEditInterfacePlug;}
 	inline QVector<MeshLabFilterInterface*>& meshlabXMLfilterPlugins()  {return meshlabXMLFilterPlug;}
 	void knownIOFormats();
-	static QString getPluginDirPath();
+	static QString getDefaultPluginDirPath();
+    //static QString getLocalPluginDirPath();
 	static QString getBaseDirPath();
 
 	QMap<QString,RichParameterSet> generateFilterParameterMap();
@@ -88,8 +89,10 @@ public:
 
 	QStringList pluginsLoaded;
 
+    static QString osDependentFileBaseName(const QString& plname);
+	static QString osIndependentPluginName(const QString& plname);
 	static QString pluginNameSpace();
-	//highlight and autocomplete
+    //highlight and autocomplete
 	/*QStringList pluginnamespaces;
 	QStringList filterscriptnames;*/
 	QList<LibraryElementInfo> libinfolist;

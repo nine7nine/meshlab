@@ -22,11 +22,16 @@
 ****************************************************************************/
 #include <QtOpenGL/QtOpenGL>
 #include<vcg/space/box2.h>
+#include<vcg/space/box3.h>
 #include<vcg/math/random_generator.h>
 #include<wrap/qt/col_qt_convert.h>
 #include <vcg/space/rect_packer.h>
-#include <vcg/space/poly_packer.h>
-#include <wrap/qt/PolyToQImage.h>
+#include <vcg/space/outline2_packer.h>
+#include <vcg/space/rasterized_outline2_packer.h>
+#include <vcg/complex/algorithms/outline_support.h>
+#include <wrap/qt/Outline2ToQImage.h>
+#include <wrap/qt/outline2_rasterizer.h>
+
 #include <time.h>
 
 using namespace vcg;
@@ -52,77 +57,70 @@ static void buildRandRectSet(int rectNum, vector<Box2f> &rectVec)
   }
 }
 
-void buildRandRectSetOld(int rectNum, vector<Box2f> &rectVec)
-{
-  math::MarsenneTwisterRNG rnd;
-  float exp=5.0f;
-  rnd.initialize(time(0));
-  for(int i=0;i<rectNum;++i)
-  {
-    Box2f bb;
-    bb.min=Point2f(-pow((float)rnd.generate01(),exp),-pow((float)rnd.generate01(),exp));
-    bb.max=Point2f( pow((float)rnd.generate01(),exp), pow((float)rnd.generate01(),exp));
-    rectVec.push_back(bb);
-  }
-}
-
-void buildRandPolySet(int polyNum, vector< vector<Point2f> > &polyVec)
-{
-  vcg::math::MarsenneTwisterRNG rnd;
-  rnd.initialize(time(0));
-
-  for(int i=0;i<polyNum;++i)
-  {
-    vector<Point2f> poly;
-    for(int j=0;j<10;j++)
-      poly.push_back(Point2f(0.5+0.5*rnd.generate01(),2.0f*M_PI*rnd.generate01()));
-
-    std::sort(poly.begin(),poly.end());
-
-    float ratio = rnd.generateRange(0.2,0.9);
-    float rot = rnd.generateRange(-M_PI,M_PI);
-    float scale = pow(rnd.generateRange(0.3,0.9),1);
-
-    for(size_t j=0;j<poly.size();j++)
-    {
-      poly[j].Polar2Cartesian();
-      poly[j][1]*=ratio;
-      poly[j] *= scale;
-      poly[j].Cartesian2Polar();
-      poly[j][1]+=rot;
-      poly[j].Polar2Cartesian();
-    }
-    polyVec.push_back(poly);
-  }
-}
-
 int main( int argc, char **argv )
 {
-  QApplication pippo(argc,argv);
+  vector<Similarity2f> trVec;
+  vector<Similarity2f> trPolyVec;
+  vector< vector<Point2f> > outline2Vec;
+  vector< vector<Point2f> > multiPolySet;
+  Point2f finalSize;
+  std::vector<Point2f> finalSizeVec;
+  const Point2i containerSize(1024,1024);
+  Outline2Dumper::Param pp;
+  std::vector<int> contInd;
 
   vector<Box2f> rectVec;
-  buildRandRectSet(1000, rectVec);
-  vector<Similarity2f> trVec;
-  vector< vector<Point2f> > polySet;
-  Point2f finalSize;
-  buildRandPolySet(100,polySet);
-  PolyDumperParam pp;
- /* PolyPacker<float>::PackAsEqualSquares(polySet,Point2f(1024.0f,1024.0f),trVec,finalSize);
-  dumpPolySet("testpolyEq.png",polySet,trVec,pp);
-  PolyPacker<float>::PackAsAxisAlignedRect(polySet,Point2f(1024.0f,1024.0f),trVec,finalSize);
-  dumpPolySet("testpolyAA.png",polySet,trVec,pp);
-  PolyPacker<float>::PackAsObjectOrientedRect(polySet,Point2f(1024.0f,1024.0f),trVec,finalSize);
-  dumpPolySet("testpolyOO.png",polySet,trVec,pp);*/
+  buildRandRectSet(10,rectVec);
+//  RectPacker<float>::Pack(rectVec,containerSize,trVec,finalSize);
+  RectPacker<float>::PackMulti(rectVec,containerSize,3,trVec,contInd,finalSizeVec);
+  RectPacker<float>::Stat s = RectPacker<float>::stat();
+  printf("RectPacker attempt %i time %5.3f %5.3f\n",s.pack_attempt_num,s.pack_total_time,s.pack_attempt_time);
 
-  //PolyPacker<float>::PackAsAxisAlignedRect(polySet,Point2f(1024.0f,1024.0f),trVec,finalSize);
-  PolyPacker<float>::PackAsObjectOrientedRect(polySet,Point2f(1024.0f,1024.0f),trVec,finalSize);
-  //dumpPolySetPNG("testpolyEq.png",polySet,trVec,pp);
-  PolyDumper::dumpPolySetSVG("testpolyEq.svg",polySet,trVec,pp);
+//  Outline2Dumper::rectSetToPolySet(rectVec,polySet);
 
-  /*PolyPacker<float>::PackAsAxisAlignedRect(polySet,Point2f(1024.0f,1024.0f),trVec,finalSize);
-  dumpPolySetSVG("testpolyAA.svg",polySet,trVec,pp);
-  PolyPacker<float>::PackAsObjectOrientedRect(polySet,Point2f(1024.0f,1024.0f),trVec,finalSize);
-  dumpPolySetSVG("testpolyOO.svg",polySet,trVec,pp);*/
+//  Outline2Dumper::multiRectSetToSinglePolySet(rectVec,trVec,contInd,0,polySet,trPolyVec);
+//  Outline2Dumper::dumpPolySetPNG("testpolyEq0.png",polySet,trPolyVec,pp);
+//  Outline2Dumper::multiRectSetToSinglePolySet(rectVec,trVec,contInd,1,polySet,trPolyVec);
+//  Outline2Dumper::dumpPolySetPNG("testpolyEq1.png",polySet,trPolyVec,pp);
+//  Outline2Dumper::multiRectSetToSinglePolySet(rectVec,trVec,contInd,2,polySet,trPolyVec);
+//  Outline2Dumper::dumpPolySetPNG("testpolyEq2.png",polySet,trPolyVec,pp);
+
+
+//   buildRandPolySet(100,polySet);
+//   PolyPacker<float>::PackMultiAsObjectOrientedRect(polySet,containerSize,3,trVec,contInd,finalSizeVec);
+
+//   Outline2Dumper::multiPolySetToSinglePolySet(polySet,trVec,contInd,0,multiPolySet,trPolyVec);
+//   Outline2Dumper::dumpPolySetPNG("testpolyEq0.png",multiPolySet,trPolyVec,pp);
+
+//   Outline2Dumper::multiPolySetToSinglePolySet(polySet,trVec,contInd,1,multiPolySet,trPolyVec);
+//   Outline2Dumper::dumpPolySetPNG("testpolyEq1.png",multiPolySet,trPolyVec,pp);
+
+//   Outline2Dumper::multiPolySetToSinglePolySet(polySet,trVec,contInd,2,multiPolySet,trPolyVec);
+//   Outline2Dumper::dumpPolySetPNG("testpolyEq2.png",multiPolySet,trPolyVec,pp);
+
+   //  Outline2Dumper::dumpPolySetPNG("testpolyOO.png",polySet,trVec,pp);
+
+  vcg::tri::OutlineUtil<float>::BuildRandomOutlineVec(25,outline2Vec);
+
+  PolyPacker<float>::PackAsEqualSquares(outline2Vec,containerSize,trVec,finalSize);
+  Outline2Dumper::dumpOutline2VecPNG("testpolyEq.png",outline2Vec,trVec,pp);
+
+  PolyPacker<float>::PackAsAxisAlignedRect(outline2Vec,containerSize,trVec,finalSize);
+  Outline2Dumper::dumpOutline2VecPNG("testpolyAA.png",outline2Vec,trVec,pp);
+
+  PolyPacker<float>::PackAsObjectOrientedRect(outline2Vec,containerSize,trVec,finalSize);
+  Outline2Dumper::dumpOutline2VecPNG("testpolyOO.png",outline2Vec,trVec,pp);
+
+  RasterizedOutline2Packer<float, QtOutline2Rasterizer>::Parameters packingParam;
+
+  packingParam.costFunction  = RasterizedOutline2Packer<float, QtOutline2Rasterizer>::Parameters::LowestHorizon;
+  packingParam.doubleHorizon = true;
+  packingParam.cellSize = 4;
+  packingParam.rotationNum = 16; //number of rasterizations in 90°
+
+  RasterizedOutline2Packer<float, QtOutline2Rasterizer>::Pack(outline2Vec,containerSize,trVec,packingParam);
+  Outline2Dumper::dumpOutline2VecPNG("testpolyRR.png",outline2Vec,trVec,pp);
+
 
   return 0;
 }

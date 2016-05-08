@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/unsupported/test/mpreal
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/unsupported/test/mpreal
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2011-10-05T15:04:40.740408Z
-4180
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -32,7 +32,7 @@ file
 
 
 
-2011-10-10T11:36:27.676017Z
+2013-05-22T15:25:28.095675Z
 d26e21fc0f3502a09102a55f6fefed3f
 2011-10-05T15:04:40.740408Z
 4180
@@ -66,10 +66,10 @@ file
 
 
 
-2011-10-10T11:36:27.666017Z
-89a01ec660a3a0e4b6fd3cfe16ac5d75
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:28.087675Z
+161d4f86145b4495cda273cb33034b13
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -92,7 +92,7 @@ has-props
 
 
 
-11676
+12952
 
 mpreal.h
 file
@@ -100,10 +100,10 @@ file
 
 
 
-2011-10-10T11:36:27.666017Z
-d45c9db73765c4df83c81994682d846a
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:28.091675Z
+668c2aa285106aa5303e9382dd44b4e8
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -126,7 +126,7 @@ has-props
 
 
 
-87103
+80048
 
 dlmalloc.c
 file
@@ -134,10 +134,10 @@ file
 
 
 
-2011-10-10T11:36:27.676017Z
-4fe58eb11fbd78ed87b7c7fe8544295a
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:28.095675Z
+5d833e43255e71e49babe1603d1e8c18
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -160,5 +160,5 @@ has-props
 
 
 
-199893
+199892
 

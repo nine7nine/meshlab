@@ -2,14 +2,14 @@
 * VCGLib                                                            o o     *
 * Visual and Computer Graphics Library                            o     o   *
 *                                                                _   O  _   *
-* Copyright(C) 2004                      
+* Copyright(C) 2004
 \/)\/    *
 * Visual Computing Lab                                            /\/|      *
 * ISTI - Italian National Research Council                           |      *
 *                                                                    \      *
 * All rights reserved.                                                      *
 *                                                                           *
-* This program is free software; you can redistribute it and/or modify      *   
+* This program is free software; you can redistribute it and/or modify      *
 * it under the terms of the GNU General Public License as published by      *
 * the Free Software Foundation; either version 2 of the License, or         *
 * (at your option) any later version.                                       *
@@ -27,13 +27,17 @@
 
 #include <list>
 #include <utility>
-#include <QMap>
+#include <QMultiMap>
+#include <QPair>
+#include <QString>
+#include <QObject>
 /**
   This is the logging class.
   One for each document. Responsible of getting an history of the logging message printed out by filters.
   */
-class GLLogStream 
+class GLLogStream : public QObject
 {
+	Q_OBJECT
 public:
 	enum Levels
 	{
@@ -42,18 +46,14 @@ public:
 		FILTER = 2,
 		DEBUG = 3
 	};
-	
-   GLLogStream ();
-   ~GLLogStream (){};
+
+	GLLogStream ();
+   ~GLLogStream (){}
   void print(QStringList &list);		// Fills a QStringList with the log entries
   void Save(int Level, const char *filename);
-  void Clear() {S.clear();}
-	void Logf(int Level, const char * f, ... );
-  void Log(int Level, const char * buf )
-	{
-		S.push_back(std::make_pair<int,QString>(Level,buf));
-    qDebug("LOG: %i %s",Level,buf);
-	}
+  void Clear();
+    void Logf(int Level, const char * f, ... );
+  void Log(int Level, const char * buf );
 
   void SetBookmark();
   void ClearBookmark();
@@ -61,12 +61,17 @@ public:
 
 //private:
   QList<std::pair<int,QString> > S;
-  QMap<QString,QString> RealTimeLogText;
-  
 
-  void RealTimeLogf(QString Id, const char * f, ... );
-  void RealTimeLog(QString Id, QString text);
+  // The list of strings used in realtime display of info over the mesh.
+  // Each box is identified by the title, name of the mesh and text.
+  // the name of the mesh is shown only if two or more box with the same title are shown.
+  QMultiMap<QString,QPair<QString,QString> > RealTimeLogText;
 
+  void RealTimeLogf(const QString& Id, const QString &meshName, const char * f, ... );
+  void RealTimeLog(const QString& Id, const QString &meshName,const QString& text);
+
+signals:
+  void logUpdated();
 
 private:
   int bookmark; /// this field is used to place a bookmark for restoring the log. Useful for previeweing

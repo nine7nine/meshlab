@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src/Eigen2Support/Geometry
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src/Eigen2Support/Geometry
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2012-06-14T13:31:05.191445Z
-4432
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -32,10 +32,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-5e862eca996fbaf5fde0576f558b7a89
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.591675Z
+8b3c5602504a37040ff7cc32d0e57fd2
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -58,7 +58,7 @@ has-props
 
 
 
-17658
+16988
 
 Rotation2D.h
 file
@@ -66,10 +66,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-04c92b1e1a8c387819bd3dfef2cd901b
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.591675Z
+2ceca70b4b935ceb63863cffdda9a132
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -92,7 +92,7 @@ has-props
 
 
 
-5692
+4973
 
 CMakeLists.txt
 file
@@ -100,7 +100,7 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
+2013-05-22T15:25:27.591675Z
 171089de5918ebcd6303a4cba9d98096
 2011-10-05T15:04:40.740408Z
 4180
@@ -134,10 +134,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-023ae5c8623924fc2aa68833b7953ab2
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.595675Z
+b2a8f86efe3249d9dcc3de8e4200d9ee
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -160,7 +160,7 @@ has-props
 
 
 
-11333
+10615
 
 All.h
 file
@@ -168,10 +168,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-6820f774e6b49fc4fe9caa34d01ffd27
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.595675Z
+caac77c027fa1ec7a5d228ed2a9e8fbb
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -194,7 +194,7 @@ has-props
 
 
 
-2635
+2636
 
 RotationBase.h
 file
@@ -202,10 +202,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-ff2f306acb7408739a763abf874155f9
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.587675Z
+37009fc3ae7355ce60050e6b43171e61
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -228,7 +228,7 @@ has-props
 
 
 
-5324
+4606
 
 AngleAxis.h
 file
@@ -236,10 +236,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-d04c7782ffc58a83ab21ea7349f78ade
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.587675Z
+4df2cc1032ba859bbc772bb9d6c8166e
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -262,7 +262,7 @@ has-props
 
 
 
-7751
+7032
 
 Transform.h
 file
@@ -270,10 +270,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-3957815c1d72132b2db03615ddfc4d9e
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.591675Z
+baec7da3c0a34abf61096b636cb8f9d2
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -296,7 +296,7 @@ has-props
 
 
 
-28989
+28270
 
 AlignedBox.h
 file
@@ -304,10 +304,10 @@ file
 
 
 
-2012-06-27T10:07:33.272228Z
-5227d3e58ece24ecf108bedc32f972c2
-2012-06-14T13:31:05.191445Z
-4432
+2013-05-22T15:25:27.591675Z
+32b8aad8b076fac443d5e60b2c7ae87e
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -330,7 +330,7 @@ has-props
 
 
 
-6953
+6241
 
 Translation.h
 file
@@ -338,10 +338,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-7918364c7edde9001d10e831262cbf4a
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.591675Z
+614eda5c17dd8cb2236a7eca717db49c
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -364,7 +364,7 @@ has-props
 
 
 
-6827
+6108
 
 ParametrizedLine.h
 file
@@ -372,10 +372,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-654b84d99bf535b4ecfcb220b3606650
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.591675Z
+725ed9d358cdceb186633839d826924c
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -398,7 +398,7 @@ has-props
 
 
 
-6444
+5725
 
 Scaling.h
 file
@@ -406,10 +406,10 @@ file
 
 
 
-2011-10-10T11:28:48.126017Z
-1414056a3dc37df681086b9b2351ebe7
-2011-10-05T15:04:40.740408Z
-4180
+2013-05-22T15:25:27.591675Z
+7e50332a40e2c019dd7a95a531efa1cf
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 has-props
 
@@ -432,5 +432,5 @@ has-props
 
 
 
-6419
+5700
 

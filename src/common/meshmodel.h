@@ -28,15 +28,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include <vcg/simplex/vertex/base.h>
-#include <vcg/simplex/vertex/component_ocf.h>
-#include <vcg/simplex/edge/base.h>
-#include <vcg/simplex/face/base.h>
-#include <vcg/simplex/face/component_ocf.h>
-
-#include <vcg/complex/used_types.h>
 #include <vcg/complex/complex.h>
-#include <vcg/complex/allocate.h>
 
 #include <vcg/simplex/face/topology.h>
 
@@ -53,14 +45,13 @@
 #include <wrap/callback.h>
 #include <wrap/io_trimesh/io_mask.h>
 #include <wrap/io_trimesh/additionalinfo.h>
+
 #include <QList>
 #include <QString>
 #include <QStringList>
 #include <QFileInfo>
-#include <QObject>
 #include "GLLogStream.h"
 #include "filterscript.h"
-#include <QSemaphore>
 
 // Forward declarations needed for creating the used types
 class CVertexO;
@@ -151,6 +142,7 @@ public:
 
 	vcg::GlTrimesh<CMeshO> glw;
 	CMeshO cm;
+	//RenderMode rm;
 };
 
 /*
@@ -306,14 +298,37 @@ public:
 Plane Class
 the base class for a registered image that contains the path, the semantic and the data of the image
 */
-class RasterModel;
 
 class Plane
 {
 public:
-	QString semantic;
+
+    enum PlaneSemantic
+    {
+      NONE        = 0x0000,
+      RGBA        = 0x0001,
+      MASK_UB     = 0x0002,
+      MASK_F      = 0x0004,
+      DEPTH_F     = 0x0008,
+      EXTRA00_F        = 0x0100,
+      EXTRA01_F        = 0x0200,
+      EXTRA02_F        = 0x0400,
+      EXTRA03_F        = 0x0800,
+      EXTRA00_RGBA     = 0x1000,
+      EXTRA01_RGBA     = 0x2000,
+      EXTRA02_RGBA     = 0x4000,
+      EXTRA03_RGBA     = 0x8000
+    };
+
+	int semantic;
 	QString fullPathFileName;
 	QImage image;
+	QImage thumb;
+	float *buf;
+
+	bool IsInCore() { return !image.isNull(); }
+	void Load();
+	void Discard(); //discard  the loaded image freeing the mem.
 
 	/// The whole full path name of the mesh
 	const QString fullName() const {return fullPathFileName;}
@@ -321,7 +336,7 @@ public:
 	const QString shortName() const { return QFileInfo(fullPathFileName).fileName(); }
 
 	Plane(const Plane& pl);
-	Plane(const QString pathName, const QString _semantic);
+	Plane(const QString pathName, const int _semantic);
 
 }; //end class Plane
 
@@ -381,35 +396,11 @@ public:
 };// end class RasterModel
 
 class MeshDocument;
-/**
-The TagBase class define the base class from which each filter has to derive its own tag class.
-
-*/
-class TagBase
-{
-private:
-	int _id;
-
-public:
-	TagBase(MeshDocument *parent);
-	int id() const {return _id;}
-
-	QString typeName;
-	QList<int> referringMeshes;
-	QList<int> referringRasters;
-	QString filterOwner;
-	int property;
-
-	enum TagProperty {
-		TP_NONE               = 0x00000000,
-		TP_UNIQUE             = 0x00000001,
-		TP_UPDATABLE  	       = 0x00000002,
-
-	};
-}; //end class TagBase
-
 class RenderMode
 {
+private:
+	QList<QAction*> declist;
+
 public:
 	vcg::GLW::DrawMode	drawMode;
 	vcg::GLW::ColorMode	colorMode;
@@ -424,6 +415,7 @@ public:
 
 
 	RenderMode()
+		:declist()
 	{
 		drawMode	= vcg::GLW::DMFlat;
 		colorMode = vcg::GLW::CMNone;
@@ -437,11 +429,61 @@ public:
 		selectedVert=false;
 	}
 
+	inline void setDrawMode(const vcg::GLW::DrawMode dm)
+	{
+		drawMode = dm;
+	}
+
+	inline void setColorMode(const vcg::GLW::ColorMode cm)
+	{
+		colorMode = cm;
+	}
+
+	inline void setTextureMode(const vcg::GLW::TextureMode tm)
+	{
+		textureMode = tm;
+	}
+
+	inline void setLighting(const bool ison)
+	{
+		lighting = ison;
+	}
+
+	inline void setBackFaceCull(const bool ison)
+	{
+		backFaceCull = ison;
+	}
+
+	inline void setDoubleFaceLighting(const bool ison)
+	{
+		doubleSideLighting = ison;
+	}
+
+	inline void setFancyLighting(const bool ison)
+	{
+		fancyLighting = ison;
+	}
+
+	inline void setSelectedFaceRendering(const bool ison)
+	{
+		selectedFace = ison;
+	}
+
+	inline void setSelectedVertRendering(const bool ison)
+	{
+		selectedVert = ison;
+	}
+
+	inline QList<QAction*>& decoratorList()
+	{
+		return declist;
+	}
+
 }; // end class RenderMode
 
-class MeshLabRenderState : public QObject
+class MeshLabRenderState //: public QObject
 {
-	Q_OBJECT
+	//Q_OBJECT
 public:
 	MeshLabRenderState();
 	~MeshLabRenderState();
@@ -493,28 +535,18 @@ private:
 //	QReadWriteLock _mutdoc;
 //};
 
-class MeshModelSI;
-
 class MeshDocument : public QObject
 {
 	Q_OBJECT
 
 public:
 
-	MeshDocument(): QObject(),rendstate(),xmlhistory()
-	{
-		tagIdCounter=0;
-		meshIdCounter=0;
-		rasterIdCounter=0;
-		currentMesh = 0;
-		currentRaster = 0;
-		busy=true;
-	}
+	MeshDocument();
 
 	//deletes each meshModel
 	~MeshDocument();
 
-	/// returns the mesh with a given unique id
+	/// returns the mesh with the given unique id
 	MeshModel *getMesh(int id);
 	MeshModel *getMesh(QString name);
 	MeshModel *getMeshByFullName(QString pathName);
@@ -523,7 +555,7 @@ public:
 	//set the current mesh to be the one with the given ID
 	void setCurrentMesh( int new_curr_id );
 
-	/// returns the mesh with a given unique id
+	/// returns the raster with the given unique id
 	RasterModel *getRaster(int i);
 
 	//set the current raster to be the one with the given ID
@@ -538,18 +570,9 @@ public:
 	template <class LayerElement>
 	void advanceCurrentElement(QList<LayerElement *>& elemList, LayerElement* curr, int pos)
 	{
-		typename QList<LayerElement *>::iterator mi;
-		for(mi=elemList.begin(); mi!=elemList.end();++mi)
-			if(*mi == curr) break;
-
-		assert(mi!=elemList.end());
-		while(pos>0)
-		{
-			pos--;
-			mi++;
-			if(mi==elemList.end()) mi=elemList.begin();
-		}
-		setCurrent((*mi));
+	  assert(!elemList.empty() && elemList.contains(curr));
+	  int currPos = elemList.indexOf(curr);
+	  setCurrent(elemList.at((currPos+pos)%elemList.size()));
 	}
 
 	MeshModel *mm() {
@@ -564,12 +587,8 @@ public:
 	/// The very important member:
 	/// The list of MeshModels.
 	QList<MeshModel *> meshList;
-	//The list of the raster models of the project
+	/// The list of the raster models of the project
 	QList<RasterModel *> rasterList;
-	///The list of the taggings of all the meshes/rasters of the project
-	QList<TagBase *> tagList;
-
-	int newTagId() {return tagIdCounter++;}
 	int newMeshId() {return meshIdCounter++;}
 	int newRasterId() {return rasterIdCounter++;}
 	
@@ -583,7 +602,6 @@ public:
 	
 
 private:
-	int tagIdCounter;
 	int meshIdCounter;
 	int rasterIdCounter;
 
@@ -598,7 +616,7 @@ private:
 	MeshLabRenderState rendstate;
 public:
 
-	inline MeshLabRenderState& renderState() {return rendstate;};
+	inline MeshLabRenderState& renderState() {return rendstate;}
 	void setDocLabel(const QString& docLb) {documentLabel = docLb;}
 	QString docLabel() const {return documentLabel;}
 	QString pathName() const {QFileInfo fi(fullPathFilename); return fi.absolutePath();}
@@ -613,7 +631,7 @@ public:
 	{
 		if(busy && _busy==false) 
 		{
-			emit meshModified();
+			emit meshDocumentModified();
 		}
 		busy=_busy;
 	}
@@ -622,11 +640,8 @@ private:
 	bool  busy;
 
 public:
-	///Returns for mesh whose id is 'meshId' the list of the associated  tags
-	QList<TagBase *> getMeshTags(int meshId);
-
 	///add a new mesh with the given name
-	MeshModel *addNewMesh(QString fullPath, QString Label, bool setAsCurrent=true);
+	MeshModel *addNewMesh(QString fullPath, QString Label, bool setAsCurrent=true,const RenderMode& rm = RenderMode());
 
 	///remove the mesh from the list and delete it from memory
 	bool delMesh(MeshModel *mmToDel);
@@ -636,12 +651,6 @@ public:
 
 	///remove the raster from the list and delete it from memory
 	bool delRaster(RasterModel *rasterToDel);
-
-	///add a new tag in the tagList
-	void addNewTag(TagBase *newTag);
-
-	///remove the tag with the given id
-	void removeTag(int id);
 
 	int vn() /// Sum of all the vertices of all the meshes
 	{
@@ -671,21 +680,27 @@ private:
 	//the current raster model 
 	RasterModel* currentRaster;
 
+
+
 signals:
-	///when ever the current mesh changed this will send out the index of the newest mesh
+	///whenever the current mesh is changed (e.g. the user click on a different mesh)
+	// this signal will send out with the index of the newest mesh
 	void currentMeshChanged(int index);
 
-	/// whenever a mesh is modified by a filter
-	void meshModified();
+	/// whenever the document (or even a single mesh) is modified by a filter
+	void meshDocumentModified();
 
 	///whenever the meshList is changed
 	void meshSetChanged();
+	void meshAdded(int index,RenderMode rm);
+	void meshRemoved(int index);
 
 	///whenever the rasterList is changed
 	void rasterSetChanged();
 
 	//this signal is emitted when a filter request to update the mesh in the renderingState
 	void documentUpdated();
+
 };// end class MeshDocument
 
 /*

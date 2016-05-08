@@ -98,14 +98,21 @@ void CustomDialog::updateSettings()
 		vrp.push_back(curParSet.paramList.at(ii));
 	}
 	tw->resizeColumnsToContents();
-	tw->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    tw->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 	//tw->setColumnWidth(0,tw->horizontalHeader()->width());
 	//tw->setColumnWidth(1,tw->horizontalHeader()->width());
 
 	/*emit tw->horizontalHeader()->sectionAutoResize( 0,QHeaderView::ResizeToContents);
 	emit tw->horizontalHeader()->sectionAutoResize( 1,QHeaderView::ResizeToContents);*/
 }
+
 //Maybe a MeshDocument parameter is needed. See loadFrameContent definition
+
+/*WARNING!*******************************************************/
+//In defPar->defVal the hardwired value is memorized
+//in curPar->defVal the one in the sys reg
+/****************************************************************/
+
 SettingDialog::SettingDialog( RichParameter* currentPar, RichParameter* defaultPar, QWidget* parent /*= 0*/ )
 :QDialog(parent),frame(this),curPar(currentPar),defPar(defaultPar),tmppar(NULL)
 {
@@ -127,7 +134,8 @@ SettingDialog::SettingDialog( RichParameter* currentPar, RichParameter* defaultP
 	RichParameterCopyConstructor cp;
 	curPar->accept(cp);
 	tmppar = cp.lastCreated;
-	frame.loadFrameContent(tmppar);
+	tmpParSet.addParam(tmppar);
+	frame.loadFrameContent(tmpParSet);
 	dialoglayout->addWidget(&frame,0,0,1,5);
 	dialoglayout->setSizeConstraint(QLayout::SetFixedSize);
 	setLayout(dialoglayout);
@@ -149,7 +157,7 @@ void SettingDialog::save()
 	qDebug("Writing into Settings param with name %s and content ****%s****",qPrintable(tmppar->name),qPrintable(docstring));
 	QSettings setting;
 	setting.setValue(tmppar->name,QVariant(docstring));
-	tmppar->pd->defVal->set(*tmppar->val);
+	curPar->pd->defVal->set(*tmppar->val);
 }
 
 void SettingDialog::apply()
@@ -172,16 +180,9 @@ void SettingDialog::reset()
 void SettingDialog::load()
 {
 	assert(frame.stdfieldwidgets.size() == 1);
-	frame.stdfieldwidgets.at(0)->resetValue();
+	frame.stdfieldwidgets.at(0)->setWidgetValue(*(curPar->pd->defVal));
 }
 
 SettingDialog::~SettingDialog()
 {
-	delete tmppar;
-	delete savebut;
-	delete resetbut;
-	delete applybut;
-	delete closebut;
-	delete loadbut;
-	//RichParameter Value will be destroyed elsewhere
 }

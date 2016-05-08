@@ -1,14 +1,14 @@
 10
 
 dir
-4493
-https://vcg.svn.sourceforge.net/svnroot/vcg/trunk/vcglib/eigenlib/Eigen/src/Core/arch
-https://vcg.svn.sourceforge.net/svnroot/vcg
+5145
+svn://svn.code.sf.net/p/vcg/code/trunk/vcglib/eigenlib/Eigen/src/Core/arch
+svn://svn.code.sf.net/p/vcg/code
 
 
 
-2012-06-14T13:31:05.191445Z
-4432
+2012-10-05T07:27:34.803522Z
+4539
 cignoni
 
 
@@ -26,13 +26,16 @@ cignoni
 
 e8973e21-934d-0410-ac44-de4585f5606d
 
+SSE
+dir
+
 CMakeLists.txt
 file
 
 
 
 
-2011-10-10T11:31:21.636017Z
+2013-05-22T15:25:26.703675Z
 5ce077cefcdcd9e57c3fd08d003ce4ec
 2011-10-05T15:04:40.740408Z
 4180
@@ -67,8 +70,5 @@ Default
 dir
 
 AltiVec
-dir
-
-SSE
 dir
 

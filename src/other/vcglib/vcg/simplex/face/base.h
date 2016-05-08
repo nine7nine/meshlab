@@ -20,17 +20,11 @@
 * for more details.                                                         *
 *                                                                           *
 ****************************************************************************/
-
+#ifndef __VCG_MESH
+#error "This file should not be included alone. It is automatically included by complex.h"
+#endif
 #ifndef __VCG_FACE_PLUS
 #define __VCG_FACE_PLUS
-
-#include <vcg/space/point3.h>
-#include <vcg/space/texcoord2.h>
-#include <vcg/space/color4.h>
-#include <vcg/complex/all_types.h>
-#include <vcg/simplex/face/component.h>
-#include <vcg/simplex/face/component_polygon.h>
-#include <vcg/container/derivation_chain.h>
 
 namespace vcg {
 
@@ -99,14 +93,6 @@ public:
 	typedef typename  FaceArityMax::ScalarType ScalarType;
 // ----- Flags stuff -----
 
-	inline int & UberFlags ()
-	{ 
-			return this->Flags();
-	}
-        inline int UberFlags() const
-	{
-		return this->Flags();
-	}
    	enum { 
 		
 		DELETED     = 0x00000001,		// Face is deleted from the mesh
@@ -138,17 +124,17 @@ public:
 
  
  	///  checks if the Face is deleted
-	bool IsD() const {return (this->Flags() & DELETED) != 0;}
+    bool IsD() const {return (this->cFlags() & DELETED) != 0;}
 	///  checks if the Face is readable
-	bool IsR() const {return (this->Flags() & NOTREAD) == 0;}
+	bool IsR() const {return (this->cFlags() & NOTREAD) == 0;}
 	///  checks if the Face is modifiable
-	bool IsW() const {return (this->Flags() & NOTWRITE)== 0;}
+	bool IsW() const {return (this->cFlags() & NOTWRITE)== 0;}
 	/// This funcion checks whether the Face is both readable and modifiable
-	bool IsRW() const {return (this->Flags() & (NOTREAD | NOTWRITE)) == 0;}
+	bool IsRW() const {return (this->cFlags() & (NOTREAD | NOTWRITE)) == 0;}
 	///  checks if the Face is Modified
-	bool IsS() const {return (this->Flags() & SELECTED) != 0;}
+	bool IsS() const {return (this->cFlags() & SELECTED) != 0;}
 	///  checks if the Face is Modified
-	bool IsV() const {return (this->Flags() & VISITED) != 0;}
+	bool IsV() const {return (this->cFlags() & VISITED) != 0;}
 	
 	/** Set the flag value
 		@param flagp Valore da inserire nel flag
@@ -182,14 +168,14 @@ public:
   void ClearV()	{this->Flags() &= ~VISITED;}
 	
 	/// This function checks if the face is selected
-	bool IsB(int i) const {return (this->Flags() & (BORDER0<<i)) != 0;}
+	bool IsB(int i) const {return (this->cFlags() & (BORDER0<<i)) != 0;}
 	/// This function select the face
   void SetB(int i)		{this->Flags() |=(BORDER0<<i);}
 	/// This funcion execute the inverse operation of SetS()
 	void ClearB(int i)	{this->Flags() &= (~(BORDER0<<i));}
 
 	/// This function checks if the face is selected
-	bool IsCrease(int i) const {return (this->Flags() & (CREASE0<<i)) != 0;}
+	bool IsCrease(int i) const {return (this->cFlags() & (CREASE0<<i)) != 0;}
 	/// This function select the face
 	void SetCrease(int i){this->Flags() |=(CREASE0<<i);}
 	/// This funcion execute the inverse operation of SetS()
@@ -198,8 +184,8 @@ public:
 	/// This function checks if a given side of the face is a feature/internal edge
 	/// it is used by some importer to mark internal 
 	/// edges of polygonal faces that have been triangulated
-	bool IsF(int i) const {return (this->Flags() & (FAUX0<<i) ) != 0;}
-	bool IsAnyF() const {return (this->Flags() & (FAUX0|FAUX1|FAUX2)) != 0;}
+	bool IsF(int i) const {return (this->cFlags() & (FAUX0<<i) ) != 0;}
+	bool IsAnyF() const {return (this->cFlags() & (FAUX0|FAUX1|FAUX2)) != 0;}
 	/// This function select the face
 	void SetF(int i)		{this->Flags() |=(FAUX0<<i);}
 	/// This funcion execute the inverse operation of SetS()

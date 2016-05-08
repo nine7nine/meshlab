@@ -3,7 +3,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../edit_quality/common
   )
 
-QT4_WRAP_CPP(moc_files filterqualitymapper.h)
+QT5_WRAP_CPP(moc_files filterqualitymapper.h)
 
 set(filter_quality_SRCS
   ../edit_quality/common/transferfunction.cpp

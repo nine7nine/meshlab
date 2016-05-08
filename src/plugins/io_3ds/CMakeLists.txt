@@ -5,7 +5,7 @@ include_directories(
   ${3DS_INCLUDE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files meshio.h)
+QT5_WRAP_CPP(moc_files meshio.h)
 
 set(io_3ds_SRCS
   meshio.cpp

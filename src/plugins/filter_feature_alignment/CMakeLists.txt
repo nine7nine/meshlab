@@ -4,7 +4,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other/ann_1.1.2/include
   )
 
-QT4_WRAP_CPP(moc_files filter_feature_alignment.h)
+QT5_WRAP_CPP(moc_files filter_feature_alignment.h)
 
 set(filter_feature_alignment_SRCS
   filter_feature_alignment.cpp

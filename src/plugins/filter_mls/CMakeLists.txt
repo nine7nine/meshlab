@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files mlsplugin.h)
+QT5_WRAP_CPP(moc_files mlsplugin.h)
 
 set(filter_mls_SRCS
   apss.cpp

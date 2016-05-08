@@ -5,7 +5,7 @@ include_directories(
   ${OPENCTM_INCLUDE_DIRS}
   )
 
-QT4_WRAP_CPP(moc_files io_ctm.h)
+QT5_WRAP_CPP(moc_files io_ctm.h)
 
 set(io_ctm_SRCS
   io_ctm.cpp

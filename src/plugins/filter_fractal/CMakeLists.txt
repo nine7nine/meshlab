@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files filter_fractal.h)
+QT5_WRAP_CPP(moc_files filter_fractal.h)
 
 set(filter_fractal_SRCS
   filter_fractal.cpp

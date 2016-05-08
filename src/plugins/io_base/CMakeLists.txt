@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files baseio.h)
+QT5_WRAP_CPP(moc_files baseio.h)
 
 set(io_base_SRCS
   baseio.cpp

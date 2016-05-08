@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files filter_sdf.h)
+QT5_WRAP_CPP(moc_files filter_sdf.h)
 
 set(filter_sdf_SRCS
   filter_sdf.cpp

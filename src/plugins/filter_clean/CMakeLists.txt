@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files cleanfilter.h)
+QT5_WRAP_CPP(moc_files cleanfilter.h)
 
 set(filter_clean_SRCS
   cleanfilter.cpp

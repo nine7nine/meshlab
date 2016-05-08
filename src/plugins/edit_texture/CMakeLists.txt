@@ -4,8 +4,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other/vcglib
   )
 
-QT4_WRAP_CPP(moc_files edittexture.h)
-QT4_WRAP_UI(uic_files textureeditor.ui)
+QT5_WRAP_CPP(moc_files edittexture.h)
+QT5_WRAP_UI(uic_files textureeditor.ui)
 set(edit_texture_SRCS
   edit_texture_factory.cpp 
   edittexture.cpp 

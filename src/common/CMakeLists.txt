@@ -27,7 +27,7 @@ set(moc_HDRS
   scriptinterface.h 
   scriptsyntax.h
   )
-QT4_WRAP_CPP(moc_interfaces_MOC ${moc_HDRS})
+QT5_WRAP_CPP(moc_interfaces_MOC ${moc_HDRS})
 
 set(common_SRCS
   ${common_basic_SRCS}

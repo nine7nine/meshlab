@@ -4,7 +4,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other/structuresynth/ssynth
   )
 
-QT4_WRAP_CPP(moc_files filter_ssynth.h)
+QT5_WRAP_CPP(moc_files filter_ssynth.h)
 
 set(filter_ssynth_SRCS
   filter_ssynth.cpp

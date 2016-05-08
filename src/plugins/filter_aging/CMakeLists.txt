@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files filter_aging.h)
+QT5_WRAP_CPP(moc_files filter_aging.h)
 
 set(filter_aging_SRCS
   filter_aging.cpp

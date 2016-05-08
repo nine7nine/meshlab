@@ -3,7 +3,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other/muparser_v132/include
   )
 
-QT4_WRAP_CPP(moc_files filter_func.h)
+QT5_WRAP_CPP(moc_files filter_func.h)
 
 set(filter_func_SRCS
   filter_func.cpp

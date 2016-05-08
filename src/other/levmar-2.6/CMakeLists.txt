@@ -34,6 +34,12 @@ IF(HAVE_PLASMA)
 ENDIF(HAVE_PLASMA)
 
 
+include(CheckLibraryExists)
+CHECK_LIBRARY_EXISTS(m cos "" HAVE_M_LIB)
+if(HAVE_M_LIB)
+	set(M_LIBRARY "m")
+endif(HAVE_M_LIB)
+
 IF(0)
 # treat paths relative to the source dir.
 IF(COMMAND CMAKE_POLICY)
@@ -87,7 +93,7 @@ IF(BUILD_DEMO)
   ENDIF(HAVE_LAPACK)
 
   ADD_EXECUTABLE(lmdemo lmdemo.c levmar.h)
-  TARGET_LINK_LIBRARIES(lmdemo ${LIBS})
+  TARGET_LINK_LIBRARIES(lmdemo ${LIBS} ${M_LIBRARY})
   MESSAGE(STATUS "lmdemo will be linked against ${LIBS}")
 
 # make sure that the library is built before the demo

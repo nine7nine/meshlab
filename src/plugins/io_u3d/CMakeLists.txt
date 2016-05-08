@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files io_u3d.h)
+QT5_WRAP_CPP(moc_files io_u3d.h)
 
 set(io_u3d_SRCS
   io_u3d.cpp

@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files io_tri.h)
+QT5_WRAP_CPP(moc_files io_tri.h)
 
 set(io_tri_SRCS
   io_tri.cpp

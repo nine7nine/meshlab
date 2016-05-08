@@ -4,9 +4,9 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other
   )
 
-QT4_WRAP_CPP(moc_files edit_align.h)
-QT4_WRAP_UI(uic_files alignDialog.ui)
-QT4_ADD_RESOURCES(rcc_files edit_align.qrc)
+QT5_WRAP_CPP(moc_files edit_align.h)
+QT5_WRAP_UI(uic_files alignDialog.ui)
+QT5_ADD_RESOURCES(rcc_files edit_align.qrc)
 set(edit_align_SRCS
   edit_align_factory.cpp 
   point_matching_scale.cpp 

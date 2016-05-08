@@ -3,9 +3,9 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files edit_paint.h)
-QT4_WRAP_UI(uic_files paintbox.ui)
-QT4_ADD_RESOURCES(rcc_files edit_paint.qrc)
+QT5_WRAP_CPP(moc_files edit_paint.h)
+QT5_WRAP_UI(uic_files paintbox.ui)
+QT5_ADD_RESOURCES(rcc_files edit_paint.qrc)
 set(edit_paint_SRCS
   edit_paint_factory.cpp 
   edit_paint.cpp 

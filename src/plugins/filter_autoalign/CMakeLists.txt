@@ -3,7 +3,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other
   )
 
-QT4_WRAP_CPP(moc_files filter_autoalign.h)
+QT5_WRAP_CPP(moc_files filter_autoalign.h)
 
 set(filter_autoalign_SRCS
   filter_autoalign.cpp

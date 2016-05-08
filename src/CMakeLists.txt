@@ -9,6 +9,11 @@ include_directories(
   ${GLEW_INCLUDE_DIR}
   ${X11_X11_INCLUDE_PATH}
   ${MESHLAB_SOURCE_DIR}/src
+  ${Qt5Widgets_INCLUDE_DIRS}
+  ${Qt5OpenGL_INCLUDE_DIRS}
+  ${Qt5Xml_INCLUDE_DIRS}
+  ${Qt5XmlPatterns_INCLUDE_DIRS}
+  ${Qt5Script_INCLUDE_DIRS}
   ${QT_MKSPECS_DIR}
   )
 

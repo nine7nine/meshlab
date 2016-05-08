@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files filter_colorproc.h)
+QT5_WRAP_CPP(moc_files filter_colorproc.h)
 
 set(filter_colorproc_SRCS
   filter_colorproc.cpp

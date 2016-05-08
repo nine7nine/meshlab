@@ -3,8 +3,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files edit_point.h)
-QT4_ADD_RESOURCES(rcc_files edit_point.qrc)
+QT5_WRAP_CPP(moc_files edit_point.h)
+QT5_ADD_RESOURCES(rcc_files edit_point.qrc)
 set(edit_point_SRCS
   edit_point_factory.cpp 
   edit_point.cpp 

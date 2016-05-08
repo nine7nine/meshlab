@@ -3,8 +3,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files edit_select.h)
-QT4_ADD_RESOURCES(rcc_files edit_select.qrc)
+QT5_WRAP_CPP(moc_files edit_select.h)
+QT5_ADD_RESOURCES(rcc_files edit_select.qrc)
 set(edit_select_SRCS
   edit_select_factory.cpp 
   edit_select.cpp 

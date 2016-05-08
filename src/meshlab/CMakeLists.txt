@@ -48,7 +48,7 @@ set(moc_files
   xmlgeneratorgui.h
   filterthread.h
   )
-QT4_WRAP_CPP(moc_SRCS ${moc_files})
+QT5_WRAP_CPP(moc_SRCS ${moc_files})
 
 set(uic_files
   ui/layerDialog.ui
@@ -62,9 +62,9 @@ set(uic_files
   ui/filtergui.ui
   ui/filtercreatortab.ui
   )
-QT4_WRAP_UI(uic_SRCS ${uic_files})
+QT5_WRAP_UI(uic_SRCS ${uic_files})
 
-QT4_ADD_RESOURCES(rcc_SRCS meshlab.qrc)
+QT5_ADD_RESOURCES(rcc_SRCS meshlab.qrc)
 
 set(meshlab_SRCS
   ${meshlab_basic_SRCS}

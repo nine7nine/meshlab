@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files filter_img_patch_param.h)
+QT5_WRAP_CPP(moc_files filter_img_patch_param.h)
 
 set(filter_img_patch_param_SRCS
   filter_img_patch_param.cpp

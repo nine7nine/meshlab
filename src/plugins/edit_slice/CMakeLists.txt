@@ -4,8 +4,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other/vcglib
   )
 
-QT4_WRAP_CPP(moc_files editslice.h)
-QT4_WRAP_UI(uic_files slicedialog.ui svgpro.ui)
+QT5_WRAP_CPP(moc_files editslice.h)
+QT5_WRAP_UI(uic_files slicedialog.ui svgpro.ui)
 set(editslice_SRCS
   edit_slice_factory.cpp 
   editslice.cpp 

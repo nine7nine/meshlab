@@ -13,14 +13,17 @@ project(SSYNTH)
 
 
 find_package(OpenGL REQUIRED)
-set(Qt4_FIND_COMPONENTS QtCore QtGui QtWebKit QtScript QtXmlPatterns QtXml QtOpenGL QtNetwork)
-find_package(Qt 4.7 REQUIRED)
-include(${QT_USE_FILE})
 
+find_package(Qt5Widgets QUIET)
+find_package(Qt5OpenGL QUIET)
+find_package(Qt5Xml QUIET)
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/ssynth
 	${X11_X11_INCLUDE_PATH}
+	${Qt5Widgets_INCLUDE_DIRS}
+	${Qt5OpenGL_INCLUDE_DIRS}
+	${Qt5Xml_INCLUDE_DIRS}
 	${QT_MKSPECS_DIR}
 	)
 

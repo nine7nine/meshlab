@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files filter_bnpts.h)
+QT5_WRAP_CPP(moc_files filter_bnpts.h)
 
 set(filter_bnpts_SRCS
   filter_bnpts.cpp

@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files filter_sampling.h)
+QT5_WRAP_CPP(moc_files filter_sampling.h)
 
 set(filter_sampling_SRCS
   filter_sampling.cpp

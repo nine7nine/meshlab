@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files meshfilter.h)
+QT5_WRAP_CPP(moc_files meshfilter.h)
 
 set(filter_meshing_SRCS
   meshfilter.cpp

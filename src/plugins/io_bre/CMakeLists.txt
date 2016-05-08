@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files io_bre.h)
+QT5_WRAP_CPP(moc_files io_bre.h)
 
 set(io_bre_SRCS
   io_bre.cpp

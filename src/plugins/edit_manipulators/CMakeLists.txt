@@ -4,8 +4,8 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other
   )
 
-QT4_WRAP_CPP(moc_files edit_manipulators.h)
-QT4_ADD_RESOURCES(rcc_files edit_manipulators.qrc)
+QT5_WRAP_CPP(moc_files edit_manipulators.h)
+QT5_ADD_RESOURCES(rcc_files edit_manipulators.qrc)
 set(edit_manipulators_SRCS
   edit_manipulators_factory.cpp 
   edit_manipulators.cpp 

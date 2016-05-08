@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files filter_poisson.h)
+QT5_WRAP_CPP(moc_files filter_poisson.h)
 
 set(filter_poisson_SRCS
   filter_poisson.cpp

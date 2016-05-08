@@ -385,11 +385,11 @@ add_subdirectory(src/other)
 # logic here as opposed to separating the header logic from the
 # find_package call.
 
-# Check for Qt and OpenGL - no point in proceeding without those
-find_package(OpenGL REQUIRED)
-set(Qt4_FIND_COMPONENTS QtCore QtGui QtWebKit QtScript QtXmlPatterns QtXml QtOpenGL QtNetwork)
-find_package(Qt 4.7 REQUIRED)
-include(${QT_USE_FILE})
+find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
+find_package(Qt5Xml)
+find_package(Qt5XmlPatterns)
+find_package(Qt5Script)
 
 # Look for threads (doesn't check for headers)
 # The variable CMAKE_THREAD_LIBS_INIT is the one of interest
@@ -414,6 +414,13 @@ if(APPLE)
   mark_as_advanced(CMAKE_OSX_ARCHITECTURES CMAKE_OSX_DEPLOYMENT_TARGET CMAKE_OSX_SYSROOT)
   mark_as_advanced(CoreFoundation_LIBRARIES Carbon_LIBRARIES Cocoa_LIBRARIES)
 endif(APPLE)
+
+
+include(CheckLibraryExists)
+CHECK_LIBRARY_EXISTS(m cos "" HAVE_M_LIB)
+if(HAVE_M_LIB)
+  set(M_LIBRARY "m")
+endif(HAVE_M_LIB)
 
 # *******************************************************************
 # ***             Check for Headers - Stage 5 of 9                ***

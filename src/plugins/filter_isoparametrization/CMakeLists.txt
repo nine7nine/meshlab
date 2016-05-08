@@ -3,7 +3,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other/levmar-2.6
   )
 
-QT4_WRAP_CPP(moc_files filter_isoparametrization.h)
+QT5_WRAP_CPP(moc_files filter_isoparametrization.h)
 
 set(filter_isoparametrization_SRCS
   filter_isoparametrization.cpp

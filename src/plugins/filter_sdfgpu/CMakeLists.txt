@@ -3,7 +3,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../render_radiance_scaling
   )
 
-QT4_WRAP_CPP(moc_files filter_sdfgpu.h)
+QT5_WRAP_CPP(moc_files filter_sdfgpu.h)
 
 set(filter_sdfgpu_SRCS
   filter_sdfgpu.cpp

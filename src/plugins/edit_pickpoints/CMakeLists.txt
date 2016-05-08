@@ -4,9 +4,9 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../meshlab
   )
 
-QT4_WRAP_CPP(moc_files editpickpoints.h)
-QT4_WRAP_UI(uic_files pickpointsDialog.ui)
-QT4_ADD_RESOURCES(rcc_files editpickpoints.qrc)
+QT5_WRAP_CPP(moc_files editpickpoints.h)
+QT5_WRAP_UI(uic_files pickpointsDialog.ui)
+QT5_ADD_RESOURCES(rcc_files editpickpoints.qrc)
 set(edit_pickpoints_SRCS
   edit_pickpoints_factory.cpp 
   editpickpoints.cpp 

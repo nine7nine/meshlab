@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files io_gts.h)
+QT5_WRAP_CPP(moc_files io_gts.h)
 
 set(io_gts_SRCS
   io_gts.cpp

@@ -2,7 +2,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
-QT4_WRAP_CPP(moc_files io_json.h)
+QT5_WRAP_CPP(moc_files io_json.h)
 
 set(io_json_SRCS
   io_json.cpp

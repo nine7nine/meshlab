@@ -4,9 +4,9 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/common
   )
 
-QT4_WRAP_CPP(moc_files qualitymapper.h)
-QT4_WRAP_UI(uic_files qualitymapperdialog.ui)
-QT4_ADD_RESOURCES(rcc_files qualitymapper.qrc)
+QT5_WRAP_CPP(moc_files qualitymapper.h)
+QT5_WRAP_UI(uic_files qualitymapperdialog.ui)
+QT5_ADD_RESOURCES(rcc_files qualitymapper.qrc)
 set(edit_quality_SRCS
   edit_quality_factory.cpp 
   qualitymapper.cpp

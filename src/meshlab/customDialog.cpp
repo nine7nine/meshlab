@@ -98,7 +98,7 @@ void CustomDialog::updateSettings()
 		vrp.push_back(curParSet.paramList.at(ii));
 	}
 	tw->resizeColumnsToContents();
-    tw->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    tw->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	//tw->setColumnWidth(0,tw->horizontalHeader()->width());
 	//tw->setColumnWidth(1,tw->horizontalHeader()->width());
 

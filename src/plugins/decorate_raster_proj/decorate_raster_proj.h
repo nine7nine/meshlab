@@ -8,7 +8,7 @@
 *                                                                    \      *
 * All rights reserved.                                                      *
 *                                                                           *
-* This program is free software; you can redistribute it and/or modify      *   
+* This program is free software; you can redistribute it and/or modify      *
 * it under the terms of the GNU General Public License as published by      *
 * the Free Software Foundation; either version 2 of the License, or         *
 * (at your option) any later version.                                       *
@@ -36,6 +36,7 @@
 class DecorateRasterProjPlugin : public QObject, public MeshDecorateInterface
 {
     Q_OBJECT
+        MESHLAB_PLUGIN_IID_EXPORTER(MESH_DECORATE_INTERFACE_IID)
     Q_INTERFACES( MeshDecorateInterface )
 
 
@@ -102,34 +103,21 @@ private:
     void                    updateColorTexture();
     void                    updateDepthTexture();
 
-    bool                    initShaders( std::string &logs );
+    bool                    initShaders(std::string &logs);
 
 
     virtual QString         decorationInfo( FilterIDType filter ) const;
     virtual QString         decorationName( FilterIDType filter ) const;
 
 public:
-	inline QList<QAction*>  actions() const                             { return actionList; }
+    inline QList<QAction*>  actions() const                             { return actionList; }
 
-    virtual bool            startDecorate( QAction          *act,
-                                           MeshDocument     &m  ,
-                                           RichParameterSet *par,
-                                           GLArea           *gla );
-
-    virtual void            decorate( QAction           *act,
-                                      MeshDocument      &m  ,
-                                      RichParameterSet  *par,
-                                      GLArea            *gla,
-                                      QPainter          *p  );
-
-    virtual void            endDecorate( QAction          *act,
-                                         MeshDocument     &m  ,
-                                         RichParameterSet *par,
-                                         GLArea           *gla );
-
-    virtual void            initGlobalParameterSet( QAction *act, RichParameterSet &par );
-
-    virtual int             getDecorationClass( QAction *act ) const;
+    bool  startDecorate(QAction  *act, MeshDocument &m, RichParameterSet *par, GLArea *gla );
+    void  decorateMesh( QAction  *   , MeshModel    & , RichParameterSet *   , GLArea *   , QPainter * , GLLogStream &  ) {}
+    void  decorateDoc(  QAction  *act, MeshDocument &m, RichParameterSet *par, GLArea *gla, QPainter *p, GLLogStream &  );
+    void  endDecorate(  QAction  *act, MeshDocument &m, RichParameterSet *par, GLArea *gla );
+    void  initGlobalParameterSet( QAction *act, RichParameterSet &par );
+    int   getDecorationClass( QAction *act ) const;
 };
 
 

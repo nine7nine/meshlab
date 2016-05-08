@@ -179,7 +179,7 @@ bool FilterCSG::applyFilter(QAction *filter, MeshDocument &md, RichParameterSet 
             Log(0, "Done");
 
             vcg::tri::UpdateBounding<CMeshO>::Box(mesh->cm);
-            vcg::tri::UpdateNormals<CMeshO>::PerFaceFromCurrentVertexNormal(mesh->cm);
+            vcg::tri::UpdateNormal<CMeshO>::PerFaceFromCurrentVertexNormal(mesh->cm);
         }
         return true;
 
@@ -190,4 +190,4 @@ bool FilterCSG::applyFilter(QAction *filter, MeshDocument &md, RichParameterSet 
 }
 
 
-Q_EXPORT_PLUGIN(FilterCSG)
+MESHLAB_PLUGIN_NAME_EXPORTER(FilterCSG)

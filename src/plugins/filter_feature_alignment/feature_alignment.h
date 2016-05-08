@@ -23,18 +23,18 @@
 #ifndef FEATURE_ALIGNMENT_H
 #define FEATURE_ALIGNMENT_H
 
-#include <common/meshmodel.h>
+#include <meshlab/meshmodel.h>
 
 #include <vcg/container/simple_temporary_data.h>
 #include <vcg/complex/algorithms/clustering.h>
 
 #include <ANN/ANN.h>
-#include <vcg/math/point_matching.h>
+#include <vcg/space/point_matching.h>
 #include <vcg/space/index/grid_static_ptr.h>
 #include <vcg/complex/algorithms/closest.h>
 #include <vcg/complex/algorithms/point_sampling.h>
 #include <vcg/complex/algorithms/overlap_estimation.h>
-#include <../edit_pickpoints/pickedPoints.h>
+#include <meshlabplugins/edit_pickpoints/pickedPoints.h>
 
 #include <qdatetime.h>
 
@@ -286,7 +286,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
             //copy descriptors of mFix into ANN structures, then build kdtree...
             FeatureAlignment::SetupKDTreePoints(*vecFFix, &fdataPts, FeatureType::getFeatureDimension());
             fkdTree = new ANNkd_tree(fdataPts,vecFFix->size(),FeatureType::getFeatureDimension());
-            assert(fkdTree);                                                        
+            assert(fkdTree);
 
             //consensus structure initialization
             cons.SetFix(mFix);
@@ -412,7 +412,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
                 CandidateType& currCandidate = (*candidates)[j];
                 Matrix44Type currTr = currCandidate.tr;              //load the right transformation
                 Matrix44Type oldTr = ApplyTransformation(mMov, currTr); //apply transformation
-                consParam.samples=param.short_cons_samples;                
+                consParam.samples=param.short_cons_samples;
                 currCandidate.shortCons = cons.Check(consParam);     //compute short consensus
                 ResetTransformation(mMov, oldTr);                    //restore old tranformation
 
@@ -434,7 +434,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
                 CandidateType& currCandidate = (*candidates)[j];
                 Matrix44Type currTr = currCandidate.tr;              //load the right transformation
                 Matrix44Type oldTr = ApplyTransformation(mMov, currTr); //apply transformation
-                consParam.samples=param.fullConsensusSamples;                                
+                consParam.samples=param.fullConsensusSamples;
                 consParam.threshold = param.consOffset*param.overlap/100.0f;
                 consParam.bestScore = bestConsensus;
                 int consensus = cons.Check(consParam);              //compute full consensus
@@ -478,7 +478,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
             delete baseVec; delete candidates;
 
             return res;
-        }     
+        }
 
         /** \brief Return a string describing the error associated to \c code.
          *
@@ -496,7 +496,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
                 case 2: return QString("Features extracted are not enough to pick a base.");
                 case 3: return QString("Features extracted are not enough to pick k neighbors.");
                 case 4: return QString("Base isn't enough sparse.");
-                case 5: return QString("Error while computing rigid transformation."); 
+                case 5: return QString("Error while computing rigid transformation.");
                 default: return QString("An unkown error occurred.");
             }
         }
@@ -572,7 +572,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
             //as support mesh, so we are sure that pointer to vertexes of input mesh are returned.
             //perform sampling: number of samples returned can be greater or smaller of the requested amount
             tri::SurfaceSampling<MeshType,VertexPointerSampler>::Poissondisk(m, sampler, m, radius, pp);
-        }                
+        }
 
         /** \brief Retrieve/create an handle to the per vertex attribute associated to a specified feature type. Useful to write short functions.
          *  @param m The mesh in which the attrubute is searched.
@@ -590,8 +590,8 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
                 else return PVAttributeHandle(NULL,0);
             }
             //now we can get a handle to the attribute and return it
-            return tri::Allocator<MeshType>::template GetPerVertexAttribute<FeatureType> (m,std::string(FeatureType::getName()));
-        }        
+            return tri::Allocator<MeshType>::template FindPerVertexAttribute<FeatureType> (m,std::string(FeatureType::getName()));
+        }
 
         /** \brief Extracts \c numRequested features from mesh \c m using the specified \c samplingStrategy.
          *  What features are actually extracted is a responsability of the Subset() function of the specific feature class.
@@ -825,7 +825,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
                 pph = tri::Allocator<MeshType>::template AddPerMeshAttribute<PickedPoints*>(m,PickedPoints::Key);
                 pph() = new PickedPoints();
             }
-            else pph = tri::Allocator<MeshType>::template GetPerMeshAttribute<PickedPoints*>(m, PickedPoints::Key);
+            else pph = tri::Allocator<MeshType>::template FindPerMeshAttribute<PickedPoints*>(m, PickedPoints::Key);
 
             for(unsigned int i=0; i<vecF.size(); i++){
                 //build up a point name made of an id and feature value...
@@ -849,7 +849,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
             PMAttributeHandle pph;
             //we get a handle to the attribute if it exists
             if(!tri::HasPerMeshAttribute(m, PickedPoints::Key)) return;
-            pph = tri::Allocator<MeshType>::template GetPerMeshAttribute<PickedPoints*>(m, PickedPoints::Key);
+            pph = tri::Allocator<MeshType>::template FindPerMeshAttribute<PickedPoints*>(m, PickedPoints::Key);
 
             //delete previous picked points
             (pph()->getPickedPointVector())->clear();
@@ -869,7 +869,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
                 pph = tri::Allocator<MeshType>::template AddPerMeshAttribute<PickedPoints*>(m,PickedPoints::Key);
                 pph() = new PickedPoints();
             }
-            else pph = tri::Allocator<MeshType>::template GetPerMeshAttribute<PickedPoints*>(m, PickedPoints::Key);
+            else pph = tri::Allocator<MeshType>::template FindPerMeshAttribute<PickedPoints*>(m, PickedPoints::Key);
 
             (pph()->getPickedPointVector())->clear();  //clear old contents
 
@@ -895,7 +895,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
                 for (int j = 0; j < pointDim; j++)
                     (*queryPts)[i][j] = (ANNcoord)(queryPointsArray[i]->description[j]);
             }
-        }       
+        }
 
         static void Match(FEATURE_TYPE** base, vector<vector<FEATURE_TYPE*> >& matches, int nBase, int level, int curSolution[], vector<CandidateType>& candidates, float errDist, CallBackPos *cb = NULL)
         {
@@ -930,7 +930,7 @@ template<class MESH_TYPE, class FEATURE_TYPE> class FeatureAlignment
             return true;
         }
 
-        //Verify that all points in a base are enough sparse        
+        //Verify that all points in a base are enough sparse
         static bool VerifyBaseDistances(FEATURE_TYPE* base[], int nBase, float baseDist )
         {
             typedef FEATURE_TYPE FeatureType;

@@ -21,8 +21,6 @@
 *                                                                           *
 ****************************************************************************/
 
-#include <Qt>
-#include <QtGui>
 #include "filter_dirt.h"
 #include "particle.h"
 #include "dirt_utils.h"
@@ -38,15 +36,11 @@
 #include <vcg/complex/algorithms/clean.h>
 #include <vcg/complex/algorithms/stat.h>
 #include <vcg/complex/algorithms/smooth.h>
-#include <vcg/complex/algorithms/update/flag.h>
-#include <vcg/complex/algorithms/update/selection.h> 
 #include <vcg/complex/algorithms/update/color.h>
-#include <vcg/complex/algorithms/update/flag.h>
 #include <vcg/complex/algorithms/update/bounding.h>
 #include <vcg/complex/algorithms/update/normal.h>
 #include <vcg/complex/algorithms/point_sampling.h>
 #include <vcg/space/triangle3.h>
-#include <vcg/complex/allocate.h>
 #include <vector>
 
 using namespace std;
@@ -174,8 +168,9 @@ bool FilterDirt::applyFilter(QAction *filter, MeshDocument &md, RichParameterSet
         if(cb) (*cb)(50,"Generating Particles...");
 
         GenerateParticles(currMM,dust_points,/*dust_particles,*/n_p,0.6);
-
-        MeshModel* dmm=md.addNewMesh("","dust_mesh");
+		RenderMode rm;
+		rm.drawMode = GLW::DMPoints;
+        MeshModel* dmm=md.addNewMesh("","dust_mesh",true,rm);
         dmm->cm.Clear();
         tri::Allocator<CMeshO>::AddVertices(dmm->cm,dust_points.size());
         CMeshO::VertexIterator vi;
@@ -269,4 +264,4 @@ MeshFilterInterface::FilterClass FilterDirt::getClass(QAction *filter)
     }
 }
 
-Q_EXPORT_PLUGIN(FilterDirt)
+MESHLAB_PLUGIN_NAME_EXPORTER(FilterDirt)

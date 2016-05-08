@@ -226,8 +226,8 @@ bool FilterCameraPlugin::applyFilter(QAction *filter, MeshDocument &md, RichPara
 			{
 				md.meshList[i]->cm.Tr=transf;
 				tri::UpdatePosition<CMeshO>::Matrix(md.meshList[i]->cm, md.meshList[i]->cm.Tr);
-				tri::UpdateNormals<CMeshO>::PerVertexMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
-				tri::UpdateNormals<CMeshO>::PerFaceMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
+				tri::UpdateNormal<CMeshO>::PerVertexMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
+				tri::UpdateNormal<CMeshO>::PerFaceMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
 				tri::UpdateBounding<CMeshO>::Box(md.meshList[i]->cm);
 				md.meshList[i]->cm.Tr.SetIdentity();
 				md.meshList[i]->cm.shot.ApplyRigidTransformation(transf);
@@ -293,8 +293,8 @@ bool FilterCameraPlugin::applyFilter(QAction *filter, MeshDocument &md, RichPara
 			{
 				md.meshList[i]->cm.Tr=trTran*trScale*trTranInv;
 				tri::UpdatePosition<CMeshO>::Matrix(md.meshList[i]->cm, md.meshList[i]->cm.Tr);
-				tri::UpdateNormals<CMeshO>::PerVertexMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
-				tri::UpdateNormals<CMeshO>::PerFaceMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
+				tri::UpdateNormal<CMeshO>::PerVertexMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
+				tri::UpdateNormal<CMeshO>::PerFaceMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
 				tri::UpdateBounding<CMeshO>::Box(md.meshList[i]->cm);
 				md.meshList[i]->cm.Tr.SetIdentity();
 				md.meshList[i]->cm.shot.ApplyRigidTransformation(trTran);
@@ -358,8 +358,8 @@ bool FilterCameraPlugin::applyFilter(QAction *filter, MeshDocument &md, RichPara
 			{
 				md.meshList[i]->cm.Tr=trTran;
 				tri::UpdatePosition<CMeshO>::Matrix(md.meshList[i]->cm, md.meshList[i]->cm.Tr);
-				tri::UpdateNormals<CMeshO>::PerVertexMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
-				tri::UpdateNormals<CMeshO>::PerFaceMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
+				tri::UpdateNormal<CMeshO>::PerVertexMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
+				tri::UpdateNormal<CMeshO>::PerFaceMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
 				tri::UpdateBounding<CMeshO>::Box(md.meshList[i]->cm);
 				md.meshList[i]->cm.Tr.SetIdentity();
 				md.meshList[i]->cm.shot.ApplyRigidTransformation(trTran);
@@ -414,7 +414,7 @@ bool FilterCameraPlugin::applyFilter(QAction *filter, MeshDocument &md, RichPara
 			{
 				md.meshList[i]->cm.Tr = mat;
 				tri::UpdatePosition<CMeshO>::Matrix(md.meshList[i]->cm, md.meshList[i]->cm.Tr);
-				tri::UpdateNormals<CMeshO>::PerFaceMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
+				tri::UpdateNormal<CMeshO>::PerFaceMatrix(md.meshList[i]->cm,md.meshList[i]->cm.Tr);
 				tri::UpdateBounding<CMeshO>::Box(md.meshList[i]->cm);
 				md.meshList[i]->cm.Tr.SetIdentity();
 				md.meshList[i]->cm.shot.ApplySimilarity(mat);
@@ -497,7 +497,7 @@ bool FilterCameraPlugin::applyFilter(QAction *filter, MeshDocument &md, RichPara
             (*vi).Q() = q;
            }
         if(par.getBool("normalize")) tri::UpdateQuality<CMeshO>::VertexNormalize(cm);
-        if(par.getBool("map")) tri::UpdateColor<CMeshO>::VertexQualityRamp(cm);
+        if(par.getBool("map")) tri::UpdateColor<CMeshO>::PerVertexQualityRamp(cm);
 
       }
     break;
@@ -514,8 +514,10 @@ int FilterCameraPlugin::postCondition(QAction * filter) const
 	case FP_CAMERA_ROTATE   : 	
 	case FP_CAMERA_TRANSLATE   :               
 	case FP_CAMERA_TRANSFORM:
-	case FP_CAMERA_SCALE                  : return MeshModel::MM_CAMERA;
-    case FP_QUALITY_FROM_CAMERA           : return MeshModel::MM_VERTQUALITY + MeshModel::MM_VERTCOLOR;
+	case FP_CAMERA_SCALE                  : 
+		return MeshModel::MM_CAMERA;
+    case FP_QUALITY_FROM_CAMERA           : 
+		return MeshModel::MM_VERTQUALITY + MeshModel::MM_VERTCOLOR;
     default                  : return MeshModel::MM_UNKNOWN;
   }
 }
@@ -541,4 +543,21 @@ int FilterCameraPlugin::postCondition(QAction * filter) const
   assert(0);
 }
 
-Q_EXPORT_PLUGIN(FilterCameraPlugin)
+ int FilterCameraPlugin::getPreConditions( QAction * a) const
+ {
+	 switch(ID(a))
+	 {
+	 case FP_CAMERA_ROTATE :
+	 case FP_CAMERA_SCALE :
+	 case FP_CAMERA_TRANSLATE :
+	 case FP_CAMERA_EDIT :
+	 case FP_CAMERA_TRANSFORM:
+	 case FP_QUALITY_FROM_CAMERA :
+	 case FP_SET_RASTER_CAMERA :
+	 case FP_SET_MESH_CAMERA :
+		return MeshModel::MM_NONE;
+	 }
+	 assert(0);
+ }
+
+MESHLAB_PLUGIN_NAME_EXPORTER(FilterCameraPlugin)

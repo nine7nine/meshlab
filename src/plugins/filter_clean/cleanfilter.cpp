@@ -22,10 +22,9 @@
 ****************************************************************************/
 
 #include <Qt>
-#include <QtGui>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtXml/QDomNode>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
 
 #include "cleanfilter.h"
 #include "align_tools.h"
@@ -35,7 +34,6 @@
 #include <vcg/complex/algorithms/stat.h>
 #include <vcg/complex/algorithms/create/ball_pivoting.h>
 
-#include <vcg/space/normal_extrapolation.h>
 using namespace std;
 using namespace vcg;
 
@@ -235,7 +233,7 @@ bool CleanFilter::applyFilter(QAction *filter, MeshDocument &md, RichParameterSe
         m.cm.fn=0;
         m.cm.face.resize(0);
       }
-
+      m.updateDataMask(MeshModel::MM_VERTFACETOPO);
       int startingFn=m.cm.fn;
       tri::BallPivoting<CMeshO> pivot(m.cm, Radius, Clustering, CreaseThr);
       // the main processing
@@ -312,14 +310,13 @@ bool CleanFilter::applyFilter(QAction *filter, MeshDocument &md, RichParameterSe
    }
    break;
   case FP_REMOVE_FOLD_FACE:
-   {
-     m.updateDataMask(MeshModel::MM_FACECOLOR);
-     tri::UpdateColor<CMeshO>::FaceConstant(m.cm, Color4b::White);
-       int total = tri::Clean<CMeshO>::RemoveFaceFoldByFlip(m.cm);
-       tri::UpdateNormals<CMeshO>::PerVertexPerFace(m.cm);
-       Log("Successfully flipped %d folded faces", total);
-   }
-   break;
+    {
+      m.updateDataMask(MeshModel::MM_FACECOLOR);
+      int total = tri::Clean<CMeshO>::RemoveFaceFoldByFlip(m.cm);
+      m.UpdateBoxAndNormals();
+      Log("Successfully flipped %d folded faces", total);
+    }
+      break;
   case FP_REMOVE_NON_MANIF_EDGE :
   {
       int total = tri::Clean<CMeshO>::RemoveNonManifoldFace(m.cm);
@@ -365,7 +362,7 @@ int SnapVertexBorder(CMeshO &m, float threshold, vcg::CallBackPos * cb)
   tri::UpdateTopology<CMeshO>::FaceFace(m);
   tri::UpdateFlags<CMeshO>::FaceBorderFromFF(m);
   tri::UpdateFlags<CMeshO>::VertexBorderFromFace(m);
-  tri::UpdateNormals<CMeshO>::PerVertexNormalizedPerFaceNormalized(m);
+  tri::UpdateNormal<CMeshO>::PerVertexNormalizedPerFaceNormalized(m);
   typedef GridStaticPtr<CMeshO::FaceType, CMeshO::ScalarType > MetroMeshFaceGrid;
   MetroMeshFaceGrid   unifGridFace;
   typedef tri::FaceTmark<CMeshO> MarkerFace;
@@ -469,7 +466,7 @@ int SnapVertexBorder(CMeshO &m, float threshold, vcg::CallBackPos * cb)
       ++firstface;
       ++firstVert;
     }
-  tri::UpdateNormals<CMeshO>::PerVertexNormalizedPerFaceNormalized(m);
+  tri::UpdateNormal<CMeshO>::PerVertexNormalizedPerFaceNormalized(m);
   return splitVertVec.size();
   }
 
@@ -538,4 +535,4 @@ int SnapVertexBorder(CMeshO &m, float threshold, vcg::CallBackPos * cb)
 	  return total;
 
 }
-Q_EXPORT_PLUGIN(CleanFilter)
+MESHLAB_PLUGIN_NAME_EXPORTER(CleanFilter)

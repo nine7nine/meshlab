@@ -21,8 +21,11 @@
 *                                                                           *
 ****************************************************************************/
 
+#include <meshlab/glarea.h>
 #include "ssao.h"
+
 #include <common/pluginmanager.h>
+
 SSAO::SSAO(float radius):DecorateShader()
 {
     this->_radius = radius;
@@ -110,9 +113,9 @@ void SSAO::runShader(MeshDocument& md, GLArea* gla){
         /***********************************************************/
         //NORMAL MAP and DEPTH MAP generation
         /***********************************************************/
+        if (gla == NULL) return;
         this->bind();
         glUseProgram(this->_normalMapShaderProgram);
-        RenderMode rm = gla->getCurrentRenderMode();
 
         vcg::Matrix44f mProj, mInverseProj;
         glMatrixMode(GL_PROJECTION);

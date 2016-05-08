@@ -8,6 +8,7 @@ include_directories(
   )
 
 add_definitions(-fPIC)
+add_definitions(${Qt5Widgets_DEFINITIONS})
 
 set(meshlab_basic_SRCS
   additionalgui.cpp

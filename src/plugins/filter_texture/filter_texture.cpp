@@ -21,11 +21,9 @@
 *                                                                           *
 ****************************************************************************/
 #include <vcg/math/base.h>
-#include <QtGui>
+
 #define EIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET
 #include <eigenlib/Eigen/Sparse>
-#include <eigenlib/Eigen/src/Sparse/SparseMatrix.h>
-#include <eigenlib/Eigen/src/Sparse/DynamicSparseMatrix.h>
 #include <eigenlib/unsupported/Eigen/SparseExtra>
 
 #include <float.h>
@@ -373,8 +371,7 @@ bool FilterTexturePlugin::applyFilter(QAction *filter, MeshDocument &md, RichPar
       if(pp.overlap==false)
         tri::Clean<CMeshO>::RemoveDuplicateVertex(paraModel->cm);
 
-      tri::UpdateNormals<CMeshO>::PerVertexPerFace(paraModel->cm);
-
+      paraModel->UpdateBoxAndNormals();
       baseModel->clearDataMask(bitToBeCleared);
       Log("Voronoi Atlas: Completed Processing in %i iterations",pp.vas.iterNum);
       Log("Asked %i generated %i regions",pp.sampleNum,pp.vas.regionNum);
@@ -832,7 +829,7 @@ bool FilterTexturePlugin::applyFilter(QAction *filter, MeshDocument &md, RichPar
 
             // Rasterizing faces
             srcMesh->updateDataMask(MeshModel::MM_FACEMARK);
-            tri::UpdateNormals<CMeshO>::PerFaceNormalized(srcMesh->cm);
+            tri::UpdateNormal<CMeshO>::PerFaceNormalized(srcMesh->cm);
             if (vertexSampling)
             {
                 TransferColorSampler sampler(srcMesh->cm, img, upperbound,vertexMode); // color sampling
@@ -903,7 +900,7 @@ bool FilterTexturePlugin::applyFilter(QAction *filter, MeshDocument &md, RichPar
             trgMesh->updateDataMask(MeshModel::MM_VERTCOLOR);
 
             srcMesh->updateDataMask(MeshModel::MM_FACEMARK);
-            tri::UpdateNormals<CMeshO>::PerFaceNormalized(srcMesh->cm);
+            tri::UpdateNormal<CMeshO>::PerFaceNormalized(srcMesh->cm);
 
             // Colorizing vertices
             VertexSampler vs(srcMesh->cm, srcImg, upperbound);
@@ -917,4 +914,4 @@ bool FilterTexturePlugin::applyFilter(QAction *filter, MeshDocument &md, RichPar
     return true;
 }
 
-Q_EXPORT_PLUGIN(FilterTexturePlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(FilterTexturePlugin)

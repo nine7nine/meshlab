@@ -278,7 +278,7 @@ void ColorizeMesh(MeshModel* m){
             else fi->C()=Color4b(255-dirtiness,255-dirtiness,255-dirtiness,0);
         }
     }
-    tri::UpdateColor<CMeshO>::VertexFromFace(m->cm);
+    tri::UpdateColor<CMeshO>::PerVertexFromFace(m->cm);
 }
 
 
@@ -580,7 +580,7 @@ void prepareMesh(MeshModel* m){
     m->cm.face.EnableVFAdjacency();
     tri::UpdateTopology<CMeshO>::FaceFace(m->cm);
     tri::UpdateTopology<CMeshO>::VertexFace(m->cm);
-    tri::UpdateNormals<CMeshO>::PerFaceNormalized(m->cm);
+    tri::UpdateNormal<CMeshO>::PerFaceNormalized(m->cm);
 
     CMeshO::FaceIterator fi;
     for(fi=m->cm.face.begin();fi!=m->cm.face.end();++fi){

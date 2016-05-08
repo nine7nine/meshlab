@@ -25,7 +25,6 @@
 
 
 #include <Qt>
-#include <QtGui>
 
 #include "io_u3d.h"
 #include <common/pluginmanager.h>
@@ -51,7 +50,7 @@ bool U3DIOPlugin::open(const QString & /*formatName*/, const QString &/*fileName
 
 QString U3DIOPlugin::computePluginsPath()
 {
-    QDir pluginsDir(PluginManager::getPluginDirPath());
+    QDir pluginsDir(PluginManager::getDefaultPluginDirPath());
 		#if defined(Q_OS_WIN)
 			pluginsDir.cd("U3D_W32");
 		#elif defined(Q_OS_MAC)
@@ -166,13 +165,17 @@ void U3DIOPlugin::GetExportMaskCapability(QString &format, int &capability, int 
 	if(format.toUpper() == tr("U3D"))
 	{
 		capability = defaultBits = vcg::tri::io::ExporterU3D<CMeshO>::GetExportMaskCapability();
-		defaultBits &= vcg::tri::io::Mask::IOM_VERTNORMAL;
-		defaultBits &= vcg::tri::io::Mask::IOM_VERTCOLOR;
+		defaultBits &= (~vcg::tri::io::Mask::IOM_VERTNORMAL);
+		defaultBits &= (~vcg::tri::io::Mask::IOM_VERTCOLOR);
+		defaultBits &= (~vcg::tri::io::Mask::IOM_FACECOLOR);
 		return;
 	}
 	if(format.toUpper() == tr("IDTF"))
 	{
 		capability=defaultBits = vcg::tri::io::ExporterIDTF<CMeshO>::GetExportMaskCapability();
+		defaultBits &= (~vcg::tri::io::Mask::IOM_VERTNORMAL);
+		defaultBits &= (~vcg::tri::io::Mask::IOM_VERTCOLOR);
+		defaultBits &= (~vcg::tri::io::Mask::IOM_FACECOLOR);
 		return;
 	}
 
@@ -220,4 +223,4 @@ void U3DIOPlugin::saveParameters(const RichParameterSet &par)
 	delete sw;
 }
 
-Q_EXPORT_PLUGIN(U3DIOPlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(U3DIOPlugin)

@@ -21,8 +21,6 @@
 *                                                                           *
 ****************************************************************************/
 
-#include <QtGui>
-
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>
@@ -46,7 +44,7 @@ void SplatRendererPlugin::initActionList()
 }
 
 
-void SplatRendererPlugin::Init(QAction * a, MeshDocument & md, RenderMode &, QGLWidget *gla)
+void SplatRendererPlugin::Init(QAction * a, MeshDocument & md, QMap<int,RenderMode>&, QGLWidget *gla)
 {
 	if (!(md.mm()->hasDataMask(MeshModel::MM_VERTRADIUS)))
 	{
@@ -56,7 +54,7 @@ void SplatRendererPlugin::Init(QAction * a, MeshDocument & md, RenderMode &, QGL
 	splat_renderer.Init(gla);
 }
 
-void SplatRendererPlugin::Render(QAction *, MeshDocument &md, RenderMode &rm, QGLWidget * /* gla */)
+void SplatRendererPlugin::Render(QAction *, MeshDocument &md, QMap<int,RenderMode>& rm, QGLWidget * /* gla */)
 {
 	GL_TEST_ERR
 
@@ -65,7 +63,11 @@ void SplatRendererPlugin::Render(QAction *, MeshDocument &md, RenderMode &rm, QG
 			{
 				meshes_to_render.push_back( &(*mp).cm );
 			}
-		splat_renderer.Render(meshes_to_render,rm.colorMode,rm.textureMode);
+		//It's not possible to pass the per mesh rendering mode cause the splatting rendering function is inside the vcglib not inside MeshLab
+		RenderMode rmode;
+		if (rm.size() > 0)
+			rmode = rm.begin().value();
+		splat_renderer.Render(meshes_to_render,rmode.colorMode,rmode.textureMode);
 
 
 }
@@ -93,4 +95,4 @@ void SplatRendererPlugin::Draw(QAction *a, MeshModel &m, RenderMode &rm, QGLWidg
 #endif
 
 
-Q_EXPORT_PLUGIN(SplatRendererPlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(SplatRendererPlugin)

@@ -5,6 +5,8 @@ include_directories(
   ${JHEAD_INCLUDE_DIR}
   )
 
+add_definitions(${Qt5Widgets_DEFINITIONS})
+
 set(common_basic_SRCS
   filterparameter.cpp
   filterscript.cpp

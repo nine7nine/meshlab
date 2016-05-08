@@ -429,7 +429,7 @@ bool SdfGpuPlugin::initGL(MeshModel& mm)
 
     glGenQueriesARB( 1, &mOcclusionQuery );
 
-    checkGLError::qDebug("GL Init failed");
+    checkGLError::debugInfo("GL Init failed");
 
     return true;
 }
@@ -538,7 +538,7 @@ void SdfGpuPlugin::releaseGL(MeshModel &m)
 
     glDeleteQueriesARB( 1, &mOcclusionQuery );
 
-    checkGLError::qDebug("GL release failed");
+    checkGLError::debugInfo("GL release failed");
 
     this->glContext->doneCurrent();
 }
@@ -572,11 +572,10 @@ void SdfGpuPlugin::setupMesh(MeshDocument& md, ONPRIMITIVE onPrimitive )
     }
 
     //Updating mesh metadata
-    tri::UpdateBounding<CMeshO>::Box(m);
     vcg::tri::Allocator<CMeshO>::CompactVertexVector(m);
     vcg::tri::Allocator<CMeshO>::CompactFaceVector(m);
-    vcg::tri::UpdateNormals<CMeshO>::PerVertexAngleWeighted(m);
-
+    vcg::tri::UpdateNormal<CMeshO>::PerVertexAngleWeighted(m);
+    tri::UpdateBounding<CMeshO>::Box(m);
 
     //Enable & Reset the necessary attributes
     switch(onPrimitive)
@@ -706,7 +705,7 @@ void SdfGpuPlugin::calculateSdfHW(FramebufferObject* fboFront, FramebufferObject
 
     vcg::Matrix44f mvprINV(mv_pr_Matrix_f);
     mvprINV.transposeInPlace();
-    vcg::Invert(mvprINV);
+    mvprINV=vcg::Inverse(mvprINV);
     mSDFProgram->setUniformMatrix4fv( "mvprMatrixINV", mvprINV.V(), 1, GL_TRUE );
 
 
@@ -937,8 +936,7 @@ void SdfGpuPlugin::applyObscurancePerVertex(MeshModel &m, float numberOfRays)
     {
         m.cm.vert[i].Q() = result[i*4]/numberOfRays;
     }
-
-    tri::UpdateColor<CMeshO>::VertexQualityGray(m.cm);
+    tri::UpdateColor<CMeshO>::PerVertexQualityGray(m.cm,0.0f,0.0f);
 
     glReadBuffer(GL_COLOR_ATTACHMENT1_EXT);
     glReadPixels(0, 0, mResTextureDim, mResTextureDim, GL_RGBA, GL_FLOAT, result);
@@ -972,7 +970,7 @@ void SdfGpuPlugin::applyObscurancePerFace(MeshModel &m, float numberOfRays)
         m.cm.face[i].Q() = result[i*4]/numberOfRays;
     }
 
-    tri::UpdateColor<CMeshO>::FaceQualityGray(m.cm);
+    tri::UpdateColor<CMeshO>::PerFaceQualityGray(m.cm);
 
     glReadBuffer(GL_COLOR_ATTACHMENT1_EXT);
     glReadPixels(0, 0, mResTextureDim, mResTextureDim, GL_RGBA, GL_FLOAT, result);
@@ -1012,8 +1010,8 @@ bool SdfGpuPlugin::postRender(unsigned int peelingIteration)
             return true;
         }
         else return false;
-	}
-	
+    }
+
     return true;
 }
 
@@ -1097,8 +1095,8 @@ void SdfGpuPlugin::TraceRay(int peelingIteration,const Point3f& dir, MeshModel* 
     assert(mFboArray[1]->isValid());
     assert(mFboArray[2]->isValid());
 
-    checkGLError::qDebug("Error during depth peeling");
+    checkGLError::debugInfo("Error during depth peeling");
 }
 
-Q_EXPORT_PLUGIN(SdfGpuPlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(SdfGpuPlugin)
 

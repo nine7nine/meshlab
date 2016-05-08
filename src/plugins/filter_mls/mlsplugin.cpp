@@ -21,8 +21,6 @@
 *                                                                           *
 ****************************************************************************/
 
-#include <QtGui>
-
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
@@ -467,8 +465,8 @@ bool MlsPlugin::applyFilter(QAction* filter, MeshDocument& md, RichParameterSet&
 				{
 					mesh->updateDataMask(MeshModel::MM_FACEFACETOPO);
 
-					vcg::tri::UpdateNormals<CMeshO>::PerFace(mesh->cm);
-					vcg::tri::UpdateNormals<CMeshO>::NormalizeFace(mesh->cm);
+					vcg::tri::UpdateNormal<CMeshO>::PerFace(mesh->cm);
+					vcg::tri::UpdateNormal<CMeshO>::NormalizePerFace(mesh->cm);
 					//vcg::RefineE<CMeshO,vcg::MidPoint<CMeshO> >(m.cm, vcg::MidPoint<CMeshO>(), edgePred, false, cb);
 					vcg::tri::RefineOddEvenE<CMeshO, tri::OddPointLoop<CMeshO>, tri::EvenPointLoop<CMeshO> >
 							(mesh->cm, tri::OddPointLoop<CMeshO>(mesh->cm), tri::EvenPointLoop<CMeshO>(), edgePred, selectionOnly, cb);
@@ -553,7 +551,7 @@ bool MlsPlugin::applyFilter(QAction* filter, MeshDocument& md, RichParameterSet&
 
 			vcg::Histogramf H;
       vcg::tri::Stat<CMeshO>::ComputePerVertexQualityHistogram(mesh->cm,H);
-      vcg::tri::UpdateColor<CMeshO>::VertexQualityRamp(mesh->cm,H.Percentile(0.01f),H.Percentile(0.99f));
+      vcg::tri::UpdateColor<CMeshO>::PerVertexQualityRamp(mesh->cm,H.Percentile(0.01f),H.Percentile(0.99f));
 		}
 	// 	else if (id & _AFRONT_)
 	// 	{
@@ -607,16 +605,11 @@ bool MlsPlugin::applyFilter(QAction* filter, MeshDocument& md, RichParameterSet&
 		}
 
 		if (mesh)
-		{
-			cb(99, "Update face normals...");
-			vcg::tri::UpdateNormals<CMeshO>::PerFace(mesh->cm);
-			cb(100, "Update box...");
-			vcg::tri::UpdateBounding<CMeshO>::Box(mesh->cm);
-		}
+		  mesh->UpdateBoxAndNormals();
 
 	} // end MLS based stuff
 
 	return true;
 }
 
-Q_EXPORT_PLUGIN(MlsPlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(MlsPlugin)

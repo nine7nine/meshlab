@@ -27,7 +27,7 @@
 #include "filter_feature_alignment.h"
 #include "feature_msc.h"
 #include "feature_rgb.h"
-#include <../edit_pickpoints/pickedPoints.h>
+#include <meshlabplugins/edit_pickpoints/pickedPoints.h>
 
 #include <stdlib.h>
 #include <time.h>
@@ -749,4 +749,4 @@ typename ALIGNER_TYPE::Result FilterFeatureAlignment::RansacDiagramOperation(Mes
     return res;  //all right
 }
 
-Q_EXPORT_PLUGIN(FilterFeatureAlignment)
+MESHLAB_PLUGIN_NAME_EXPORTER(FilterFeatureAlignment)

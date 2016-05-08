@@ -21,7 +21,7 @@
 *                                                                           *
 ****************************************************************************/
 #include <Qt>
-#include <QtGui>
+#include <QMessageBox>
 #include <QDialog>
 
 #include "v3dImportDialog.h"
@@ -57,6 +57,9 @@ void v3dImportDialog::closeEvent ( QCloseEvent * /*event*/ )
 v3dImportDialog::v3dImportDialog(QWidget *parent,EditArc3DPlugin *_edit )    : QDockWidget(parent)
 {
 	v3dImportDialog::ui.setupUi(this);
+	for(int ii = 0;ii < 2;++ii)
+		ui.saveShotCombo->addItem(exportShotsString(ExportShots(ii)));
+	ui.saveShotCombo->setCurrentIndex(v3dImportDialog::EXPORT_ONLY_SELECTED);
 	this->setFeatures(QDockWidget::AllDockWidgetFeatures);
 	this->setAllowedAreas(Qt::LeftDockWidgetArea);
 	QPoint p=parent->mapToGlobal(QPoint(0,0));
@@ -73,13 +76,21 @@ v3dImportDialog::v3dImportDialog(QWidget *parent,EditArc3DPlugin *_edit )    : Q
 		connect(ui.cancelButton, SIGNAL(pressed()), this, SIGNAL(closing()));
 				
     er=0;
-		exportToPLY=false;
-
-	fileName = QFileDialog::getOpenFileName(this->parentWidget(), tr("Select v3D File"), ".", "*.v3d");
-
-	
+	exportToPLY=false;
+	fileName = QFileDialog::getOpenFileName(this->parentWidget(), tr("Select v3D File"), tr("."), tr("Arc 3D Document (*.v3d)"));
 }
 
+QString v3dImportDialog::exportShotsString( const ExportShots exp )
+{
+	switch (exp)
+	{
+		case (EXPORT_ALL):
+			return QString("Export all images");
+		case (EXPORT_ONLY_SELECTED):
+			return QString("Export only selected images");
+	}
+	return QString();
+}
 
 /* 
 Main function that populate the dialog, loading all the images and eventually creating the thumbs.
@@ -153,7 +164,7 @@ void v3dImportDialog::setArc3DReconstruction(Arc3DReconstruction *_er)
     if(!QFile::exists(ThumbCntName))
       {
         CharImage chi;
-        bool ret=chi.Open(er->modelList[i].countName.toAscii());
+        bool ret=chi.Open(er->modelList[i].countName.toUtf8().data());
         if(!ret) QMessageBox::warning(this,"Error in Thumb creation",QString("Unable to create '%1' from '%2'").arg(ThumbCntName,er->modelList[i].textureName));
 
         CharImage::colorizedScaledToHeight(64,chi).save(ThumbCntName,"jpg");

@@ -21,8 +21,6 @@
 *                                                                           *
 ****************************************************************************/
 
-#include <QtGui>
-
 #include <math.h>
 #include <stdlib.h>
 
@@ -230,7 +228,7 @@ void MeshShaderRenderPlugin::initActionList() {
 	}
 }
 
-void MeshShaderRenderPlugin::Init(QAction *a, MeshDocument &/*md*/, RenderMode &rm, QGLWidget *gla)
+void MeshShaderRenderPlugin::Init(QAction *a, MeshDocument &/*md*/, QMap<int,RenderMode>&rm, QGLWidget *gla)
 {
 	if (sDialog) {
 		sDialog->close();
@@ -346,7 +344,7 @@ void MeshShaderRenderPlugin::Init(QAction *a, MeshDocument &/*md*/, RenderMode &
 					}
 
 
-					sDialog = new ShaderDialog(&shaders[a->text()], gla, rm);
+					sDialog = new ShaderDialog(&shaders[a->text()], gla, rm,gla);
 					sDialog->move(10,100);
 					sDialog->show();
 
@@ -386,7 +384,7 @@ void MeshShaderRenderPlugin::Init(QAction *a, MeshDocument &/*md*/, RenderMode &
 }
 
 
-void MeshShaderRenderPlugin::Render(QAction *a, MeshDocument &md, RenderMode &rm, QGLWidget * /* gla */) 
+void MeshShaderRenderPlugin::Render(QAction *a, MeshDocument &md, QMap<int,RenderMode>&rm, QGLWidget * /* gla */) 
 {
 //  MeshModel &mm
 	if (shaders.find(a->text()) != shaders.end()) {
@@ -451,7 +449,8 @@ void MeshShaderRenderPlugin::Render(QAction *a, MeshDocument &md, RenderMode &rm
 			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);	
 
 			glBindTexture( tIter->Target, tIter->tId );
-      rm.textureMode = GLW::TMPerWedge;
+			for(QMap<int,RenderMode>::iterator it = rm.begin();it != rm.end();++it)
+				it.value().textureMode = GLW::TMPerWedge;
 			
 			++tIter;
 			++n;
@@ -463,7 +462,9 @@ void MeshShaderRenderPlugin::Render(QAction *a, MeshDocument &md, RenderMode &rm
 	glGetError();
 	foreach(MeshModel * mp, md.meshList)
 				{
-					if(mp->visible) mp->render(rm.drawMode,rm.colorMode,rm.textureMode);
+					QMap<int,RenderMode>::const_iterator it = rm.find(mp->id());
+					if ((mp->visible) && (it != rm.end())) 
+						mp->render(it.value().drawMode,it.value().colorMode,it.value().textureMode);
 				}
 	glUseProgramObjectARB(0);
 }
@@ -474,4 +475,4 @@ void MeshShaderRenderPlugin::Finalize( QAction*, MeshDocument*, GLArea* )
 	sDialog = 0;
 }
 
-Q_EXPORT_PLUGIN(MeshShaderRenderPlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(MeshShaderRenderPlugin)

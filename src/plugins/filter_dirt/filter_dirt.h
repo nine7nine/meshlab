@@ -30,8 +30,6 @@
 #include <common/meshmodel.h>
 #include <common/interfaces.h>
 #include<vector>
-#include<vcg/simplex/vertex/base.h>
-#include<vcg/simplex/face/base.h>
 #include<vcg/complex/complex.h>
 //#include "muParser.h"
 
@@ -42,6 +40,7 @@ using namespace vcg;
 class FilterDirt : public QObject, public MeshFilterInterface
 {
     Q_OBJECT
+	MESHLAB_PLUGIN_IID_EXPORTER(MESH_FILTER_INTERFACE_IID)
     Q_INTERFACES(MeshFilterInterface)
 protected:
     double x,y,z,nx,ny,nz,r,g,b,q,rad;

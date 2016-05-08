@@ -182,7 +182,7 @@ bool AmbientOcclusionPlugin::processGL(MeshModel &m, vector<Point3f> &posVect)
 	if (errInit)
 		return false;
 
-	checkGLError::qDebug("start");
+	checkGLError::debugInfo("start");
  	int tInitElapsed = 0;
 	QTime tInit, tAll;
 	tInit.start();
@@ -192,16 +192,14 @@ bool AmbientOcclusionPlugin::processGL(MeshModel &m, vector<Point3f> &posVect)
 
 	vcg::tri::Allocator<CMeshO>::CompactVertexVector(m.cm);
 	vcg::tri::Allocator<CMeshO>::CompactFaceVector(m.cm);
-	vcg::tri::UpdateNormals<CMeshO>::PerVertexNormalizedPerFaceNormalized(m.cm);
+	vcg::tri::UpdateNormal<CMeshO>::PerVertexNormalizedPerFaceNormalized(m.cm);
 
-  CMeshO::PerVertexAttributeHandle<Point3f> BN = tri::Allocator<CMeshO>::GetPerVertexAttribute<Point3f>(m.cm, "BentNormal");
-  if(!tri::Allocator<CMeshO>::IsValidHandle<Point3f>(m.cm,BN))
-  {
-        BN = tri::Allocator<CMeshO>::AddPerVertexAttribute<Point3f> (m.cm,"BentNormal");
-        std::vector<std::string> AllVertexAttribName;
-        tri::Allocator<CMeshO>::GetAllPerVertexAttribute< Point3f >(m.cm,AllVertexAttribName);
-        qDebug("Now mesh has %i attrib",AllVertexAttribName.size());
-  }
+    CMeshO::PerVertexAttributeHandle<Point3f> BN = tri::Allocator<CMeshO>::GetPerVertexAttribute<Point3f>(m.cm, "BentNormal");
+
+    std::vector<std::string> AllVertexAttribName;
+    tri::Allocator<CMeshO>::GetAllPerVertexAttribute< Point3f >(m.cm,AllVertexAttribName);
+    qDebug("Now mesh has %i attrib",AllVertexAttribName.size());
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 
@@ -270,7 +268,7 @@ bool AmbientOcclusionPlugin::processGL(MeshModel &m, vector<Point3f> &posVect)
 			if(perFace) generateFaceOcclusionSW(m,faceCenterVec);
 			else generateOcclusionSW(m);
 		}
-		checkGLError::qDebug("Debug");
+		checkGLError::debugInfo("Debug");
 	}
 
 	if (useGPU)
@@ -282,12 +280,12 @@ bool AmbientOcclusionPlugin::processGL(MeshModel &m, vector<Point3f> &posVect)
 
 	if(perFace) 
 		{
-			tri::UpdateColor<CMeshO>::FaceQualityGray(m.cm);
+			tri::UpdateColor<CMeshO>::PerFaceQualityGray(m.cm);
 			CMeshO::FaceIterator fi;
       for(fi=m.cm.face.begin();fi!=m.cm.face.end();++fi)
 					(*fi).Q()=(*fi).Q()/numViews;
 		} else {
-			tri::UpdateColor<CMeshO>::VertexQualityGray(m.cm);
+			tri::UpdateColor<CMeshO>::PerVertexQualityGray(m.cm,0.0f,0.0f);
 			CMeshO::VertexIterator vi;
       for(vi=m.cm.vert.begin();vi!=m.cm.vert.end();++vi)
       {
@@ -888,4 +886,4 @@ void AmbientOcclusionPlugin::dumpFloatTexture(QString filename, float *texdata, 
 	delete [] cdata;
 }
 
-Q_EXPORT_PLUGIN(AmbientOcclusionPlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(AmbientOcclusionPlugin)

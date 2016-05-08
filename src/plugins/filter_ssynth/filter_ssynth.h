@@ -29,10 +29,11 @@
 #include <QObject>
 #include <common/meshmodel.h>
 #include <common/interfaces.h>
-#include <io_x3d.h>
+#include <meshlabplugins/io_x3d/io_x3d.h>
 
 class FilterSSynth : public QObject,public MeshIOInterface, public MeshFilterInterface{
     Q_OBJECT
+	MESHLAB_PLUGIN_IID_EXPORTER(MESH_FILTER_INTERFACE_IID)
     Q_INTERFACES(MeshFilterInterface)
     public:
             enum {CR_SSYNTH} ;

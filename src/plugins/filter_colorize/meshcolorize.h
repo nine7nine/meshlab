@@ -30,6 +30,7 @@
 class ExtraMeshColorizePlugin : public QObject, public MeshFilterInterface
 {
     Q_OBJECT
+	MESHLAB_PLUGIN_IID_EXPORTER(MESH_FILTER_INTERFACE_IID)
     Q_INTERFACES(MeshFilterInterface)
 
 public:
@@ -46,6 +47,7 @@ public:
       CP_FACE_TO_VERTEX,
 			CP_TEXTURE_TO_VERTEX,
       CP_VERTEX_TO_FACE,
+      CP_MESH_TO_FACE,
       CP_COLOR_NON_TOPO_COHERENT,
       CP_RANDOM_FACE,
       CP_RANDOM_CONNECTED_COMPONENT

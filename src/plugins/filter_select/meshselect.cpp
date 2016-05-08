@@ -20,7 +20,6 @@
  * for more details.                                                         *
  *                                                                           *
  ****************************************************************************/
-#include <QtGui>
 
 #include <math.h>
 #include <stdlib.h>
@@ -136,7 +135,7 @@ void SelectionFilterPlugin::initParameterSet(QAction *action, MeshModel &m, Rich
 		switch(ID(action))
 		{
     case FP_SELECT_BORDER:
-      parlst.addParam(new RichInt("Iteration", true, "Inclusive Sel.", "If true only the faces with <b>all</b> selected vertices are selected. Otherwise any face with at least one selected vertex will be selected."));
+      //parlst.addParam(new RichInt("Iteration", true, "Inclusive Sel.", "If true only the faces with <b>all</b> selected vertices are selected. Otherwise any face with at least one selected vertex will be selected."));
       break;
     case FP_SELECTBYANGLE :
       {
@@ -195,6 +194,18 @@ void SelectionFilterPlugin::initParameterSet(QAction *action, MeshModel &m, Rich
 				parlst.addParam(new RichDynamicFloat("PercentRH", 0.2f, 0.0f, 1.0f,  tr("Variation from Red or Hue"), tr("A float between 0 and 1 that represents the percent variation from this color that will be selected.  For example if the R was 200 and you put 0.1 then any color with R 200+-25.5 will be selected.") ));
 				parlst.addParam(new RichDynamicFloat("PercentGS", 0.2f, 0.0f, 1.0f,  tr("Variation from Green or Saturation"), tr("A float between 0 and 1 that represents the percent variation from this color that will be selected.  For example if the R was 200 and you put 0.1 then any color with R 200+-25.5 will be selected.") ));
 				parlst.addParam(new RichDynamicFloat("PercentBV", 0.2f, 0.0f, 1.0f,  tr("Variation from Blue or Value"), tr("A float between 0 and 1 that represents the percent variation from this color that will be selected.  For example if the R was 200 and you put 0.1 then any color with R 200+-25.5 will be selected.") ));
+			}
+			break;
+			case FP_SELECT_ALL:
+			{
+				 parlst.addParam(new RichBool("allFaces", true, "Select all Faces", "If true the filter will select all the faces."));
+				 parlst.addParam(new RichBool("allVerts", true, "Select all Vertices", "If true the filter will select all the vertices."));
+			}
+			break;
+			case FP_SELECT_NONE:
+			{
+				 parlst.addParam(new RichBool("allFaces", true, "De-select all Faces", "If true the filter will de-select all the faces."));
+				 parlst.addParam(new RichBool("allVerts", true, "De-select all Vertices", "If true the filter will de-select all the vertices."));
 			}
 			break;
 			case FP_SELECT_INVERT:
@@ -275,11 +286,15 @@ bool SelectionFilterPlugin::applyFilter(QAction *action, MeshDocument &md, RichP
   }
   break;
   case FP_SELECT_ALL    :
-      tri::UpdateSelection<CMeshO>::VertexAll(m.cm);
-      tri::UpdateSelection<CMeshO>::FaceAll(m.cm);     break;
+	  if (par.getBool("allVerts"))
+		tri::UpdateSelection<CMeshO>::VertexAll(m.cm);
+	  if (par.getBool("allFaces"))
+	      tri::UpdateSelection<CMeshO>::FaceAll(m.cm);     break;
   case FP_SELECT_NONE   :
-      tri::UpdateSelection<CMeshO>::VertexClear(m.cm);
-      tri::UpdateSelection<CMeshO>::FaceClear(m.cm);   break;
+	  if (par.getBool("allVerts"))
+		tri::UpdateSelection<CMeshO>::VertexClear(m.cm);
+	  if (par.getBool("allFaces"))
+		tri::UpdateSelection<CMeshO>::FaceClear(m.cm);   break;
   case FP_SELECT_INVERT :
 	  if (par.getBool("InvVerts"))
 		tri::UpdateSelection<CMeshO>::VertexInvert(m.cm);
@@ -390,9 +405,9 @@ bool SelectionFilterPlugin::applyFilter(QAction *action, MeshDocument &md, RichP
   case CP_SELFINTERSECT_SELECT:
     {
       std::vector<CFaceO *> IntersFace;
-      std::vector<CFaceO *>::iterator fpi;
       tri::Clean<CMeshO>::SelfIntersections(m.cm,IntersFace);
       tri::UpdateSelection<CMeshO>::FaceClear(m.cm);
+      std::vector<CFaceO *>::iterator fpi;
       for(fpi=IntersFace.begin();fpi!=IntersFace.end();++fpi)
         (*fpi)->SetS();
     break;
@@ -413,7 +428,7 @@ MeshFilterInterface::FilterClass SelectionFilterPlugin::getClass(QAction *action
           return FilterClass(MeshFilterInterface::Selection + MeshFilterInterface::Cleaning);;
 
       case CP_SELECT_TEXBORDER : return FilterClass(MeshFilterInterface::Selection + MeshFilterInterface::Texture);
-      case FP_SELECT_BY_COLOR : return FilterClass(MeshFilterInterface::Selection + MeshFilterInterface::FaceColoring);
+      case FP_SELECT_BY_COLOR : return FilterClass(MeshFilterInterface::Selection);
       case FP_SELECT_BY_FACE_QUALITY : return FilterClass(MeshFilterInterface::Selection + MeshFilterInterface::Quality);
     case FP_SELECT_BY_VERT_QUALITY : return FilterClass(MeshFilterInterface::Selection + MeshFilterInterface::Quality);
     case FP_SELECTBYANGLE :
@@ -477,4 +492,4 @@ int SelectionFilterPlugin::getPreConditions( QAction * action) const
 	}
   return 0;
 }
-Q_EXPORT_PLUGIN(SelectionFilterPlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(SelectionFilterPlugin)

@@ -1,7 +1,6 @@
 #include <Qt>
-#include <QtGui>
 #include "filter_ssynth.h"
-#include <import_x3d.h>
+#include <meshlabplugins/io_x3d/import_x3d.h>
 #include <common/meshmodel.h>
 #include <common/interfaces.h>
 #include <StructureSynth/Model/RandomStreams.h>
@@ -66,8 +65,9 @@ void FilterSSynth::openX3D(const QString &fileName, MeshModel &m, int& mask, vcg
         int result = vcg::tri::io::ImporterX3D<CMeshO>::LoadMask(fileName.toStdString().c_str(), info);
         m.Enable(info->mask);
         result = vcg::tri::io::ImporterX3D<CMeshO>::Open(m.cm, fileName.toStdString().c_str(), info, cb);
-         vcg::tri::UpdateBounding<CMeshO>::Box(m.cm);
-         vcg::tri::UpdateNormals<CMeshO>::PerVertexNormalizedPerFaceNormalized(m.cm);
+         /*vcg::tri::UpdateBounding<CMeshO>::Box(m.cm);
+         vcg::tri::UpdateNormal<CMeshO>::PerVertexNormalizedPerFaceNormalized(m.cm);*/
+		m.UpdateBoxAndNormals();
          mask=info->mask;
         delete(info);
 }
@@ -246,7 +246,7 @@ QList<MeshIOInterface::Format> FilterSSynth::importFormats() const
              grammar->insert(0,tosub);
          }
  }
- Q_EXPORT_PLUGIN(FilterSSynth)
+ MESHLAB_PLUGIN_NAME_EXPORTER(FilterSSynth)
 
 
 

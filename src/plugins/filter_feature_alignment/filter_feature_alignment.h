@@ -28,8 +28,8 @@
 #include <QStringList>
 #include <QString>
 
-#include <common/meshmodel.h>
-#include <common/interfaces.h>
+#include <meshlab/meshmodel.h>
+#include <meshlab/interfaces.h>
 
 using namespace std;
 using namespace vcg;
@@ -37,6 +37,7 @@ using namespace vcg;
 class FilterFeatureAlignment : public QObject, public MeshFilterInterface
 {
     Q_OBJECT
+	MESHLAB_PLUGIN_IID_EXPORTER(MESH_FILTER_INTERFACE_IID)
     Q_INTERFACES(MeshFilterInterface)
 
     public:

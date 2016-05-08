@@ -6,9 +6,10 @@ HEADERS       += filter_texture.h \
 		$$VCGDIR/vcg/complex/algorithms/parametrization/voronoi_atlas.h
 SOURCES       += filter_texture.cpp  \
 		$$VCGDIR/wrap/ply/plylib.cpp \
-
+		$$VCGDIR/wrap/qt/outline2_rasterizer.cpp
 TARGET        = filter_texture
 
 win32-msvc2005:DEFINES	+= _USE_MATH_DEFINES
 win32-msvc2008:DEFINES	+= _USE_MATH_DEFINES
-CONFIG +=  stl
+#CONFIG +=  stl
+#QT += opengl svg

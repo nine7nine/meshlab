@@ -208,7 +208,6 @@ void FilterColorProc::initParameterSet(QAction *a, MeshDocument& /*md*/, RichPar
     }
     case CP_WHITE_BAL:
     {
-      par.addParam(new RichBool("auto",true,"Automatic white balance","If checked, an automatic balancing is done, otherwise an unbalanced white color must be chosen"));
       par.addParam(new RichColor("color", QColor(255,255,255),"Unbalanced white: ","The color that is supposed to be white."));
       break;
     }
@@ -221,6 +220,11 @@ void FilterColorProc::initParameterSet(QAction *a, MeshDocument& /*md*/, RichPar
     {
         par.addParam(new RichInt("noiseBits", 1, "Noise bits:","Bits of noise added to each RGB channel. Example: 3 noise bits adds three random offsets in the [-4,+4] interval to each RGB channels."));
         break;
+    }
+    case CP_SCATTER_PER_MESH:
+    {
+      par.addParam(new RichInt("seed", 0, "Seed","Random seed used to generate scattered colors. Zero means totally random (each time the filter is started it generates a different result)"));
+      break;
     }
     default: break; // do not add any parameter for the other filters
 	}
@@ -243,7 +247,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;  //if a region of he mesh is selected, filter works on that.
 
-      vcg::tri::UpdateColor<CMeshO>::Filling(m->cm, new_col, selected);  //calls the function that does the real job
+      vcg::tri::UpdateColor<CMeshO>::PerVertexConstant(m->cm, new_col, selected);  //calls the function that does the real job
       return true;
     }
     case CP_THRESHOLDING:
@@ -258,7 +262,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       bool selected = false;
       if(m->cm.sfn!=0) selected = true; //if a region of he mesh is selected, filter works on that.
 
-      vcg::tri::UpdateColor<CMeshO>::Thresholding(m->cm, threshold, c1, c2, selected); //calls the function that does the real job
+      vcg::tri::UpdateColor<CMeshO>::PerVertexThresholding(m->cm, threshold, c1, c2, selected); //calls the function that does the real job
       return true;
     }
     case CP_BRIGHTNESS:
@@ -268,7 +272,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
 
-                        vcg::tri::UpdateColor<CMeshO>::Brighting(m->cm, brightness, selected);
+						vcg::tri::UpdateColor<CMeshO>::PerVertexBrightness(m->cm, brightness, selected);
 	    return true;
     }
     case CP_CONTRAST:
@@ -278,7 +282,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
 
-      vcg::tri::UpdateColor<CMeshO>::Contrast(m->cm, factor, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexContrast(m->cm, factor, selected);
       return true;
     }
     case CP_CONTR_BRIGHT:
@@ -290,8 +294,8 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
 
-      vcg::tri::UpdateColor<CMeshO>::Gamma(m->cm, gamma, selected);
-      vcg::tri::UpdateColor<CMeshO>::BrightnessContrast(m->cm, brightness/256.0f,contrast/256.0f , selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexGamma(m->cm, gamma, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexBrightnessContrast(m->cm, brightness/256.0f,contrast/256.0f , selected);
       return true;
     }
     case CP_GAMMA :
@@ -301,7 +305,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
 
-      vcg::tri::UpdateColor<CMeshO>::Gamma(m->cm, gamma, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexGamma(m->cm, gamma, selected);
       return true;
     }
     case CP_INVERT :
@@ -309,7 +313,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
 
-      vcg::tri::UpdateColor<CMeshO>::Invert(m->cm, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexInvert(m->cm, selected);
       return true;
     }
     case CP_LEVELS:
@@ -331,7 +335,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
 
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
-      vcg::tri::UpdateColor<CMeshO>::Levels(m->cm, gamma, in_min, in_max, out_min, out_max, rgbMask, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexLevels(m->cm, gamma, in_min, in_max, out_min, out_max, rgbMask, selected);
       return true;
 		}
 		case CP_COLOURISATION:
@@ -349,7 +353,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
 
-      vcg::tri::UpdateColor<CMeshO>::Colourisation(m->cm, color, intensity, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexColourisation(m->cm, color, intensity, selected);
       return true;
     }
     case CP_DESATURATION:
@@ -357,7 +361,7 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
       int method = par.getEnum("method");
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
-      vcg::tri::UpdateColor<CMeshO>::Desaturation(m->cm, method, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexDesaturation(m->cm, method, selected);
       return true;
     }
     case CP_EQUALIZE:
@@ -370,43 +374,46 @@ bool FilterColorProc::applyFilter(QAction *filter, MeshDocument& md, RichParamet
 
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
-      vcg::tri::UpdateColor<CMeshO>::Equalize(m->cm, rgbMask, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexEqualize(m->cm, rgbMask, selected);
       return true;
     }
     case CP_WHITE_BAL:
     {
-      bool automatic =  par.getBool("auto");
       QColor tempColor = par.getColor("color");
       Color4b color = Color4b(tempColor.red(),tempColor.green(),tempColor.blue(), 255);
       bool selected = false;
       if(m->cm.sfn!=0) selected = true;
-      vcg::tri::UpdateColor<CMeshO>::WhiteBalance(m->cm, automatic, color, selected);
+      vcg::tri::UpdateColor<CMeshO>::PerVertexWhiteBalance(m->cm, color, selected);
       return true;
     }
     case CP_SCATTER_PER_MESH:
     {
-      math::SubtractiveRingRNG myrnd(time(NULL));
+      int seed=par.getInt("seed");
+      if(seed==0) seed= time(NULL);
+      math::SubtractiveRingRNG myrnd(seed);
       int numOfMeshes = md.meshList.size();
       int id = myrnd.generate(numOfMeshes);
+      if(seed!=0) id = seed;
       foreach(MeshModel *mm, md.meshList)
       {
         mm->cm.C()=Color4b::Scatter(numOfMeshes+1,id);
         id=(id+1)%numOfMeshes;
-      }
-      return true;
+     }
+    return true;
     }
     case CP_PERLIN_COLOR:
     {
         //read parameters
         float freq = par.getDynamicFloat("freq");//default frequency; grant to be the same for all mesh in the document
-        tri::UpdateColor<CMeshO>::PerlinColor(m->cm, md.bbox(), freq, Point3i(0,64,128));
+        float period = md.bbox().Diag() / freq;
+        tri::UpdateColor<CMeshO>::PerVertexPerlinNoise(m->cm, Point3f(period,period,period));
         return true;
     }
     case CP_COLOR_NOISE:
     {
         //read parameters
         int noiseBits = par.getInt("noiseBits");
-        tri::UpdateColor<CMeshO>::ColorNoise(m->cm, noiseBits);
+        tri::UpdateColor<CMeshO>::PerVertexAddNoise(m->cm, noiseBits);
         return true;
     }
     default: assert(0);
@@ -473,4 +480,4 @@ int FilterColorProc::getPreConditions( QAction * filter ) const
 	}
 }
 
-Q_EXPORT_PLUGIN(FilterColorProc)
+MESHLAB_PLUGIN_NAME_EXPORTER(FilterColorProc)

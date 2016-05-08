@@ -27,7 +27,8 @@ $Log: stdpardialog.cpp,v $
 ****************************************************************************/
 #ifndef ALIGN_DIALOG_H
 #define ALIGN_DIALOG_H
-#include <QtGui>
+#include <QMenu>
+#include <QDockWidget>
 #include "meshtree.h"
 class GLArea;
 
@@ -55,18 +56,19 @@ public:
 	void rebuildTree();
 	void updateButtons();
 	void updateDialog();
+	void updateMeshVisibilities() {emit updateMeshSetVisibilities();}
 	void setTree(MeshTree *);
 	void updateCurrentNodeBackground();
 	void setCurrentArc(vcg::AlignPair::Result *currentArc);
 
 	Ui::alignDialog ui;
-	GLArea *gla; 
+	GLArea *gla;
 private:
 	EditAlignPlugin *edit;
 public:
 
 	MeshTree *meshTree;
-	MeshNode *currentNode(); 
+	MeshNode *currentNode();
 	vcg::AlignPair::Result *currentArc;
 
 	QMap<MeshNode *,           MeshTreeWidgetItem *> M2T; // MeshNode to treeitem hash
@@ -82,6 +84,7 @@ signals:
 
 public slots:
 	void onClickItem(QTreeWidgetItem * item, int column );
+	void currentMeshChanged(int );
 };
 
 #endif

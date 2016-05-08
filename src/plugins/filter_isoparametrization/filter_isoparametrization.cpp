@@ -20,13 +20,13 @@
 * for more details.                                                         *
 *                                                                           *
 ****************************************************************************/
+#include "filter_isoparametrization.h"
 
-#include <Qt>
-#include <QtGui>
+#include <QStringList>
+#include <QFileInfo>
 #include "defines.h"
 
 #include "../../common/meshmodel.h"
-#include <filter_isoparametrization.h>
 #include <iso_transfer.h>
 
 
@@ -357,7 +357,7 @@ bool FilterIsoParametrization::applyFilter(QAction *filter, MeshDocument& md, Ri
 	case ISOP_REMESHING :
 		{
       CMeshO::PerMeshAttributeHandle<IsoParametrization> isoPHandle =
-          tri::Allocator<CMeshO>::GetPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
+          tri::Allocator<CMeshO>::FindPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
 
       bool b=tri::Allocator<CMeshO>::IsValidHandle<IsoParametrization>(*mesh,isoPHandle);
 			if (!b)
@@ -393,13 +393,13 @@ bool FilterIsoParametrization::applyFilter(QAction *filter, MeshDocument& md, Ri
 			mm->updateDataMask(MeshModel::MM_FACEFACETOPO);
 			mm->updateDataMask(MeshModel::MM_VERTFACETOPO);
 			PrintStats(rem);
-      tri::UpdateNormals<CMeshO>::PerFace(*rem);
+      tri::UpdateNormal<CMeshO>::PerFace(*rem);
 			return true;
 		}
 	case ISOP_DIAMPARAM :
 		{
       CMeshO::PerMeshAttributeHandle<IsoParametrization> isoPHandle =
-          tri::Allocator<CMeshO>::GetPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
+          tri::Allocator<CMeshO>::FindPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
       bool b=tri::Allocator<CMeshO>::IsValidHandle<IsoParametrization>(*mesh,isoPHandle);
 			if (!b)
 			{
@@ -415,7 +415,7 @@ bool FilterIsoParametrization::applyFilter(QAction *filter, MeshDocument& md, Ri
 			DiamondParametrizator DiaPara;
 			DiaPara.Init(&isoPHandle());
 			DiaPara.SetCoordinates<CMeshO>(*rem,border_size);
-      tri::UpdateNormals<CMeshO>::PerFace(*rem);
+      tri::UpdateNormal<CMeshO>::PerFace(*rem);
 			return true;
 		}
 	case ISOP_LOAD : 
@@ -432,7 +432,7 @@ bool FilterIsoParametrization::applyFilter(QAction *filter, MeshDocument& md, Ri
 				return false;
 			}
       CMeshO::PerMeshAttributeHandle<IsoParametrization> isoPHandle =
-          tri::Allocator<CMeshO>::GetPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
+          tri::Allocator<CMeshO>::FindPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
 
       bool b=tri::Allocator<CMeshO>::IsValidHandle<IsoParametrization>(*mesh,isoPHandle);
 			if (!b)
@@ -456,7 +456,7 @@ bool FilterIsoParametrization::applyFilter(QAction *filter, MeshDocument& md, Ri
 		{
 			m->updateDataMask(MeshModel::MM_VERTQUALITY);
       CMeshO::PerMeshAttributeHandle<IsoParametrization> isoPHandle =
-          tri::Allocator<CMeshO>::GetPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
+          tri::Allocator<CMeshO>::FindPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
 
       bool b=tri::Allocator<CMeshO>::IsValidHandle<IsoParametrization>(*mesh,isoPHandle);
 			if (!b)
@@ -481,7 +481,7 @@ bool FilterIsoParametrization::applyFilter(QAction *filter, MeshDocument& md, Ri
       CMeshO *srcMesh=&mmsrc->cm;
 
       CMeshO::PerMeshAttributeHandle<IsoParametrization> isoPHandle =
-          tri::Allocator<CMeshO>::GetPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
+          tri::Allocator<CMeshO>::FindPerMeshAttribute<IsoParametrization>(*mesh,"isoparametrization");
 
       bool b=tri::Allocator<CMeshO>::IsValidHandle<IsoParametrization>(*srcMesh,isoPHandle);
 			if (!b)
@@ -529,4 +529,4 @@ int FilterIsoParametrization::postCondition( QAction* /*filter*/ ) const
 	return MeshModel::MM_UNKNOWN;
 }
 
-Q_EXPORT_PLUGIN(FilterIsoParametrization)
+MESHLAB_PLUGIN_NAME_EXPORTER(FilterIsoParametrization)

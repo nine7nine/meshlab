@@ -22,6 +22,7 @@
  ****************************************************************************/
 
 #include "paintbox.h"
+#include <QFileDialog>
 
 Paintbox::Paintbox(QWidget * parent, Qt::WindowFlags flags) : QWidget(parent, flags)
 {
@@ -98,7 +99,8 @@ void Paintbox::on_switch_colors_clicked()
 
 void Paintbox::setClonePixmap(QImage & image)
 {
-	if (item != NULL) getCloneScene()->removeItem(item);
+	if ((item != NULL) && (getCloneScene()->items().contains(item)))
+		getCloneScene()->removeItem(item);
 	item = getCloneScene()->addPixmap(QPixmap::fromImage(image));
 	item->setParentItem(clone_source_view->scenegroup);
 	item->setPos(0, 0);
@@ -141,7 +143,8 @@ void Paintbox::loadClonePixmap()
 	if (!s.isNull()) 
 	{
 		QPixmap pixmap(s);
-		if (item != NULL) getCloneScene()->removeItem(item);
+		if ((item != NULL) && (getCloneScene()->items().contains(item))) 
+			getCloneScene()->removeItem(item);
 		item = getCloneScene()->addPixmap(pixmap);
 		item->setParentItem(clone_source_view->scenegroup);
 		setPixmapDelta(pixmap.width()/2.0, pixmap.height()/2.0);
@@ -189,7 +192,8 @@ void Paintbox::restorePreviousType()
 
 void Paintbox::refreshBrushPreview()
 {
-	if (item != NULL) brush_viewer->scene()->removeItem(item);
+	if ((item != NULL) && (brush_viewer->scene()->items().contains(item))) 
+		brush_viewer->scene()->removeItem(item);
 		
 		item = brush_viewer->scene()->addPixmap(QPixmap::fromImage(
 				raster(getBrush(), (int) ((brush_viewer->width()-2) * size_slider->value() / 100.0), 

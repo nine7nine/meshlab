@@ -33,6 +33,7 @@ class QGLFramebufferObject;
 class SplatRendererPlugin : public QObject, public MeshRenderInterface
 {
 	Q_OBJECT
+	MESHLAB_PLUGIN_IID_EXPORTER(MESH_RENDER_INTERFACE_IID)
 	Q_INTERFACES(MeshRenderInterface)
 
 	SplatRenderer<CMeshO> splat_renderer;
@@ -52,8 +53,8 @@ public:
 	void initActionList();
 
 	bool isSupported() {return splat_renderer.isSupported();}
-	void Init(QAction *a, MeshDocument &m, RenderMode &rm, QGLWidget *gla);
-	void Render(QAction *a, MeshDocument &m, RenderMode &rm, QGLWidget *gla);
+	void Init(QAction *a, MeshDocument &m, QMap<int,RenderMode>& rm, QGLWidget *gla);
+	void Render(QAction *a, MeshDocument &m, QMap<int,RenderMode>& rm, QGLWidget *gla);
 	void Finalize(QAction * /*mode*/, MeshDocument */*m*/, GLArea * /*parent*/) ;
 
 };

@@ -21,7 +21,6 @@
 *                                                                           *
 ****************************************************************************/
 #include "radianceScalingRenderer.h"
-#include <QtGui>
 #include <math.h>
 #include <stdlib.h>
 #include <iostream>
@@ -44,8 +43,8 @@ RadianceScalingRendererPlugin::RadianceScalingRendererPlugin()
     _fbo(NULL),
     _buffPass(NULL),
     _rsPass(NULL),
-    _depthTex(NULL), 
-    _gradTex(NULL), 
+    _depthTex(NULL),
+    _gradTex(NULL),
     _normTex(NULL),
     _colorTex(NULL),
     _convexLS(NULL),
@@ -53,7 +52,7 @@ RadianceScalingRendererPlugin::RadianceScalingRendererPlugin()
 
 }
 
-void RadianceScalingRendererPlugin::Init(QAction *, MeshDocument &, RenderMode &, QGLWidget *gla) {
+void RadianceScalingRendererPlugin::Init(QAction *, MeshDocument &, QMap<int,RenderMode>&, QGLWidget *gla) {
   if(_sDialog) {
     _sDialog->close();
     delete _sDialog;
@@ -74,9 +73,9 @@ void RadianceScalingRendererPlugin::Init(QAction *, MeshDocument &, RenderMode &
     _supported = false;
     return;
   }
-  
+
   _supported = true;
-  _sDialog = new ShaderDialog(this,gla);
+  _sDialog = new ShaderDialog(this,gla,gla);
   _sDialog->move(10,100);
   _sDialog->show();
 
@@ -93,21 +92,24 @@ void RadianceScalingRendererPlugin::Init(QAction *, MeshDocument &, RenderMode &
   GL_TEST_ERR
 }
 
-void RadianceScalingRendererPlugin::Render(QAction *, MeshDocument &md, RenderMode &rm, QGLWidget *) {
+void RadianceScalingRendererPlugin::Render(QAction *, MeshDocument &md, QMap<int,RenderMode>&rm, QGLWidget *) {
   checkViewport();
 
-  // first pass: buffers 
+  // first pass: buffers
   _fbo->bind();
   glDrawBuffers(3,FramebufferObject::buffers(0));
   glClearColor(0.0,0.0,0.0,1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  vcg::glColor(vcg::Color4b::LightGray);
   _buffPass->enable();
   foreach(MeshModel *mp,md.meshList) {
-    if(mp->visible) mp->render(rm.drawMode,rm.colorMode,rm.textureMode);
+      QMap<int,RenderMode>::iterator it = rm.find(mp->id());
+      if((mp->visible) && (it != rm.end()))
+          mp->render(it.value().drawMode,it.value().colorMode,it.value().textureMode);
   }
   _buffPass->disable();
-  
-  // second pass: descriptor, radiance scaling, lighting 
+
+  // second pass: descriptor, radiance scaling, lighting
   FramebufferObject::unbind();
   swapToScreenMode();
   _rsPass->enable();
@@ -136,7 +138,7 @@ void RadianceScalingRendererPlugin::Finalize(QAction *, MeshDocument *, GLArea *
     _concavLS = NULL;
   }
 }
- 
+
 void RadianceScalingRendererPlugin::initActionList() {
   _actionList << new QAction("Radiance Scaling",this);
 }
@@ -144,10 +146,10 @@ void RadianceScalingRendererPlugin::initActionList() {
 void RadianceScalingRendererPlugin::createLit(const QString &filename,int type) {
   QImage t;
   QImage b;
-  
+
   if(!b.load(filename)) {
     return;
-  } 
+  }
 
   t = QGLWidget::convertToGLFormat(b);
 
@@ -156,7 +158,7 @@ void RadianceScalingRendererPlugin::createLit(const QString &filename,int type) 
       delete _convexLS;
       _convexLS = NULL;
     }
-    
+
     _convexLS = new UbyteTexture2D(TextureFormat(GL_TEXTURE_2D,t.width(),t.height(),3,GL_RGBA,GL_UNSIGNED_BYTE),TextureParams(GL_LINEAR,GL_LINEAR),t.bits());
   } else {
 
@@ -164,7 +166,7 @@ void RadianceScalingRendererPlugin::createLit(const QString &filename,int type) 
       delete _concavLS;
       _concavLS = NULL;
     }
-    
+
     _concavLS = new UbyteTexture2D(TextureFormat(GL_TEXTURE_2D,t.width(),t.height(),3,GL_RGBA,GL_UNSIGNED_BYTE),TextureParams(GL_LINEAR,GL_LINEAR),t.bits());
   }
 }
@@ -173,8 +175,8 @@ void RadianceScalingRendererPlugin::initShaders(bool reload)
 {
   if(!reload) {
     string path = ":/RadianceScalingRenderer/shaders/";
-	delete _buffPass;
-	delete _rsPass;
+    delete _buffPass;
+    delete _rsPass;
     _buffPass = new GPUProgram(path+"01_buffer.vs",path+"01_buffer.fs");
     _rsPass   = new GPUProgram(path+"02_rs.vs"  ,path+"02_rs.fs");
     GL_TEST_ERR
@@ -195,7 +197,7 @@ void RadianceScalingRendererPlugin::initShaders(bool reload)
     _rsPass->addUniform("colormap");
     _rsPass->disable();
 
-    GL_TEST_ERR    
+    GL_TEST_ERR
   } else {
     _buffPass->reload();
     _rsPass->reload();
@@ -228,7 +230,7 @@ void RadianceScalingRendererPlugin::initFBOs() {
   glGetIntegerv(GL_VIEWPORT,v);
   _w = v[2];
   _h = v[3];
-  
+
   if(_fbo==NULL) {
     GLenum filter = GL_LINEAR;
     GLenum format = GL_RGBA16F_ARB;
@@ -271,7 +273,7 @@ void RadianceScalingRendererPlugin::cleanFBOs() {
     delete _gradTex;
     delete _normTex;
     delete _colorTex;
-    
+
     _fbo      = NULL;
     _depthTex = NULL;
     _gradTex  = NULL;
@@ -280,4 +282,4 @@ void RadianceScalingRendererPlugin::cleanFBOs() {
   }
 }
 
-Q_EXPORT_PLUGIN(RadianceScalingRendererPlugin)
+MESHLAB_PLUGIN_NAME_EXPORTER(RadianceScalingRendererPlugin)

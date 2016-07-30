@@ -36,8 +36,8 @@
 #include <common/meshmodel.h>
 #include <meshlab/glarea.h>
 
-#include <meshlabplugins/edit_pickpoints/pickedPoints.h>
-#include <meshlabplugins/edit_align/align/AlignPair.h>
+#include <plugins/edit_pickpoints/pickedPoints.h>
+#include <plugins/edit_align/align/AlignPair.h>
 
 class AlignTools : public QObject
 {

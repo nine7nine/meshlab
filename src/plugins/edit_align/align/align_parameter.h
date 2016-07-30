@@ -22,7 +22,7 @@
 ****************************************************************************/
 
 #include <common/filterparameter.h>
-#include <meshlabplugins/edit_align/meshtree.h>
+#include <plugins/edit_align/meshtree.h>
 
 class AlignParameter {
 

@@ -379,17 +379,21 @@ add_subdirectory(src/other)
 # ***            Check for Libraries - Stage 4 of 9               ***
 # *******************************************************************
 
+find_package(OpenGL)
+
 # While the primary purpose of this section is to identify libraries,
 # some of the headers we are looking for are associated with the
 # libraries checked here.  In those cases, we will handle the header
 # logic here as opposed to separating the header logic from the
 # find_package call.
 
-find_package(Qt5Widgets)
+find_package(Qt5Widgets REQUIRED)
 find_package(Qt5OpenGL)
 find_package(Qt5Xml)
 find_package(Qt5XmlPatterns)
 find_package(Qt5Script)
+
+set(QT_LIBRARIES Qt5::Widgets Qt5::OpenGL Qt5::Xml Qt5::XmlPatterns Qt5::Script)
 
 # Look for threads (doesn't check for headers)
 # The variable CMAKE_THREAD_LIBS_INIT is the one of interest

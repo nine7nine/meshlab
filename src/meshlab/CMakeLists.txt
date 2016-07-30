@@ -24,6 +24,7 @@ set(meshlab_basic_SRCS
   mainwindow_RunTime.cpp
   multiViewer_Container.cpp
   plugindialog.cpp
+  rendermodeactions.cpp
   savemaskexporter.cpp
   saveSnapshotDialog.cpp
   stdpardialog.cpp
@@ -35,21 +36,23 @@ set(meshlab_basic_SRCS
 
 set(moc_files
   ../common/interfaces.h
-  mainwindow.h
-  glarea.h
-  multiViewer_Container.h
-  plugindialog.h
+  additionalgui.h
+  changetexturename.h
   customDialog.h
   filterScriptDialog.h
+  filterthread.h
+  glarea.h
+  layerDialog.h
+  mainwindow.h
+  meshlabeditdockwidget.h
+  multiViewer_Container.h
+  plugindialog.h
+  rendermodeactions.h
   saveSnapshotDialog.h
   savemaskexporter.h
-  changetexturename.h
-  layerDialog.h
   stdpardialog.h
-  xmlstdpardialog.h
-  additionalgui.h
   xmlgeneratorgui.h
-  filterthread.h
+  xmlstdpardialog.h
   )
 QT5_WRAP_CPP(moc_SRCS ${moc_files})
 
@@ -77,7 +80,7 @@ set(meshlab_SRCS
   )
 
 add_executable(meshlab ${meshlab_SRCS})
-target_link_libraries(meshlab common jhead ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(meshlab common jhead ${OPENGL_LIBRARIES} ${QT_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 install(TARGETS meshlab
   RUNTIME DESTINATION ${BIN_DIR}
   LIBRARY DESTINATION ${LIB_DIR}

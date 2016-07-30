@@ -24,12 +24,15 @@ set(common_basic_SRCS
   )
 
 set(moc_HDRS
+  GLLogStream.h
   interfaces.h
-  meshmodel.h 
-  scriptinterface.h 
+  meshmodel.h
+  scriptinterface.h
   scriptsyntax.h
   )
 QT5_WRAP_CPP(moc_interfaces_MOC ${moc_HDRS})
+
+message("QT_LIBRARIES: ${QT_LIBRARIES}")
 
 set(common_SRCS
   ${common_basic_SRCS}

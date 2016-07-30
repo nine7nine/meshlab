@@ -12,7 +12,7 @@ sufficient to get a calibrated shot.<br>
 
 #include <list>
 
-#include "../../other/levmar-2.3/lm.h"
+#include "../../other/levmar-2.6/levmar.h"
 
 
 struct LevmarCorrelation {

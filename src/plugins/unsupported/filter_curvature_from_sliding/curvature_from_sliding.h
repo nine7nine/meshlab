@@ -30,7 +30,7 @@
 #include <vcg/complex/allocate.h>
 #include <vcg/complex/algorithms/subset.h>
 #include <vcg/space/index/grid_static_ptr.h>
-#include <lib/levmar/lm.h>
+#include <lib/levmar/levmar.h>
 
 #include "frame.h"
 

@@ -4,20 +4,29 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/../../other
   )
 
-QT5_WRAP_CPP(moc_files edit_align.h)
+set(edit_align_HDRS
+  edit_align_factory.h
+  edit_align.h
+  alignDialog.h
+  AlignPairDialog.h
+  AlignPairWidget.h
+  )
+
+QT5_WRAP_CPP(moc_files ${edit_align_HDRS})
 QT5_WRAP_UI(uic_files alignDialog.ui)
 QT5_ADD_RESOURCES(rcc_files edit_align.qrc)
 set(edit_align_SRCS
-  edit_align_factory.cpp 
-  point_matching_scale.cpp 
-  edit_align.cpp 
-  meshtree.cpp 
-  alignDialog.cpp 
-  AlignPairWidget.cpp 
-  align/AlignPair.cpp 
-  align/AlignGlobal.cpp 
-  align/OccupancyGrid.cpp 
-  align/align_parameter.cpp 
+  edit_align_factory.cpp
+  point_matching_scale.cpp
+  edit_align.cpp
+  meshtree.cpp
+  alignDialog.cpp
+  AlignPairWidget.cpp
+  AlignPairDialog.cpp
+  align/AlignPair.cpp
+  align/AlignGlobal.cpp
+  align/OccupancyGrid.cpp
+  align/align_parameter.cpp
   ../../meshlab/stdpardialog.cpp 
   ../../other/vcglib/wrap/ply/plylib.cpp
   ../../other/vcglib/wrap/gui/trackball.cpp

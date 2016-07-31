@@ -116,5 +116,39 @@ mkdir src/meshlab
 mv meshlab/src/meshlab/* src/meshlab
 rm -rf meshlab/src/meshlab
 
+#################################
+#         plugins               #
+#################################
+mkdir src/plugins
+mkdir src/plugins/standard
+mv meshlab/src/meshlabplugins/* src/plugins/standard
+rm -rf meshlab/src/meshlabplugins
+
+mkdir src/plugins/experimental
+mv meshlab/src/plugins_experimental/* src/plugins/experimental
+rm -rf meshlab/src/plugins_experimental
+
+mkdir src/plugins/unsupported
+mv meshlab/src/plugins_unsupported/* src/plugins/unsupported
+rm -rf meshlab/src/plugins_unsupported
+
+mkdir src/plugins/sample
+mv meshlab/src/sampleplugins/* src/plugins/sample
+rm -rf meshlab/src/sampleplugins
+
+mkdir src/plugins/fgt
+mv meshlab/src/fgt/* src/plugins/fgt
+rm -rf meshlab/src/fgt
+
+
+#################################
+#         server                #
+#################################
+mkdir src/server
+mv meshlab/src/meshlabserver/* src/server
+rm -rf meshlab/src/meshlabserver
+
+
+
 ## Make sure none of the files are executable
 find . -type f -exec chmod -x {} \;

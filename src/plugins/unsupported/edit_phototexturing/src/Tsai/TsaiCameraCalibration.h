@@ -2,8 +2,8 @@
 #define TSAICAMERACALIBRATION_H_
 extern "C" {
 
-	#include "../../../other/TSAI30B3/CAL_MAIN.h"
-	//#include "../../../other/TSAI30B3/CAL_UTIL.h"
+	#include "../../../external/TSAI30B3/CAL_MAIN.h"
+	//#include "../../../external/TSAI30B3/CAL_UTIL.h"
 }
 
 #include <src/CameraCalibration.h>

@@ -1,5 +1,6 @@
 function(meshlab_plugin plugin base_srcs moc_hdrs)
   cmake_parse_arguments(MP "" "" "INCLUDE_DIRS" ${ARGN})
+  set(added_plugins ${added_plugins} ${plugin} PARENT_SCOPE)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${plugin})
   if(MP_INCLUDE_DIRS)
     include_directories(${MP_INCLUDE_DIRS})
@@ -18,6 +19,14 @@ function(meshlab_plugin plugin base_srcs moc_hdrs)
     LIBRARY DESTINATION ${LIB_DIR}
     ARCHIVE DESTINATION ${LIB_DIR})
 endfunction()
+
+# In order to spot plugins we aren't handling with the build logic, get a list
+# of what's there and initialize an empty list that will be updated by the meshlab_plugin
+# function
+set(added_plugins)
+file(GLOB dir_plugins RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*")
+file(GLOB dir_files LIST_DIRECTORIES false RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*")
+list(REMOVE_ITEM dir_plugins ${dir_files})
 
 # ********************************
 # ***** Input/Output plugins *****
@@ -39,6 +48,17 @@ meshlab_plugin(io_base io_base_srcs io_base_moc_hdrs)
 # **************************
 # ***** Filter plugins *****
 # **************************
+
+message("added_plugins: ${added_plugins}")
+
+list(REMOVE_ITEM dir_plugins ${added_plugins})
+if(dir_plugins)
+  set(strlist)
+  foreach(pl ${dir_plugins})
+    set(strlist "${strlist}\n${pl}")
+  endforeach(pl ${dir_plugins})
+  message(WARNING "The following plugins were not added: ${strlist}")
+endif(dir_plugins)
 
 # Local Variables:
 # tab-width: 8

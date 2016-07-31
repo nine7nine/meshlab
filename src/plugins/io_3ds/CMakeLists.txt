@@ -1,4 +1,4 @@
-set(3DS_INCLUDE_DIR ../../other/lib3ds)
+set(3DS_INCLUDE_DIR ../../external/lib3ds)
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}

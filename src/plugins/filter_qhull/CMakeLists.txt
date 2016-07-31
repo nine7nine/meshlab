@@ -1,6 +1,6 @@
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other/qhull-2003.1/src
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external/qhull-2003.1/src
   )
 
 QT5_WRAP_CPP(moc_files filter_qhull.h)

@@ -6,7 +6,7 @@ QT5_WRAP_CPP(moc_files filter_texture.h)
 
 set(filter_texture_SRCS
   filter_texture.cpp
-  ../../other/vcglib/wrap/ply/plylib.cpp
+  ../../external/vcglib/wrap/ply/plylib.cpp
   ${moc_files}
   )
 

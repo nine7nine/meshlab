@@ -6,7 +6,7 @@ QT5_WRAP_CPP(moc_files io_pdb.h)
 
 set(io_pdb_SRCS
   io_pdb.cpp
-  ../../other/vcglib/wrap/ply/plylib.cpp
+  ../../external/vcglib/wrap/ply/plylib.cpp
   ${moc_files}
   )
 

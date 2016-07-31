@@ -1,7 +1,7 @@
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other/vcglib
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external/vcglib
   )
 
 QT5_WRAP_CPP(moc_files edittexture.h)
@@ -11,8 +11,8 @@ set(edit_texture_SRCS
   edittexture.cpp 
   textureeditor.cpp
   renderarea.cpp
-  ../../other/vcglib/wrap/gui/trackball.cpp
-  ../../other/vcglib/wrap/gui/trackmode.cpp
+  ../../external/vcglib/wrap/gui/trackball.cpp
+  ../../external/vcglib/wrap/gui/trackmode.cpp
   ${moc_files}
   ${uic_files}
   ${rcc_files}

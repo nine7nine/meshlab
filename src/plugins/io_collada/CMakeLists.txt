@@ -6,7 +6,7 @@ QT5_WRAP_CPP(moc_files io_collada.h)
 
 set(io_collada_SRCS
   io_collada.cpp
-  ../../other/vcglib/wrap/dae/xmldocumentmanaging.cpp
+  ../../external/vcglib/wrap/dae/xmldocumentmanaging.cpp
   ${moc_files}
   )
 

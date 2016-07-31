@@ -1,7 +1,7 @@
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other/vcglib
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external/vcglib
   )
 
 QT5_WRAP_CPP(moc_files editslice.h)
@@ -10,8 +10,8 @@ set(editslice_SRCS
   edit_slice_factory.cpp 
   editslice.cpp 
   slicedialog.cpp
-  ../../other/vcglib/wrap/gui/trackball.cpp
-  ../../other/vcglib/wrap/gui/trackmode.cpp
+  ../../external/vcglib/wrap/gui/trackball.cpp
+  ../../external/vcglib/wrap/gui/trackmode.cpp
   svgpro.cpp
   ${moc_files}
   ${uic_files}

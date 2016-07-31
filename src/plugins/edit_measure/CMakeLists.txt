@@ -1,7 +1,7 @@
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external
   )
 
 QT5_WRAP_CPP(moc_files edit_measure.h)
@@ -9,7 +9,7 @@ QT5_ADD_RESOURCES(rcc_files edit_measure.qrc)
 set(edit_measure_SRCS
   edit_measure_factory.cpp 
   edit_measure.cpp 
-  ../../other/vcglib/wrap/gui/rubberband.cpp
+  ../../external/vcglib/wrap/gui/rubberband.cpp
   ${moc_files}
   ${uic_files}
   ${rcc_files}

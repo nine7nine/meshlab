@@ -1,4 +1,4 @@
-set(JHEAD_INCLUDE_DIR ${MESHLAB_SOURCE_DIR}/src/other/jhead)
+set(JHEAD_INCLUDE_DIR ${MESHLAB_SOURCE_DIR}/src/external/jhead)
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}

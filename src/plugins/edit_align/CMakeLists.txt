@@ -1,7 +1,7 @@
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external
   )
 
 set(edit_align_HDRS
@@ -28,9 +28,9 @@ set(edit_align_SRCS
   align/OccupancyGrid.cpp
   align/align_parameter.cpp
   ../../meshlab/stdpardialog.cpp 
-  ../../other/vcglib/wrap/ply/plylib.cpp
-  ../../other/vcglib/wrap/gui/trackball.cpp
-  ../../other/vcglib/wrap/gui/trackmode.cpp 
+  ../../external/vcglib/wrap/ply/plylib.cpp
+  ../../external/vcglib/wrap/gui/trackball.cpp
+  ../../external/vcglib/wrap/gui/trackmode.cpp 
   ${moc_files}
   ${uic_files}
   ${rcc_files}

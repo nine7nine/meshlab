@@ -1,4 +1,4 @@
-set(OPENCTM_INCLUDE_DIRS ../../other/openctm/lib)
+set(OPENCTM_INCLUDE_DIRS ../../external/openctm/lib)
 
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}

@@ -45,7 +45,7 @@ endif(NOT DEFINED BUILD_STATIC_LIBS)
 
 # Figure out what to do with required libs that we also have
 # as included sources
-add_subdirectory(src/other)
+add_subdirectory(src/external)
 
 # Check for the math library
 include(CheckLibraryExists)

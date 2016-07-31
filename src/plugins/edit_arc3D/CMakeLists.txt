@@ -1,7 +1,7 @@
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external
   )
 
 QT5_WRAP_CPP(moc_files edit_arc3D.h)
@@ -17,7 +17,7 @@ set(edit_arc3D_SRCS
   maskRenderWidget.cpp 
   maskImageWidget.cpp 
   fillImage.cpp 
-  ../../other/vcglib/wrap/ply/plylib.cpp 
+  ../../external/vcglib/wrap/ply/plylib.cpp 
   ${moc_files}
   ${uic_files}
   ${rcc_files}

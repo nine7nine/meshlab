@@ -1,7 +1,7 @@
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/../filter_mls
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other/ann_1.1.2/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external/ann_1.1.2/include
   )
 
 QT5_WRAP_CPP(moc_files filter_feature_alignment.h)

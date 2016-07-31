@@ -1,4 +1,4 @@
-set(JHEAD_INCLUDE_DIR ${MESHLAB_SOURCE_DIR}/src/other/jhead)
+set(JHEAD_INCLUDE_DIR ${MESHLAB_SOURCE_DIR}/src/external/jhead)
 
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -30,8 +30,8 @@ set(meshlab_basic_SRCS
   stdpardialog.cpp
   xmlgeneratorgui.cpp
   xmlstdpardialog.cpp
-  ../other/vcglib/wrap/gui/trackball.cpp
-  ../other/vcglib/wrap/gui/trackmode.cpp
+  ../external/vcglib/wrap/gui/trackball.cpp
+  ../external/vcglib/wrap/gui/trackmode.cpp
   )
 
 set(moc_files

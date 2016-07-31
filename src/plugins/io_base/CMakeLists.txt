@@ -6,7 +6,7 @@ QT5_WRAP_CPP(moc_files baseio.h)
 
 set(io_base_SRCS
   baseio.cpp
-  ../../other/vcglib/wrap/ply/plylib.cpp
+  ../../external/vcglib/wrap/ply/plylib.cpp
   ${moc_files}
   )
 

@@ -6,7 +6,7 @@ QT5_WRAP_CPP(moc_files filter_plymc.h)
 
 set(filter_plymc_SRCS
   filter_plymc.cpp
-  ../../other/vcglib/wrap/ply/plylib.cpp
+  ../../external/vcglib/wrap/ply/plylib.cpp
   ${moc_files}
   )
 

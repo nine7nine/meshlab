@@ -1,6 +1,6 @@
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other/levmar-2.6
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external/levmar-2.6
   )
 
 QT5_WRAP_CPP(moc_files filter_mutualinfo.h)

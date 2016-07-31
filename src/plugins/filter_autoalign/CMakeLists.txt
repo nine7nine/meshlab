@@ -1,6 +1,6 @@
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external
   )
 
 QT5_WRAP_CPP(moc_files filter_autoalign.h)
@@ -10,7 +10,7 @@ set(filter_autoalign_SRCS
   ../edit_align/align/AlignPair.cpp
   ../edit_align/align/Guess.cpp
   ../edit_align/point_matching_scale.cpp
-  ../../other/vcglib/wrap/ply/plylib.cpp
+  ../../external/vcglib/wrap/ply/plylib.cpp
   ${moc_files}
   )
 

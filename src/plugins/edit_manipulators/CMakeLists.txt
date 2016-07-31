@@ -1,7 +1,7 @@
 include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../other
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../external
   )
 
 QT5_WRAP_CPP(moc_files edit_manipulators.h)
@@ -9,8 +9,8 @@ QT5_ADD_RESOURCES(rcc_files edit_manipulators.qrc)
 set(edit_manipulators_SRCS
   edit_manipulators_factory.cpp 
   edit_manipulators.cpp 
-  ../../other/vcglib/wrap/gui/trackball.cpp
-  ../../other/vcglib/wrap/gui/trackmode.cpp
+  ../../external/vcglib/wrap/gui/trackball.cpp
+  ../../external/vcglib/wrap/gui/trackmode.cpp
   ${moc_files}
   ${uic_files}
   ${rcc_files}

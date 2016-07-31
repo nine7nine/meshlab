@@ -1,4 +1,4 @@
-# Copyright (c) 2011-2012 United States Government as represented by
+# Copyright (c) 2010-2016 United States Government as represented by
 # the U.S. Army Research Laboratory.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,31 +28,35 @@
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-###
 
-macro(MESHLAB_OPTION opt comment)
-  if(NOT DEFINED ${${opt}})
-    set(${opt} AUTO)
-  endif(NOT DEFINED ${${opt}})
-  # Put ${opt} into the cache, so set_property has something
-  # to work on
-  set(${opt} "${${opt}}" CACHE STRING "${comment}" FORCE)
-  set_property(CACHE ${opt} PROPERTY STRINGS AUTO BUNDLED SYSTEM)
-  string(TOUPPER "${${opt}}" ${opt}_UPPER)
-  set(${opt} "${${opt}_UPPER}" CACHE STRING "${comment}" FORCE)
-  if(${${opt}} MATCHES "ON")
-    set(${opt} "BUNDLED" CACHE STRING "${comment}" FORCE)
-  endif(${${opt}} MATCHES "ON")
-  if(${${opt}} MATCHES "OFF")
-    set(${opt} "SYSTEM" CACHE STRING "${comment}" FORCE)
-  endif(${${opt}} MATCHES "OFF")
-  if(NOT "${${opt}}" MATCHES "AUTO" AND NOT "${${opt}}" MATCHES "BUNDLED" AND NOT "${${opt}}" MATCHES "SYSTEM")
-    message(WARNING "Unknown value ${opt} supplied for ${opt} - defaulting to AUTO")
-    message(WARNING "Valid options are AUTO, BUNDLED and SYSTEM")
-    set(${opt} "AUTO" CACHE STRING "Build   bundled libraries." FORCE)
-  endif(NOT "${${opt}}" MATCHES "AUTO" AND NOT "${${opt}}" MATCHES "BUNDLED" AND NOT "${${opt}}" MATCHES "SYSTEM")
-endmacro(MESHLAB_OPTION)
+#---------------------------------------------------------------------
+# The following logic is what allows binaries to run successfully in
+# the build directory AND install directory.  Thanks to plplot for
+# identifying the necessity of setting CMAKE_INSTALL_NAME_DIR on OSX.
+# Documentation of these options is available at
+# http://www.cmake.org/Wiki/CMake_RPATH_handling
+
+# use, i.e. don't skip the full RPATH for the build tree
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+
+# the RPATH/INSTALL_NAME_DIR to be used when installing
+if (NOT APPLE)
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${LIB_DIR}:\$ORIGIN/../${LIB_DIR}")
+endif(NOT APPLE)
+# On OSX, we need to set INSTALL_NAME_DIR instead of RPATH for CMake < 3.0
+# http://www.cmake.org/cmake/help/cmake-2-8-docs.html#variable:CMAKE_INSTALL_NAME_DIR
+# http://www.cmake.org/cmake/help/v3.2/policy/CMP0042.html
+if ("${CMAKE_VERSION}" VERSION_LESS 3.0)
+  set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${LIB_DIR}")
+endif ("${CMAKE_VERSION}" VERSION_LESS 3.0)
+
+# add the automatically determined parts of the RPATH which point to
+# directories outside the build tree to the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Local Variables:
 # tab-width: 8

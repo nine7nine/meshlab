@@ -32,8 +32,6 @@ set(moc_HDRS
   )
 QT5_WRAP_CPP(moc_interfaces_MOC ${moc_HDRS})
 
-message("QT_LIBRARIES: ${QT_LIBRARIES}")
-
 set(common_SRCS
   ${common_basic_SRCS}
   ${moc_interfaces_MOC}

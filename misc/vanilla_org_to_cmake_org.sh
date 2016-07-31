@@ -1,4 +1,8 @@
 #!/bin/sh
+
+# clear dirs not of interest
+rm -rf meshlab/src/install
+
 mkdir src
 mkdir src/external
 
@@ -95,5 +99,22 @@ mkdir src/external/tsai
 mv meshlab/src/external/tsai*/* src/external/tsai
 rm -rf meshlab/src/external/tsai*
 
+#################################
+#         misc dir              #
+#################################
+mkdir misc
+mv meshlab/src/distrib/* misc/
+rm -rf meshlab/src/distrib
+
+#################################
+#         core meshlab          #
+#################################
+mkdir src/common
+mv meshlab/src/common/* src/common
+rm -rf meshlab/src/common
+mkdir src/meshlab
+mv meshlab/src/meshlab/* src/meshlab
+rm -rf meshlab/src/meshlab
+
 ## Make sure none of the files are executable
-find meshlab -type f -exec chmod -x {} \;
+find . -type f -exec chmod -x {} \;

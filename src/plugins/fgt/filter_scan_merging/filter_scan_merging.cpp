@@ -23,7 +23,7 @@
 
 #include <QtGui>
 
-#include <meshlabplugins/edit_point/knnGraph.h>
+#include <plugins/standard/edit_point/knnGraph.h>
 #include <vcg/space/fitting3.h>
 #include <vcg/complex/append.h>
 

@@ -152,3 +152,6 @@ rm -rf meshlab/src/meshlabserver
 
 ## Make sure none of the files are executable
 find . -type f -exec chmod -x {} \;
+
+# fix plugin includes
+find . -type f -exec perl -0777 -pi -e 's/meshlabplugins/plugins\/standard/g' {} \;

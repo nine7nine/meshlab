@@ -25,13 +25,13 @@
 
 #include "align_tools.h"
 
-#include <meshlabplugins/edit_pickpoints/pickedPoints.h>
+#include <plugins/standard/edit_pickpoints/pickedPoints.h>
 
-#include <meshlabplugins/editalign/align/align_parameter.h>
-#include <meshlabplugins/editalign/meshtree.h>
-#include <meshlabplugins/editalign/align/AlignPair.h>
+#include <plugins/standard/edit_align/align/align_parameter.h>
+#include <plugins/standard/edit_align/meshtree.h>
+#include <plugins/standard/edit_align/align/AlignPair.h>
 
-#include <vcg/math/point_matching.h>
+#include <vcg/space/point_matching.h>
 
 #include <vcg/complex/algorithms/update/position.h>
 #include <vcg/complex/algorithms/update/bounding.h>
@@ -304,7 +304,7 @@ bool AlignTools::align(MeshModel *stuckModel, PickedPoints *stuckPickedPoints,
 		
 		//now translate all the points in the mesh
 		//TODO probably should call a function to do this so if meshlab changes we dont have to
-		//taken from meshlab/src/meshlabplugins/meshfilter/meshfilter.cpp
+		//taken from meshlab/src/plugins/standard/meshfilter/meshfilter.cpp
 		//if (ID(filter) == (FP_FREEZE_TRANSFORM) ) {
 		vcg::tri::UpdatePosition<CMeshO>::Matrix(modelToMove->cm, modelToMove->cm.Tr);
 		vcg::tri::UpdateNormals<CMeshO>::PerVertexNormalizedPerFace(modelToMove->cm);

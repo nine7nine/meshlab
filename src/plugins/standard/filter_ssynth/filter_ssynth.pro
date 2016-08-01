@@ -1,13 +1,13 @@
 include (../../shared.pri)
 HEADERS += filter_ssynth.h \
-    ../../meshlabplugins/io_x3d/import_x3d.h \
-    ../../meshlabplugins/io_x3d/util_x3d.h \
-    ../../meshlabplugins/io_x3d/vrml/Parser.h \
-    ../../meshlabplugins/io_x3d/vrml/Scanner.h \
+    ../../plugins/standard/io_x3d/import_x3d.h \
+    ../../plugins/standard/io_x3d/util_x3d.h \
+    ../../plugins/standard/io_x3d/vrml/Parser.h \
+    ../../plugins/standard/io_x3d/vrml/Scanner.h \
     mytrenderer.h
 SOURCES += filter_ssynth.cpp \
-    ../../meshlabplugins/io_x3d/vrml/Parser.cpp \
-    ../../meshlabplugins/io_x3d/vrml/Scanner.cpp \
+    ../../plugins/standard/io_x3d/vrml/Parser.cpp \
+    ../../plugins/standard/io_x3d/vrml/Scanner.cpp \
     mytrenderer.cpp
 INCLUDEPATH += ../../external/structuresynth-1.5/ssynth
 win32-msvc.net:LIBS += ../../external/lib/win32-msvc.net/ssynth.lib

@@ -1,6 +1,6 @@
 #include <Qt>
 #include "filter_ssynth.h"
-#include <meshlabplugins/io_x3d/import_x3d.h>
+#include <plugins/standard/io_x3d/import_x3d.h>
 #include <common/meshmodel.h>
 #include <common/interfaces.h>
 #include <StructureSynth/Model/RandomStreams.h>

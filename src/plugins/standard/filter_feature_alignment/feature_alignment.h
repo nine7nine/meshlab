@@ -34,7 +34,7 @@
 #include <vcg/complex/algorithms/closest.h>
 #include <vcg/complex/algorithms/point_sampling.h>
 #include <vcg/complex/algorithms/overlap_estimation.h>
-#include <meshlabplugins/edit_pickpoints/pickedPoints.h>
+#include <plugins/standard/edit_pickpoints/pickedPoints.h>
 
 #include <qdatetime.h>
 

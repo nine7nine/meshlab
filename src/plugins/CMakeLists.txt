@@ -1,5 +1,42 @@
-# Plugins constitute the majority of MeshLab's functionality.
-# Directories below are grouped by category.
+# Plugins constitute the majority of MeshLab's functionality. This
+# function encompasses the most common build logic pattern
+
+function(meshlab_plugin plugin base_srcs moc_hdrs)
+  cmake_parse_arguments(MP "IGNORE" "" "INCLUDE_DIRS;DEPS;UIC;RCC" ${ARGN})
+  set(added_plugins ${added_plugins} ${plugin} PARENT_SCOPE)
+  if(NOT MP_IGNORE)
+    QT5_WRAP_CPP(moc_files ${${moc_hdrs}})
+    if(MP_UIC)
+      QT5_WRAP_UI(uic_files ${${MP_UIC}})
+    endif(MP_UIC)
+    if(MP_RCC)
+      QT5_ADD_RESOURCES(rcc_files ${${MP_RCC}})
+    endif(MP_RCC)
+    set(mp_base_srcs
+      ${${base_srcs}}
+      ${moc_files}
+      ${uic_files}
+      ${rcc_files}
+      )
+    add_library(${plugin} SHARED ${mp_base_srcs})
+    target_link_libraries(${plugin} ${${MP_DEPS}} ${QT_LIBRARIES} ${OPENGL_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+    if(MP_DEPS)
+      foreach(dp ${${MP_DEPS}})
+	if(TARGET ${dp})
+	  add_dependencies(${plugin} ${dp})
+	endif(TARGET ${dp})
+      endforeach(dp ${${MP_DEPS}})
+    endif(MP_DEPS)
+    target_include_directories(${plugin} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/${plugin})
+    if(MP_INCLUDE_DIRS)
+      target_include_directories(${plugin} PUBLIC ${${MP_INCLUDE_DIRS}})
+    endif(MP_INCLUDE_DIRS)
+    install(TARGETS ${plugin}
+      RUNTIME DESTINATION ${BIN_DIR}
+      LIBRARY DESTINATION ${LIB_DIR}
+      ARCHIVE DESTINATION ${LIB_DIR})
+  endif(NOT MP_IGNORE)
+endfunction()
 
 # Plugins need to go into the 'plugins' directory in the same
 # directory as the meshlab executable, so for this set of targets

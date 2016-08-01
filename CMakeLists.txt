@@ -43,6 +43,23 @@ if(NOT DEFINED BUILD_STATIC_LIBS)
   set(BUILD_STATIC_LIBS ON)
 endif(NOT DEFINED BUILD_STATIC_LIBS)
 
+# This is ugly - there should be a better solution...
+if(WIN32)
+  if(MSVC)
+    set(MPIR_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/external/inc/win32-msvc2008/mpir-2.2.1_x64)
+  else(MSVC)
+    set(MPIR_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/external/inc/win32-gcc/mpir-2.2.1)
+  endif(MSVC)
+elseif(APPLE)
+  if(${CMAKE_SIZEOF_VOID_P} MATCHES "^8$")
+    set(MPIR_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/external/inc/macx64/mpir-2.4.0)
+  else(${CMAKE_SIZEOF_VOID_P} MATCHES "^8$")
+    set(MPIR_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/external/inc/macx/gmp-5.0.1 ${CMAKE_CURRENT_SOURCE_DIR}/src/external/inc/macx/mpir-2.1.3)
+  endif(${CMAKE_SIZEOF_VOID_P} MATCHES "^8$")
+else(WIN32)
+  set(MPIR_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/external/inc/linux-g++/mpir-2.4.0)
+endif(WIN32)
+
 # Figure out what to do with required libs that we also have
 # as included sources
 add_subdirectory(src/external)

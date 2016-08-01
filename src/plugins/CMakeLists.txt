@@ -3,8 +3,8 @@
 
 function(meshlab_plugin plugin base_srcs moc_hdrs)
   cmake_parse_arguments(MP "IGNORE" "" "INCLUDE_DIRS;DEPS;UIC;RCC" ${ARGN})
-  set(added_plugins ${added_plugins} ${plugin} PARENT_SCOPE)
   if(NOT MP_IGNORE)
+    set(added_plugins ${added_plugins} ${plugin} PARENT_SCOPE)
     QT5_WRAP_CPP(moc_files ${${moc_hdrs}})
     if(MP_UIC)
       QT5_WRAP_UI(uic_files ${${MP_UIC}})
@@ -35,6 +35,8 @@ function(meshlab_plugin plugin base_srcs moc_hdrs)
       RUNTIME DESTINATION ${BIN_DIR}
       LIBRARY DESTINATION ${LIB_DIR}
       ARCHIVE DESTINATION ${LIB_DIR})
+  else(NOT MP_IGNORE)
+    set(disabled_plugins ${disabled_plugins} ${plugin} PARENT_SCOPE)
   endif(NOT MP_IGNORE)
 endfunction()
 

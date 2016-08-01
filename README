@@ -18,5 +18,5 @@ more and more features.
 
 This particular unoffical branch of Meshlab seeks to replace its existing build
 system with one based on CMake.  The CMake build logic added in this repository
-is MIT licensed - MeshLab itself is GPL, and the external libraries have their
-own licenses.
+is MIT licensed unless otherwise indicated in the individual file.  MeshLab
+itself is GPL, and the external libraries have their own licenses.

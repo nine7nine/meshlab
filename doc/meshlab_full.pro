@@ -27,7 +27,7 @@ SUBDIRS       = common \
                 meshlabplugins/filter_colorproc \
 				meshlabplugins/filter_color_projection \
                 meshlabplugins/filter_create \
-                #meshlabplugins/filter_csg \
+                meshlabplugins/filter_csg \
 				meshlabplugins/filter_dirt \
                 meshlabplugins/filter_fractal \
                 meshlabplugins/filter_func \
@@ -75,5 +75,7 @@ SUBDIRS       = common \
                 sampleplugins/samplefilter \
                 sampleplugins/samplefilterdyn \
               sampleplugins/io_m\
-               sampleplugins/filtergeodesic \
-               sampleplugins/filtercreateiso
+               sampleplugins/filter_geodesic \
+               sampleplugins/filter_createiso \
+plugins_experimental/edit_referencing \
+plugins_experimental/io_TXT

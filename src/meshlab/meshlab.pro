@@ -99,6 +99,7 @@ QT += xml
 QT += xmlpatterns
 QT += network
 QT += script
+unix:LIBS += -lGLU
 
 
 # the following line is needed to avoid mismatch between

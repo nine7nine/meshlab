@@ -18,6 +18,5 @@ win32-g++:LIBS		 += ../../external/lib/win32-gcc/libmpirxx.a ../../external/lib/
 win32-msvc2008:LIBS		 += ../../external/lib/win32-msvc2008/mpirxx.lib ../../external/lib/win32-msvc2008/mpir.lib
 win32-msvc2010:LIBS		 += ../../external/lib/win32-msvc2008/mpirxx.lib ../../external/lib/win32-msvc2008/mpir.lib
 win32-msvc2012:LIBS		 += ../../external/lib/win32-msvc2008/mpirxx.lib ../../external/lib/win32-msvc2008/mpir.lib
-linux-g++:INCLUDEPATH += ../../external/inc/linux-g++/mpir-2.4.0
-linux-g++:LIBS += ../../external/lib/linux-g++/libmpirxx.a ../../external/lib/linux-g++/libmpir.a
+linux-g++:LIBS += -lmpirxx -lmpir
 
